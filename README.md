@@ -3,7 +3,7 @@ This is a concept implementation of a proof-of-work (PoW) algorithm proposal for
 
 ### Key features
 * __ASIC resistant__. This is important for a decentralized cryptocurrency and allows anyone with an ordinary computer to participate in securing the network. The algorithm internally uses the Google V8 Javascript engine, which is a large software package consisting of almost 2 million lines of code. Full hardware implementation would require an enormous investment.
-* __Asymetrical__. Finding a single solution takes roughly 1 second on a modern CPU core, while a valid solution can be verified in a few milliseconds. This is beneficial for mining pools by reducing their hardware requirements.
+* __Asymmetrical__. Finding a single solution takes roughly 1 second on a modern CPU core, while a valid solution can be verified in a few milliseconds. This is beneficial for mining pools by reducing their hardware requirements.
 * __DoS resistant__. The algorithm stores an intermediate value in the block header, allowing quick verification whether the PoW meets the difficulty target. This requires just two Blake2b hash calculations (roughly 500 nanoseconds on a modern CPU). This is beneficial both for mining pools and network nodes in case someone wanted to flood them with invalid blocks.
 
 A more detailed description will follow.
