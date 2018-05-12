@@ -53,7 +53,7 @@ namespace Tevador.RandomJS.Crypto
                     string output, error;
                     if(0 != (exitCode = program.Execute(out output, out error)))
                     {
-                        throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {(*noncePtr)}. Seed: {BinaryUtils.ByteArrayToString(key)}"));
+                        throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {(*noncePtr)}. Seed: {BinaryUtils.ByteArrayToString(key)}, {error}"));
                     }
                     _blakeKeyed = new Blake2B256(key);
                     result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(output));
@@ -62,7 +62,6 @@ namespace Tevador.RandomJS.Crypto
                 while (result[0] != auxiliary[0]);
                 nonce = *noncePtr;
             }
-
             return new Solution()
             {
                 Nonce = nonce,
@@ -90,7 +89,7 @@ namespace Tevador.RandomJS.Crypto
             string output, error;
             if (0 != (exitCode = program.Execute(out output, out error)))
             {
-                throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {sol.Nonce}. Seed: {BinaryUtils.ByteArrayToString(key)}"));
+                throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {sol.Nonce}. Seed: {BinaryUtils.ByteArrayToString(key)}, {error}"));
             }
             var result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(output));
             if(!BinaryUtils.ArraysEqual(sol.Result, result))

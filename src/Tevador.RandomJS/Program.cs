@@ -34,7 +34,6 @@ namespace Tevador.RandomJS
         private List<Global> _globals = new List<Global>();
         private List<Variable> _printOrder;
         private ProgramOptions _options;
-        private WebClient _client;
 
         public Program()
             : base(null)
@@ -111,7 +110,6 @@ namespace Tevador.RandomJS
         // Runtime: Min: 2,1137; Max: 22,169; Avg: 3,90796864137288; Stdev: 1,87134841989214;
         public int Execute(out string output, out string error)
         {
-            var client = _client ?? (_client = new WebClient());
             StringBuilder sb = new StringBuilder(10000);
             using (var writer = new StringWriter(sb))
             {
@@ -119,7 +117,20 @@ namespace Tevador.RandomJS
             }
             try
             {
-                output = client.UploadString("http://localhost:18111", sb.ToString());
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:18111");
+                request.KeepAlive = false;
+                request.Timeout = 10000;
+                request.Method = "POST";
+                byte[] data = Encoding.UTF8.GetBytes(sb.ToString());
+                request.ContentLength = data.Length;
+                Stream reqStream = request.GetRequestStream();
+                reqStream.Write(data, 0, data.Length);
+                reqStream.Close();
+                WebResponse response = request.GetResponse();
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    output = reader.ReadToEnd();
+                }
                 error = null;
                 return 0;
             }
