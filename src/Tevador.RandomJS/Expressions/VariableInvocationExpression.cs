@@ -29,7 +29,8 @@ namespace Tevador.RandomJS.Expressions
 
         protected VariableInvocationExpression(IVariable variable)
         {
-            _variable = variable ?? throw new ArgumentNullException();
+            if(variable == null) throw new ArgumentNullException();
+            _variable = variable;
         }
 
         public VariableInvocationExpression(IScope scope, IVariable variable)

@@ -63,7 +63,8 @@ namespace Tevador.RandomJS
 
         private void SetGlobalVariable<T>(string name, T value)
         {
-            if (value != null && _globalNames.TryGetValue(name, out Global g))
+            Global g;
+            if (value != null && _globalNames.TryGetValue(name, out g))
             {
                 GlobalVariable glVar = g as GlobalVariable;
                 if (glVar != null)
@@ -174,7 +175,8 @@ namespace Tevador.RandomJS
                 var p = new Program();
                 p.Generate(random, options);
                 runtimeSw.Restart();
-                var exitCode = p.Execute(out string output, out string error);
+                string output, error;
+                var exitCode = p.Execute(out output, out error);
                 runtimeSw.Stop();
                 if (exitCode != 0)
                 {
@@ -212,7 +214,8 @@ namespace Tevador.RandomJS
 
         static void Main(string[] args)
         {
-            if(args.Length == 0 || !int.TryParse(args[0], out int seed))
+            int seed;
+            if(args.Length == 0 || !int.TryParse(args[0], out seed))
             {
                 seed = Environment.TickCount;
             }

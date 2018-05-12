@@ -50,7 +50,8 @@ namespace Tevador.RandomJS.Crypto
                     byte[] key = _blake.ComputeHash(_blockTemplate);
                     var program = _factory.GenProgran(key);
                     int exitCode;
-                    if(0 != (exitCode = program.Execute(out string output, out string error)))
+                    string output, error;
+                    if(0 != (exitCode = program.Execute(out output, out error)))
                     {
                         throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {(*noncePtr)}. Seed: {BinaryUtils.ByteArrayToString(key)}"));
                     }
@@ -86,7 +87,8 @@ namespace Tevador.RandomJS.Crypto
             }
             var program = _factory.GenProgran(key);
             int exitCode;
-            if (0 != (exitCode = program.Execute(out string output, out string error)))
+            string output, error;
+            if (0 != (exitCode = program.Execute(out output, out error)))
             {
                 throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {sol.Nonce}. Seed: {BinaryUtils.ByteArrayToString(key)}"));
             }
