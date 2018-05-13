@@ -30,31 +30,40 @@ namespace Tevador.RandomJS.Expressions
 
         public override void WriteTo(System.IO.TextWriter w)
         {
-            if (Operator.Has(OperatorRequirement.NumericOnly))
+            if (!Operator.Has(OperatorRequirement.NumericOnly))
+            {
+                w.Write("(");
+                Variable.WriteTo(w);
+                w.Write(Operator);
+                Rhs.WriteTo(w);
+                w.Write(")");
+            }
+            else
             {
                 w.Write(GlobalFunction.CALC);
                 w.Write("(");
                 Variable.WriteTo(w);
-                w.Write(", function() { ");
-            }
-            w.Write("(");
-            if (Operator.Has(OperatorRequirement.Prefix))
-            {
-                w.Write(Operator);
-                Variable.WriteTo(w);
-            }
-            else
-            {
-                Variable.WriteTo(w);
-                w.Write(Operator); 
-            }
-            Rhs?.WriteTo(w);
-            w.Write(")");
-            if (Operator.Has(OperatorRequirement.NumericOnly))
-            {
-                w.Write("; return ");
-                Variable.WriteTo(w);
-                w.Write("; }, ");
+                w.Write(", function() { return (");
+                if (Operator.Has(OperatorRequirement.WithoutRhs))
+                {
+                    if (Operator.Has(OperatorRequirement.Prefix))
+                    {
+                        w.Write(Operator);
+                        Variable.WriteTo(w);
+                    }
+                    else
+                    {
+                        Variable.WriteTo(w);
+                        w.Write(Operator);
+                    }
+                }
+                else
+                {
+                    Variable.WriteTo(w);
+                    w.Write(Operator);
+                    Rhs.WriteTo(w);
+                }
+                w.Write("); }, ");
                 DefaultValue.WriteTo(w);
                 w.Write(")");
             }
@@ -74,6 +83,10 @@ namespace Tevador.RandomJS.Expressions
             if (!op.Has(OperatorRequirement.WithoutRhs))
             {
                 Expression expr = Expression.Generate(rand, scope, ae, isReturn);
+                if (op.Has(OperatorRequirement.NumericOnly))
+                {
+                    expr = new NumericExpression(scope, expr, NumericLiteral.Generate(rand, scope));
+                }
                 if (op.Has(OperatorRequirement.RhsNonzero))
                 {
                     expr = new NonZeroExpression(scope, expr);
