@@ -24,8 +24,8 @@ namespace Tevador.RandomJS
     class ProgramOptions
     {
         public int GlobalVariablesCount { get; set; }
-        internal CallDepthProtection DepthProtection { get; set; }
-        internal LoopCyclesProtection CyclesProtection { get; set; }
+        public CallDepthProtection DepthProtection { get; set; }
+        public LoopCyclesProtection CyclesProtection { get; set; }
         public int MaxExpressionDepth { get; set; }
         public int MaxStatementDepth { get; set; }
         public double ConstVariableChance { get; set; }
@@ -35,8 +35,11 @@ namespace Tevador.RandomJS
         public double FuncInvocationInExprChance { get; set; }
         public bool AllowFunctionOverwriting { get; set; }
         public bool AllowFunctionsInsideFunctions { get; set; }
-        
-        internal byte[] Seed { get; set; }
+        public bool PreferFuncParametersToLiterals { get; set; }
+        public int MaxExpressionAttempts { get; set; }
+        public int FpMathPrecision { get; set; }
+
+        public byte[] Seed { get; set; }
         
         public RandomTable<LiteralType> Literals { get; set; }
         public RandomTable<NumericLiteralType> NumericLiterals { get; set; }

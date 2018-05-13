@@ -19,8 +19,13 @@ namespace Tevador.RandomJS
         }
 
         public ProgramFactory()
+            : this(new Xoshiro256Plus())
         {
-            _randomGenerator = new Xoshiro256Plus();
+        }
+
+        internal ProgramFactory(Xoshiro256Plus random)
+        {
+            _randomGenerator = random;
             _options = new ProgramOptions()
             {
                 AssignmentOperators = new RandomTable<AssignmentOperator>()
@@ -76,6 +81,9 @@ namespace Tevador.RandomJS
                 MaxStringLiteralLength = 10,
                 FuncInvocationInExprChance = 0.25,
                 MaxStringVariableLength = 20,
+                PreferFuncParametersToLiterals = true,
+                MaxExpressionAttempts = 10,
+                FpMathPrecision = 9,
                 Literals = new RandomTable<LiteralType>()
                 {
                     { 0.2, LiteralType.String },

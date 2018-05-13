@@ -40,14 +40,14 @@ namespace Tevador.RandomJS.Expressions
             {
                 return Literal.Generate(rand, scope);
             }
-            while (true)
+            for(int i = 0; i < scope.Options.MaxExpressionAttempts; ++i)
             {
                 Variable v;
                 var type = scope.Options.Expressions.ChooseRandom(rand);
                 switch (type)
                 {
-                    default: //Literal
-                        if (scope.InFunc && (v = rand.ChooseVariable(scope, false, true)) != null) //prefer parameters inside functions
+                    case ExpressionType.Literal:
+                        if (scope.Options.PreferFuncParametersToLiterals && scope.InFunc && (v = rand.ChooseVariable(scope, false, true)) != null)
                         {
                             if (isReturn)
                             {
@@ -115,6 +115,7 @@ namespace Tevador.RandomJS.Expressions
                         return TernaryExpression.Generate(rand, scope, parent, isReturn);
                 }
             }
+            return Literal.Generate(rand, scope); //fall back to a Literal
         }
     }
 }

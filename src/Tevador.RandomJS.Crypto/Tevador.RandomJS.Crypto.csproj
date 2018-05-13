@@ -54,7 +54,6 @@
     <Compile Include="Blake\Blake2BTreeConfig.cs" />
     <Compile Include="Blake\Blake2IvBuilder.cs" />
     <Compile Include="Miner.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solution.cs" />
   </ItemGroup>

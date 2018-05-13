@@ -20,6 +20,9 @@
 using System;
 using System.Text;
 using Tevador.RandomJS.Crypto.Blake;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Tevador.RandomJS.Crypto
 {
@@ -104,6 +107,58 @@ namespace Tevador.RandomJS.Crypto
                 return false;
             }
             return true;
+        }
+
+        static void Main(string[] args)
+        {
+            string blockTemplateHex = "0707f7a4f0d605b303260816ba3f10902e1a145ac5fad3aa3af6ea44c11869dc4f853f002b2eea0000000077b206a02ca5b1d4ce6bbfdf0acac38bded34d2dcdeef95cd20cefc12f61d56109";
+            if (args.Length > 0)
+            {
+                blockTemplateHex = args[0];
+            }
+            if (blockTemplateHex.Length != 152 || blockTemplateHex.Any(c => !"0123456789abcdef".Contains(c)))
+            {
+                Console.WriteLine("Invalid block template (152 hex characters expected).");
+            }
+            else
+            {
+                try
+                {
+                    var blockTemplate = BinaryUtils.StringToByteArray(blockTemplateHex);
+                    var miner = new Miner();
+                    miner.Reset(blockTemplate);
+                    TimeSpan period = TimeSpan.FromMinutes(1);
+                    List<Solution> solutions = new List<Solution>(100);
+                    Stopwatch sw = Stopwatch.StartNew();
+                    while (sw.Elapsed < period)
+                    {
+                        var solution = miner.Solve();
+                        Console.WriteLine($"Nonce = {solution.Nonce}; PoW = {BinaryUtils.ByteArrayToString(solution.ProofOfWork)}");
+                        solutions.Add(solution);
+                    }
+                    sw.Stop();
+                    var seconds = sw.Elapsed.TotalSeconds;
+                    Console.WriteLine();
+                    Console.WriteLine($"Solving nonces: {string.Join(", ", solutions.Select(s => s.Nonce))}");
+                    Console.WriteLine();
+                    Console.WriteLine($"Found {solutions.Count} solutions in {seconds} seconds. Performance = {solutions.Count / seconds} Sols./s.");
+                    sw.Restart();
+                    foreach (var sol in solutions)
+                    {
+                        if (!miner.Verify(sol))
+                        {
+                            Console.WriteLine($"Nonce {sol.Nonce} - verification failed");
+                            return;
+                        }
+                    }
+                    sw.Stop();
+                    Console.WriteLine($"All {solutions.Count} solutions were verified in {sw.Elapsed.TotalSeconds} seconds");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"ERROR: {e}");
+                }
+            }
         }
     }
 }
