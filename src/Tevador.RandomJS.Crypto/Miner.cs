@@ -30,7 +30,7 @@ namespace Tevador.RandomJS.Crypto
     {
         const int _nonceOffset = 39;
         Blake2B256 _blake = new Blake2B256();
-        Blake2B256 _blakeKeyed = new Blake2B256(new byte[32]);
+        Blake2B256 _blakeKeyed;
         ProgramFactory _factory = new ProgramFactory();
         byte[] _blockTemplate;
 
@@ -51,19 +51,24 @@ namespace Tevador.RandomJS.Crypto
                 {
                     (*noncePtr)++;
                     byte[] key = _blake.ComputeHash(_blockTemplate);
-                    var program = _factory.GenProgran(key);
+                    var program = _factory.GenProgram(key);
+                    _blakeKeyed = new Blake2B256(key);
+                    auxiliary = _blakeKeyed.ComputeHash(program.Source);
                     int exitCode;
                     string output, error;
                     if(0 != (exitCode = program.Execute(out output, out error)))
                     {
                         throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {(*noncePtr)}. Seed: {BinaryUtils.ByteArrayToString(key)}, {error}"));
                     }
-                    _blakeKeyed = new Blake2B256(key);
                     result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(output));
-                    auxiliary = _blakeKeyed.ComputeHash(_blockTemplate, _nonceOffset, sizeof(uint));
                 }
                 while (result[0] != auxiliary[0]);
                 nonce = *noncePtr;
+            }
+            result[0] = 0;
+            for(int i = 0; i < result.Length; ++i)
+            {
+                result[i] ^= auxiliary[i];
             }
             return new Solution()
             {
@@ -87,7 +92,14 @@ namespace Tevador.RandomJS.Crypto
                 Console.WriteLine("Invalid PoW");
                 return false;
             }
-            var program = _factory.GenProgran(key);
+            var program = _factory.GenProgram(key);
+            var auxiliary = _blakeKeyed.ComputeHash(program.Source);
+            if (auxiliary[0] != sol.Result[0])
+            {
+                Console.WriteLine("Invalid Auxiliary");
+                return false;
+            }
+            auxiliary[0] = 0;
             int exitCode;
             string output, error;
             if (0 != (exitCode = program.Execute(out output, out error)))
@@ -95,15 +107,13 @@ namespace Tevador.RandomJS.Crypto
                 throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {sol.Nonce}. Seed: {BinaryUtils.ByteArrayToString(key)}, {error}"));
             }
             var result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(output));
-            if(!BinaryUtils.ArraysEqual(sol.Result, result))
+            for (int i = 0; i < result.Length; ++i)
+            {
+                result[i] ^= auxiliary[i];
+            }
+            if (!BinaryUtils.ArraysEqual(sol.Result, result))
             {
                 Console.WriteLine("Invalid Result");
-                return false;
-            }
-            var auxiliary = _blakeKeyed.ComputeHash(_blockTemplate, _nonceOffset, sizeof(uint));
-            if(auxiliary[0] != result[0])
-            {
-                Console.WriteLine("Invalid Auxiliary");
                 return false;
             }
             return true;

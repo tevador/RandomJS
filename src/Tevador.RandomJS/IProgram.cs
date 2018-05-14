@@ -10,5 +10,6 @@ namespace Tevador.RandomJS
     {
         int Execute(out string output, out string error);
         void WriteTo(System.IO.TextWriter w);
+        byte[] Source { get; }
     }
 }

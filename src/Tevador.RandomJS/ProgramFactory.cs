@@ -12,7 +12,7 @@ namespace Tevador.RandomJS
         private ProgramOptions _options;
         private IRandom _randomGenerator;
 
-        public IProgram GenProgran(byte[] seed)
+        public IProgram GenProgram(byte[] seed)
         {
             _options.Seed = seed;
             return new Program().Generate(_randomGenerator, _options);
