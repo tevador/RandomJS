@@ -33,7 +33,7 @@ In the description below, `Blake2b(X)` and `Blake2b(K,X)` refer to the plain and
 1. If `PoW` doesn't meet the difficulty target, go back to step 1.
 1. Submit `H, R` as the result to be included in the block.
 
-Finding and verifying a solution takes on average 767 Blake2b hash calculations, 256 random javascript program generations and 256 javascript executions.
+Finding and verifying a solution takes on average 769 Blake2b hash calculations, 256 random javascript program generations and 256 javascript executions.
 
 ### Verification algorithm
 Input: `H, R` from the received block.
