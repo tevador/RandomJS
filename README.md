@@ -73,7 +73,7 @@ The project has 3 main units:
 
 ### Linux
 #### Dependencies
-1. Mono 4.0+ ([via package manager](http://www.mono-project.com/download/stable/#download-lin)). For recent Ubuntu and Debian distros, install using `sudo apt-get install mono-complete`.
+1. Mono 4.0+ ([via package manager](http://www.mono-project.com/download/stable/#download-lin)). For recent Ubuntu and Debian distros, install using `sudo apt-get install mono-devel`.
 1. NodeJS ([via package manager](https://nodejs.org/en/download/package-manager/)). For recent Ubuntu and Debian distros, install using `curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -` and `sudo apt-get install -y nodejs`
 
 #### Instructions
