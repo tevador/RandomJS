@@ -1,15 +1,23 @@
 COMPILER=mcs
+BINDIR=bin/
 CSFLAGS=-target:exe -unsafe -out:$@
-TEVRANDOMJS=Tevador.RandomJS.exe
-TEVMINER=Tevador.RandomJS.Crypto.exe
-TEVRANDOMJSCS=./Tevador.RandomJS/Operators/OperatorRequirement.cs ./Tevador.RandomJS/Operators/BinaryOperator.cs ./Tevador.RandomJS/Operators/Operator.cs ./Tevador.RandomJS/Operators/AssignmentOperator.cs ./Tevador.RandomJS/Operators/UnaryOperator.cs ./Tevador.RandomJS/Loop.cs ./Tevador.RandomJS/ExpressionStatement.cs ./Tevador.RandomJS/Global.cs ./Tevador.RandomJS/Xoshiro256Plus.cs ./Tevador.RandomJS/IVariable.cs ./Tevador.RandomJS/ReturnStatement.cs ./Tevador.RandomJS/LoopCyclesProtection.cs ./Tevador.RandomJS/GlobalVariable.cs ./Tevador.RandomJS/BinaryUtils.cs ./Tevador.RandomJS/ForLoop.cs ./Tevador.RandomJS/IfElseStatement.cs ./Tevador.RandomJS/ProgramFactory.cs ./Tevador.RandomJS/RandomExtensions.cs ./Tevador.RandomJS/Expressions/UnaryExpression.cs ./Tevador.RandomJS/Expressions/Expression.cs ./Tevador.RandomJS/Expressions/RoundedExpression.cs ./Tevador.RandomJS/Expressions/GlobalFunctionExpression.cs ./Tevador.RandomJS/Expressions/NumericExpression.cs ./Tevador.RandomJS/Expressions/BinaryExpression.cs ./Tevador.RandomJS/Expressions/NumericLiteral.cs ./Tevador.RandomJS/Expressions/VariableInvocationExpression.cs ./Tevador.RandomJS/Expressions/FunctionInvocationExpression.cs ./Tevador.RandomJS/Expressions/VariableExpression.cs ./Tevador.RandomJS/Expressions/FunctionExpression.cs ./Tevador.RandomJS/Expressions/Literal.cs ./Tevador.RandomJS/Expressions/TernaryExpression.cs ./Tevador.RandomJS/Expressions/AssignmentExpression.cs ./Tevador.RandomJS/Expressions/NonZeroExpression.cs ./Tevador.RandomJS/Expressions/NonEmptyExpression.cs ./Tevador.RandomJS/Expressions/NonNegativeExpression.cs ./Tevador.RandomJS/GlobalFunction.cs ./Tevador.RandomJS/AssignmentStatement.cs ./Tevador.RandomJS/LoopControlExpression.cs ./Tevador.RandomJS/ExpressionType.cs ./Tevador.RandomJS/BreakStatement.cs ./Tevador.RandomJS/LiteralType.cs ./Tevador.RandomJS/IRandom.cs ./Tevador.RandomJS/IProgram.cs ./Tevador.RandomJS/ProgramOptions.cs ./Tevador.RandomJS/CallDepthProtection.cs ./Tevador.RandomJS/Block.cs ./Tevador.RandomJS/VariableDeclaration.cs ./Tevador.RandomJS/Variable.cs ./Tevador.RandomJS/RandomTable.cs ./Tevador.RandomJS/Properties/AssemblyInfo.cs ./Tevador.RandomJS/TableEntry.cs ./Tevador.RandomJS/StatementType.cs ./Tevador.RandomJS/NumericLiteralType.cs ./Tevador.RandomJS/Program.cs ./Tevador.RandomJS/Statement.cs ./Tevador.RandomJS/OutputStatement.cs ./Tevador.RandomJS/IScope.cs
-TEVMINERCS=./Tevador.RandomJS.Crypto/Solution.cs ./Tevador.RandomJS.Crypto/Properties/AssemblyInfo.cs ./Tevador.RandomJS.Crypto/Blake/Blake2BConfig.cs ./Tevador.RandomJS.Crypto/Blake/Blake2BCoreUnrolled.cs ./Tevador.RandomJS.Crypto/Blake/Blake2B256.cs ./Tevador.RandomJS.Crypto/Blake/Blake2IvBuilder.cs ./Tevador.RandomJS.Crypto/Blake/Blake2BCore.cs ./Tevador.RandomJS.Crypto/Blake/Blake2BHash.cs ./Tevador.RandomJS.Crypto/Blake/Blake2BTreeConfig.cs ./Tevador.RandomJS.Crypto/Miner.cs
+RANDOMJS=$(BINDIR)Tevador.RandomJS.exe
+MINER=$(BINDIR)Tevador.RandomJS.Crypto.exe
+RANDOMJSCS=$(addprefix ./Tevador.RandomJS/, Operators/OperatorRequirement.cs Operators/BinaryOperator.cs Operators/Operator.cs Operators/AssignmentOperator.cs Operators/UnaryOperator.cs Loop.cs ExpressionStatement.cs Global.cs Xoshiro256Plus.cs IVariable.cs ReturnStatement.cs LoopCyclesProtection.cs GlobalVariable.cs BinaryUtils.cs ForLoop.cs IfElseStatement.cs ProgramFactory.cs RandomExtensions.cs Expressions/UnaryExpression.cs Expressions/Expression.cs Expressions/RoundedExpression.cs Expressions/GlobalFunctionExpression.cs Expressions/NumericExpression.cs Expressions/BinaryExpression.cs Expressions/NumericLiteral.cs Expressions/VariableInvocationExpression.cs Expressions/FunctionInvocationExpression.cs Expressions/VariableExpression.cs Expressions/FunctionExpression.cs Expressions/Literal.cs Expressions/TernaryExpression.cs Expressions/AssignmentExpression.cs Expressions/NonZeroExpression.cs Expressions/NonEmptyExpression.cs Expressions/NonNegativeExpression.cs GlobalFunction.cs AssignmentStatement.cs LoopControlExpression.cs ExpressionType.cs BreakStatement.cs LiteralType.cs IRandom.cs IProgram.cs ProgramOptions.cs CallDepthProtection.cs Block.cs VariableDeclaration.cs Variable.cs RandomTable.cs Properties/AssemblyInfo.cs TableEntry.cs StatementType.cs NumericLiteralType.cs Program.cs Statement.cs OutputStatement.cs IScope.cs EnumTable.cs OperatorTable.cs ProgramOptionsException.cs ProgramOptionsHandler.cs)
+MINERCS=$(addprefix ./Tevador.RandomJS.Crypto/, Solution.cs Properties/AssemblyInfo.cs Blake/Blake2BConfig.cs Blake/Blake2BCoreUnrolled.cs Blake/Blake2B256.cs Blake/Blake2IvBuilder.cs Blake/Blake2BCore.cs Blake/Blake2BHash.cs Blake/Blake2BTreeConfig.cs Miner.cs)
+XMLOPTIONS=ProgramOptions.xml
 
-$(TEVMINER): $(TEVRANDOMJS) $(TEVMINERCS)
-	$(COMPILER) /reference:$(TEVRANDOMJS) $(CSFLAGS) $(TEVMINERCS) 
+$(MINER): $(RANDOMJS) $(MINERCS)
+	$(COMPILER) /reference:$(RANDOMJS) $(CSFLAGS) $(MINERCS)
     
-$(TEVRANDOMJS): $(TEVRANDOMJSCS)
-	$(COMPILER) $(CSFLAGS) $(TEVRANDOMJSCS)
+$(RANDOMJS): $(RANDOMJSCS) $(BINDIR)$(XMLOPTIONS)
+	$(COMPILER) $(CSFLAGS) $(RANDOMJSCS)
+
+$(BINDIR)$(XMLOPTIONS): | $(BINDIR)
+	cp ./Tevador.RandomJS/$(XMLOPTIONS) $(BINDIR)
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
 clean:
-	rm -f $(TEVRANDOMJS) $(TEVMINER)
+	rm -f $(RANDOMJS) $(MINER) $(BINDIR)$(XMLOPTIONS)
