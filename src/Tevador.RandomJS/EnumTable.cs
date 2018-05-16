@@ -17,17 +17,27 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Xml;
+
 namespace Tevador.RandomJS
 {
-    public class TableEntry<T>
+    public class EnumTable<T> : RandomTable<T>
+        where T : struct
     {
-        public TableEntry(T value, double weight)
+        public EnumTable()
         {
-            Weight = weight;
-            Value = value;
+            if (!typeof(T).IsEnum)
+                throw new ArgumentException("Invalid generic argument type, expected Enum");
         }
 
-        public double Weight { get; private set; }
-        public T Value { get; private set; }
+        protected override void AddValue(string valueStr, double weight, XmlReader reader)
+        {
+            T type;
+            if (!Enum.TryParse(valueStr, out type))
+                Error("Invalid value of attribute 'type' = " + valueStr, reader);
+
+            Add(type, weight);
+        }
     }
 }

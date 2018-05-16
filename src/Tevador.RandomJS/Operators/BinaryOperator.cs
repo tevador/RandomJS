@@ -19,24 +19,24 @@
 
 namespace Tevador.RandomJS.Operators
 {
-    sealed class BinaryOperator : Operator
+    public sealed class BinaryOperator : Operator
     {
         public readonly static BinaryOperator Add = new BinaryOperator("+");
         public readonly static BinaryOperator Comma = new BinaryOperator(",");
         public readonly static BinaryOperator Sub = new BinaryOperator("-", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator Mul = new BinaryOperator("*", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator Div = new BinaryOperator("/", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);
-        public readonly static BinaryOperator Rem = new BinaryOperator("%", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);
+        public readonly static BinaryOperator Mod = new BinaryOperator("%", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);
         public readonly static BinaryOperator Less = new BinaryOperator("<");
         public readonly static BinaryOperator Greater = new BinaryOperator(">");
         public readonly static BinaryOperator Equal = new BinaryOperator("==");
         public readonly static BinaryOperator NotEqual = new BinaryOperator("!=");
-        public readonly static BinaryOperator BwAnd = new BinaryOperator("&", OperatorRequirement.NumericOnly);
-        public readonly static BinaryOperator BwOr = new BinaryOperator("|", OperatorRequirement.NumericOnly);
+        public readonly static BinaryOperator BitAnd = new BinaryOperator("&", OperatorRequirement.NumericOnly);
+        public readonly static BinaryOperator BitOr = new BinaryOperator("|", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator Xor = new BinaryOperator("^", OperatorRequirement.NumericOnly);
-        public readonly static BinaryOperator ShiftLeft = new BinaryOperator("<<", OperatorRequirement.NumericOnly);
-        public readonly static BinaryOperator ShiftRight = new BinaryOperator(">>", OperatorRequirement.NumericOnly);
-        public readonly static BinaryOperator ShiftRightUn = new BinaryOperator(">>>", OperatorRequirement.NumericOnly);
+        public readonly static BinaryOperator ShLeft = new BinaryOperator("<<", OperatorRequirement.NumericOnly);
+        public readonly static BinaryOperator ShRight = new BinaryOperator(">>", OperatorRequirement.NumericOnly);
+        public readonly static BinaryOperator UnShRight = new BinaryOperator(">>>", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator Min = new BinaryOperator("Math.min", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall);
         public readonly static BinaryOperator Max = new BinaryOperator("Math.max", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall);
 

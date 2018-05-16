@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS.Operators
 {
-    sealed class UnaryOperator : Operator
+    public sealed class UnaryOperator : Operator
     {
         public readonly static UnaryOperator Not = new UnaryOperator("!");
         public readonly static UnaryOperator Plus = new UnaryOperator("+");

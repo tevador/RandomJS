@@ -36,7 +36,7 @@ namespace Tevador.RandomJS
             w.Write(_value.Name);
             if (_value.Initializer != null)
             {
-                w.Write(AssignmentOperator.Mov);
+                w.Write(AssignmentOperator.Basic);
                 _value.Initializer.WriteTo(w);
             }
             w.WriteLine(";");

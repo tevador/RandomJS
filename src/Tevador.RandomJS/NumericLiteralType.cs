@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS
 {
-    enum NumericLiteralType
+    public enum NumericLiteralType
     {
         Boolean,
         SmallInteger,

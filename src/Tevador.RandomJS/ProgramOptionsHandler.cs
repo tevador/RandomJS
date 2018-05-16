@@ -17,17 +17,16 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System.Configuration;
+using System.Xml;
+
 namespace Tevador.RandomJS
 {
-    public class TableEntry<T>
+    public class ProgramOptionsHandler : IConfigurationSectionHandler
     {
-        public TableEntry(T value, double weight)
+        public object Create(object parent, object configContext, XmlNode section)
         {
-            Weight = weight;
-            Value = value;
+            return ProgramOptions.FromXml(new XmlNodeReader(section));
         }
-
-        public double Weight { get; private set; }
-        public T Value { get; private set; }
     }
 }

@@ -17,17 +17,22 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace Tevador.RandomJS
 {
-    public class TableEntry<T>
+    class ProgramOptionsException : ApplicationException
     {
-        public TableEntry(T value, double weight)
+        public ProgramOptionsException(string message)
+            : base(message)
         {
-            Weight = weight;
-            Value = value;
+
         }
 
-        public double Weight { get; private set; }
-        public T Value { get; private set; }
+        public ProgramOptionsException(string message, Exception inner) 
+            : base(message, inner)
+        {
+
+        }
     }
 }

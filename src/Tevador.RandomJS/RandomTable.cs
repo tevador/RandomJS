@@ -19,10 +19,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Globalization;
 
 namespace Tevador.RandomJS
 {
-    class RandomTable<T> : ICollection<TableEntry<T>>
+    public abstract class RandomTable<T> : ICollection<TableEntry<T>>, IXmlSerializable
     {
         private List<TableEntry<T>> _items = new List<TableEntry<T>>();
         private double _total;
@@ -33,9 +37,9 @@ namespace Tevador.RandomJS
             _total += item.Weight;
         }
 
-        public void Add(double weight, T item)
+        public void Add(T item, double weight)
         {
-            _items.Add(new TableEntry<T>(weight, item));
+            _items.Add(new TableEntry<T>(item, weight));
             _total += weight;
         }
 
@@ -79,11 +83,11 @@ namespace Tevador.RandomJS
             return GetEnumerator();
         }
 
-        public T ChooseRandom(IRandom rand)
+        internal T ChooseRandom(IRandom rand)
         {
             if (Count == 0)
             {
-                throw new InvalidOperationException("RandomTable is empty");
+                throw new ProgramOptionsException("RandomTable is empty");
             }
             double pivot = rand.Gen() * _total;
             int i = 0;
@@ -94,6 +98,67 @@ namespace Tevador.RandomJS
                 probe += _items[i].Weight;
             }
             return _items[i].Value;          
+        }
+
+        protected abstract void AddValue(string valueStr, double weight, XmlReader reader);
+
+        private void AddDeserializedItem(string valueStr, string weightStr, XmlReader reader)
+        {
+            double weight;
+            if (!double.TryParse(weightStr, NumberStyles.Any, CultureInfo.InvariantCulture, out weight))
+                Error("Invalid value of attribute 'weight' = " + weightStr, reader);
+
+            AddValue(valueStr, weight, reader);
+        }
+
+        protected void Error(string message, XmlReader reader)
+        {
+            var li = reader as IXmlLineInfo;
+            if (li != null)
+                message += " on line " + li.LineNumber;
+            throw new ProgramOptionsException(message);
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            bool isEmpty = reader.IsEmptyElement;
+            reader.Read();
+
+            if (isEmpty)
+                return;
+
+            reader.MoveToContent();
+
+            while (reader.NodeType != XmlNodeType.EndElement)
+            {
+                string valueStr = reader["type"];
+                string weightStr = reader["weight"];
+
+                if (valueStr == null) Error("Missing attribute 'type'", reader);
+                if (weightStr == null) Error("Missing attribute 'weight'", reader);
+
+                AddDeserializedItem(valueStr, weightStr, reader);
+
+                reader.Read();
+                reader.MoveToContent();
+            }
+            reader.ReadEndElement();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            foreach (var item in _items)
+            {
+                writer.WriteStartElement("item");
+                writer.WriteAttributeString("type", item.Value.ToString());
+                writer.WriteAttributeString("weight", item.Weight.ToString(CultureInfo.InvariantCulture));
+                writer.WriteEndElement();
+            }
         }
     }
 }

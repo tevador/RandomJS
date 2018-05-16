@@ -30,8 +30,15 @@ namespace Tevador.RandomJS
         readonly static GlobalVariable _cycles = new GlobalVariable(_cyclesVaribleName) { Initializer = new Literal("0") };
         readonly static GlobalVariable _maxCycles = new GlobalVariable(_maxCyclesConstantName, true);
 
+        public int MaxCycles
+        {
+            get;
+            private set;
+        }
+
         public LoopCyclesProtection(int maxCycles)
         {
+            MaxCycles = maxCycles;
             _maxCycles.Initializer = new Literal(maxCycles.ToString());
         }
 

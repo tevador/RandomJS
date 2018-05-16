@@ -17,15 +17,77 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System;
 using Tevador.RandomJS.Operators;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Tevador.RandomJS
 {
-    class ProgramOptions
+    public class ProgramOptions
     {
+        private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(ProgramOptions), new XmlRootAttribute(nameof(ProgramOptions)));
+
+        public static ProgramOptions FromXml()
+        {
+            var configurationFileName = typeof(ProgramOptions).Name + ".xml";
+            try
+            {
+                using (var reader = File.OpenText(configurationFileName))
+                    return FromXml(XmlReader.Create(reader));
+            }
+            catch(Exception e)
+            {
+                throw new ProgramOptionsException($"Failed to load ProgramOptions from file {configurationFileName}", e);
+            }
+        }
+
+        public static ProgramOptions FromXml(XmlReader reader)
+        {
+            return (ProgramOptions)_serializer.Deserialize(reader);
+        }
+
+        public OperatorTable<AssignmentOperator> AssignmentOperators { get; set; }
+        public OperatorTable<UnaryOperator> UnaryOperators { get; set; }
+        public OperatorTable<BinaryOperator> BinaryOperators { get; set; }
+        public EnumTable<LiteralType> Literals { get; set; }
+        public EnumTable<NumericLiteralType> NumericLiterals { get; set; }
+        public EnumTable<ExpressionType> GlobalExpressions { get; set; }
+        public EnumTable<ExpressionType> Expressions { get; set; }
+
         public int GlobalVariablesCount { get; set; }
-        public CallDepthProtection DepthProtection { get; set; }
-        public LoopCyclesProtection CyclesProtection { get; set; }
+        public int MaxCallDepth
+        {
+            get
+            {
+                if (DepthProtection != null) return DepthProtection.MaxDepth;
+                return 0;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    DepthProtection = new CallDepthProtection(value);
+                }
+            }
+        }
+
+        public int MaxLoopCycles
+        {
+            get
+            {
+                if (CyclesProtection != null) return CyclesProtection.MaxCycles;
+                return 0;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    CyclesProtection = new LoopCyclesProtection(value);
+                }
+            }
+        }
         public int MaxExpressionDepth { get; set; }
         public int MaxStatementDepth { get; set; }
         public double ConstVariableChance { get; set; }
@@ -39,15 +101,17 @@ namespace Tevador.RandomJS
         public int MaxExpressionAttempts { get; set; }
         public int FpMathPrecision { get; set; }
 
-        public byte[] Seed { get; set; }
+        [XmlIgnore]
+        internal CallDepthProtection DepthProtection { get; set; }
+
+        [XmlIgnore]
+        internal LoopCyclesProtection CyclesProtection { get; set; }
+
+        [XmlIgnore]
+        internal byte[] Seed { get; set; }
+
         
-        public RandomTable<LiteralType> Literals { get; set; }
-        public RandomTable<NumericLiteralType> NumericLiterals { get; set; }
-        public RandomTable<ExpressionType> GlobalExpressions { get; set; }
-        public RandomTable<ExpressionType> Expressions { get; set; }
-        public RandomTable<AssignmentOperator> AssignmentOperators { get; set; }
-        public RandomTable<UnaryOperator> UnaryOperators { get; set; }
-        public RandomTable<BinaryOperator> BinaryOperators { get; set; }
+        
 
         public override string ToString()
         {

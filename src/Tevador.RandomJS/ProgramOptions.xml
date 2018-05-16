@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProgramOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AssignmentOperators>
+    <item type="Basic" weight="0.7" />
+    <item type="Add" weight="0.15" />
+    <item type="Sub" weight="0.05" />
+    <item type="Mul" weight="0.05" />
+    <item type="Div" weight="0.05" />
+    <item type="Mod" weight="0.04" />
+    <item type="PreInc" weight="0.2" />
+    <item type="PostDec" weight="0.2" />
+    <item type="PreDec" weight="0.2" />
+    <item type="PostInc" weight="0.2" />
+  </AssignmentOperators>
+  <UnaryOperators>
+    <item type="Plus" weight="0.05" />
+    <item type="Typeof" weight="0.1" />
+    <item type="Minus" weight="0.2" />
+    <item type="Not" weight="0.2" />
+    <item type="Sqrt" weight="0.2" />
+    <item type="Exp" weight="0.05" />
+    <item type="Log" weight="0.05" />
+    <item type="Sin" weight="0.05" />
+    <item type="Cos" weight="0.05" />
+    <item type="Atan" weight="0.05" />
+    <item type="Floor" weight="0.05" />
+    <item type="Ceil" weight="0.05" />
+    <item type="Abs" weight="0.05" />
+  </UnaryOperators>
+  <BinaryOperators>
+    <item type="Add" weight="0.4" />
+    <item type="Comma" weight="0.05" />
+    <item type="Sub" weight="0.1" />
+    <item type="Mul" weight="0.1" />
+    <item type="Div" weight="0.1" />
+    <item type="Mod" weight="0.1" />
+    <item type="Less" weight="0.1" />
+    <item type="Greater" weight="0.1" />
+    <item type="Equal" weight="0.1" />
+    <item type="NotEqual" weight="0.1" />
+    <item type="Min" weight="0.05" />
+    <item type="Max" weight="0.05" />
+    <item type="BitAnd" weight="0.05" />
+    <item type="BitOr" weight="0.05" />
+    <item type="Xor" weight="0.05" />
+  </BinaryOperators>
+  <Literals>
+    <item type="String" weight="0.2" />
+    <item type="Numeric" weight="0.8" />
+  </Literals>
+  <NumericLiterals>
+    <item type="Boolean" weight="0.125" />
+    <item type="DecimalInteger" weight="0.125" />
+    <item type="BinaryInteger" weight="0.05" />
+    <item type="OctalInteger" weight="0.125" />
+    <item type="SmallInteger" weight="0.125" />
+    <item type="HexInteger" weight="0.125" />
+    <item type="FixedFloat" weight="0.125" />
+    <item type="ExpFloat" weight="0.125" />
+  </NumericLiterals>
+  <Expressions>
+    <item type="AssignmentExpression" weight="0.13" />
+    <item type="BinaryExpression" weight="0.15" />
+    <item type="FunctionExpression" weight="0.2" />
+    <item type="Literal" weight="0.1" />
+    <item type="TernaryExpression" weight="0.05" />
+    <item type="UnaryExpression" weight="0.07" />
+    <item type="VariableInvocationExpression" weight="0.1" />
+  </Expressions>
+  <GlobalVariablesCount>10</GlobalVariablesCount>
+  <MaxCallDepth>0</MaxCallDepth>
+  <MaxLoopCycles>0</MaxLoopCycles>
+  <MaxExpressionDepth>5</MaxExpressionDepth>
+  <MaxStatementDepth>2</MaxStatementDepth>
+  <ConstVariableChance>0.1</ConstVariableChance>
+  <MaxFunctionParameterCount>3</MaxFunctionParameterCount>
+  <MaxStringLiteralLength>10</MaxStringLiteralLength>
+  <MaxStringVariableLength>20</MaxStringVariableLength>
+  <FuncInvocationInExprChance>0.25</FuncInvocationInExprChance>
+  <AllowFunctionOverwriting>false</AllowFunctionOverwriting>
+  <AllowFunctionsInsideFunctions>false</AllowFunctionsInsideFunctions>
+  <PreferFuncParametersToLiterals>true</PreferFuncParametersToLiterals>
+  <MaxExpressionAttempts>10</MaxExpressionAttempts>
+  <FpMathPrecision>9</FpMathPrecision>
+</ProgramOptions>

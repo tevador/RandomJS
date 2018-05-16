@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS
 {
-    enum ExpressionType
+    public enum ExpressionType
     {
         Literal,
         FunctionExpression,

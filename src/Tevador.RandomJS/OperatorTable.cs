@@ -17,17 +17,23 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System.Xml;
+using System.Reflection;
+
 namespace Tevador.RandomJS
 {
-    public class TableEntry<T>
+    public class OperatorTable<T> : RandomTable<T>
+        where T : Operators.Operator
     {
-        public TableEntry(T value, double weight)
+        protected override void AddValue(string valueStr, double weight, XmlReader reader)
         {
-            Weight = weight;
-            Value = value;
-        }
+            var field = typeof(T).GetField(valueStr, BindingFlags.Public | BindingFlags.Static);
+            if(field == null)
+                Error("Invalid value of attribute 'type' = " + valueStr, reader);
 
-        public double Weight { get; private set; }
-        public T Value { get; private set; }
+            T type = (T)field.GetValue(null);
+
+            Add(type, weight);
+        }
     }
 }

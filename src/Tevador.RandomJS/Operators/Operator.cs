@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS.Operators
 {
-    abstract class Operator
+    public abstract class Operator
     {
         protected Operator(string symbol, OperatorRequirement flags)
         {

@@ -19,14 +19,14 @@
 
 namespace Tevador.RandomJS.Operators
 {
-    sealed class AssignmentOperator : Operator
+    public sealed class AssignmentOperator : Operator
     {
-        public readonly static AssignmentOperator Mov = new AssignmentOperator("=");
+        public readonly static AssignmentOperator Basic = new AssignmentOperator("=");
         public readonly static AssignmentOperator Add = new AssignmentOperator("+=");
         public readonly static AssignmentOperator Sub = new AssignmentOperator("-=", OperatorRequirement.NumericOnly);
         public readonly static AssignmentOperator Mul = new AssignmentOperator("*=", OperatorRequirement.NumericOnly);
         public readonly static AssignmentOperator Div = new AssignmentOperator("/=", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);
-        public readonly static AssignmentOperator Rem = new AssignmentOperator("%=", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);
+        public readonly static AssignmentOperator Mod = new AssignmentOperator("%=", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);
 
         public readonly static AssignmentOperator PreInc = new AssignmentOperator("++", OperatorRequirement.NumericOnly | OperatorRequirement.Prefix | OperatorRequirement.WithoutRhs);
         public readonly static AssignmentOperator PostInc = new AssignmentOperator("++", OperatorRequirement.NumericOnly | OperatorRequirement.WithoutRhs);

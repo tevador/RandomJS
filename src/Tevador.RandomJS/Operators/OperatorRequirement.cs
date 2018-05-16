@@ -22,7 +22,7 @@ using System;
 namespace Tevador.RandomJS.Operators
 {
     [Flags]
-    enum OperatorRequirement
+    public enum OperatorRequirement
     {
         None = 0,
         NumericOnly = 1 << 0,
