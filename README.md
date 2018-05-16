@@ -33,7 +33,7 @@ In the description below, `Blake2b(X)` and `Blake2b(K,X)` refer to the plain and
 1. If `PoW` doesn't meet the difficulty target, go back to step 1.
 1. Submit `H, R` as the result to be included in the block.
 
-Finding and verifying a solution takes on average 767 Blake2b hash calculations, 256 random javascript program generations and 256 javascript executions.
+Finding and verifying a solution takes on average 769 Blake2b hash calculations, 256 random javascript program generations and 256 javascript executions.
 
 ### Verification algorithm
 Input: `H, R` from the received block.
@@ -73,7 +73,7 @@ The project has 3 main units:
 
 ### Linux
 #### Dependencies
-1. Mono 4.0+ ([via package manager](http://www.mono-project.com/download/stable/#download-lin)). For recent Ubuntu and Debian distros, install using `sudo apt-get install mono-complete`.
+1. Mono 4.0+ ([via package manager](http://www.mono-project.com/download/stable/#download-lin)). For recent Ubuntu and Debian distros, install using `sudo apt-get install mono-devel`.
 1. NodeJS ([via package manager](https://nodejs.org/en/download/package-manager/)). For recent Ubuntu and Debian distros, install using `curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -` and `sudo apt-get install -y nodejs`
 
 #### Instructions
