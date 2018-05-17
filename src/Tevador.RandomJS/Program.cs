@@ -103,7 +103,7 @@ namespace Tevador.RandomJS
                 {
                     using (var ms = new MemoryStream(20 * 1024))
                     {
-                        using (var writer = new StreamWriter(ms))
+                        using (var writer = new StreamWriter(ms) { NewLine = "\n" })
                         {
                             WriteTo(writer);
                         }
@@ -241,14 +241,23 @@ namespace Tevador.RandomJS
 
         static void Main(string[] args)
         {
-            int seed = Environment.TickCount;
-            if (args.Length > 0 && !int.TryParse(args[0], out seed))
+            byte[] seed;
+            if (args.Length > 0)
             {
-                Console.WriteLine("Invalid seed value");
-                return;
+                string hexSeed = args[0];
+                if (hexSeed.Length != 64 || hexSeed.Any(c => !"0123456789abcdef".Contains(c)))
+                {
+                    Console.WriteLine("Invalid seed value (expected 64 hex characters)");
+                    return;
+                }
+                seed = BinaryUtils.StringToByteArray(hexSeed);
+            }
+            else
+            {
+                seed = GenerateSeed(Environment.TickCount);
             }
             var random = new Xoshiro256Plus();
-            var p = new ProgramFactory(random).GenProgram(GenerateSeed(seed));
+            var p = new ProgramFactory(random).GenProgram(seed);
             p.WriteTo(Console.Out);
             Console.WriteLine($"// {random.Counter} random numbers used");
         }
