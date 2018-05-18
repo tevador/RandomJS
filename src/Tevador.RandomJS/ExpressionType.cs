@@ -24,6 +24,7 @@ namespace Tevador.RandomJS
         Literal,
         FunctionExpression,
         VariableInvocationExpression,
+        FunctionInvocationExpression,
         AssignmentExpression,
         UnaryExpression,
         BinaryExpression,

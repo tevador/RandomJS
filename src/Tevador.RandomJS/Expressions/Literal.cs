@@ -21,9 +21,9 @@ namespace Tevador.RandomJS.Expressions
 {
     class Literal : Expression
     {
-        protected Literal() { }
+        protected Literal() : base(null) { }
 
-        public Literal(string value)
+        public Literal(string value) : this()
         {
             Value = value;
         }
@@ -33,19 +33,6 @@ namespace Tevador.RandomJS.Expressions
         public override void WriteTo(System.IO.TextWriter w)
         {
             w.Write(Value);
-        }
-
-        public static Literal Generate(IRandom rand, IScope scope)
-        {
-            switch (scope.Options.Literals.ChooseRandom(rand))
-            {
-                case LiteralType.Numeric:
-                    return NumericLiteral.Generate(rand, scope);
-
-                default:
-                    int stringLength = rand.GenInt(scope.Options.MaxStringLiteralLength);
-                    return new Literal { Value = rand.GenStringLiteral(stringLength) };                    
-            }
         }
     }
 }

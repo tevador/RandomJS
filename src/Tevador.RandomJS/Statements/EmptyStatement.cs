@@ -17,18 +17,15 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
+using System.IO;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
-    interface IScope
+    class EmptyStatement : Statement
     {
-        IEnumerable<Variable> Variables { get; }
-        IScope Parent { get; }
-        bool InFunc { get; }
-        bool HasBreak { get; }
-        int VariableCounter { get; set; }
-        int StatementDepth { get; }
-        void Require(Global gf);
+        public override void WriteTo(TextWriter w)
+        {
+            w.Write(";");
+        }
     }
 }

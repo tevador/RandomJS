@@ -19,6 +19,7 @@
 
 using System.IO;
 using Tevador.RandomJS.Expressions;
+using Tevador.RandomJS.Statements;
 
 namespace Tevador.RandomJS
 {

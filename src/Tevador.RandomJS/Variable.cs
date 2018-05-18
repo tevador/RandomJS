@@ -18,25 +18,26 @@
 */
 
 using Tevador.RandomJS.Expressions;
+using Tevador.RandomJS.Statements;
 
 namespace Tevador.RandomJS
 {
     class Variable : IVariable
     {
-        public string Name { get; private set; }
-        public bool IsParameter { get; private set; }
-        public bool IsConstant { get; private set; }
-        public bool IsLoopCounter { get; private set; }
-        public IScope Parent { get; private set; }
-        public Statement Declaration { get; private set; }
+        public string Name { get; set; }
+        public bool IsParameter { get; set; }
+        public bool IsConstant { get; set; }
+        public bool IsLoopCounter { get; set; }
+        public IScope Parent { get; set; }
+        public Statement Declaration { get; set; }
         public Expression Initializer { get; set; }
 
-        private Variable()
+        public Variable()
         {
             Declaration = new VariableDeclaration(this);
         }
 
-        private static string _getVariableName(int index)
+        public static string GetVariableName(int index)
         {
             string str = string.Empty;
             while (index >= 0)
@@ -51,24 +52,6 @@ namespace Tevador.RandomJS
         public override string ToString()
         {
             return Name;
-        }
-
-        public static Variable Generate(IRandom rand, IScope scope, bool isParameter, bool isLoopCounter)
-        {
-            var v = new Variable();
-            v.Name = _getVariableName(scope.VariableCounter++);
-            v.Parent = scope;
-            v.IsParameter = isParameter;
-            v.IsLoopCounter = isLoopCounter;
-            if (!v.IsParameter && !v.IsLoopCounter && rand.FlipCoin(scope.Options.ConstVariableChance))
-            {
-                v.IsConstant = true;
-            }
-            if (!v.IsParameter && !v.IsLoopCounter)
-            {
-                v.Initializer = Expression.Generate(rand, scope, null, false);
-            }
-            return v;
         }
     }
 }

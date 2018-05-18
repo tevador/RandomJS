@@ -18,24 +18,24 @@
 */
 
 using System.IO;
+using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
-    class ForLoop : Loop
+    class ExpressionStatement<T> : Statement
+        where T : Expression
     {
-        public Statement Initializator { get; set; }
-        public Expressions.Expression Iterator { get; set; }
-        public Statement Body { get; set; }
+        private T _expr;
+
+        public ExpressionStatement(T expr)
+        {
+            _expr = expr;
+        }
 
         public override void WriteTo(TextWriter w)
         {
-            w.Write("for(");
-            Initializator.WriteTo(w);
-            Control.WriteTo(w);
+            _expr.WriteTo(w);
             w.Write(";");
-            Iterator.WriteTo(w);
-            w.Write(")");
-            Body.WriteTo(w);
         }
     }
 }

@@ -45,7 +45,28 @@ namespace Tevador.RandomJS
 
         public static ProgramOptions FromXml(XmlReader reader)
         {
-            return (ProgramOptions)_serializer.Deserialize(reader);
+            var options = (ProgramOptions)_serializer.Deserialize(reader);
+            options.Validate();
+            return options;
+        }
+
+        public void Validate()
+        {
+            if (AssignmentOperators.Total <= 0) ErrorTable(nameof(AssignmentOperators));
+            if (UnaryOperators.Total <= 0) ErrorTable(nameof(UnaryOperators));
+            if (BinaryOperators.Total <= 0) ErrorTable(nameof(BinaryOperators));
+            if (Literals.Total <= 0) ErrorTable(nameof(Literals));
+            if (NumericLiterals.Total <= 0) ErrorTable(nameof(NumericLiterals));
+            if (Expressions.Total <= 0) ErrorTable(nameof(Expressions));
+            if (Statements.Total <= 0) ErrorTable(nameof(Statements));
+            if (AssignmentInForLoop.Total <= 0) ErrorTable(nameof(AssignmentInForLoop));
+
+            if (MaxSmallInteger <= 0) throw new ProgramOptionsException($"Value of {nameof(MaxSmallInteger)} must be greater than zero.");
+        }
+
+        public void ErrorTable(string table)
+        {
+            throw new ProgramOptionsException($"Sum of weights in table '{table}' must be greater than zero");
         }
 
         public OperatorTable<AssignmentOperator> AssignmentOperators { get; set; }
@@ -53,10 +74,17 @@ namespace Tevador.RandomJS
         public OperatorTable<BinaryOperator> BinaryOperators { get; set; }
         public EnumTable<LiteralType> Literals { get; set; }
         public EnumTable<NumericLiteralType> NumericLiterals { get; set; }
-        public EnumTable<ExpressionType> GlobalExpressions { get; set; }
         public EnumTable<ExpressionType> Expressions { get; set; }
+        public EnumTable<StatementType> Statements { get; set; }
+        public OperatorTable<AssignmentOperator> AssignmentInForLoop { get; set; }
 
-        public int GlobalVariablesCount { get; set; }
+        public Interval BlockStatementsRange { get; set; }
+        public Interval FunctionParametersCountRange { get; set; }
+        public Interval StringLiteralLengthRange { get; set; }
+        public Interval GlobalVariablesCountRange { get; set; }
+        public Interval LocalVariablesCountRange { get; set; }
+        public Interval SwitchLabelsCountRange { get; set; }
+
         public int MaxCallDepth
         {
             get
@@ -90,16 +118,17 @@ namespace Tevador.RandomJS
         }
         public int MaxExpressionDepth { get; set; }
         public int MaxStatementDepth { get; set; }
-        public double ConstVariableChance { get; set; }
-        public int MaxFunctionParameterCount { get; set; }
-        public int MaxStringLiteralLength { get; set; }
         public int MaxStringVariableLength { get; set; }
-        public double FuncInvocationInExprChance { get; set; }
-        public bool AllowFunctionOverwriting { get; set; }
-        public bool AllowFunctionsInsideFunctions { get; set; }
-        public bool PreferFuncParametersToLiterals { get; set; }
         public int MaxExpressionAttempts { get; set; }
+        public int MaxStatementAttempts { get; set; }
         public int FpMathPrecision { get; set; }
+        public double ConstVariableChance { get; set; }
+        public double ElseChance { get; set; }
+        public bool AllowFunctionOverwriting { get; set; }
+        public bool AllowNestedFunctions { get; set; }
+        public bool PreferFuncParameters { get; set; }
+        public int MaxSmallInteger { get; set; }
+        public double ForLoopVariableBoundsChance { get; set; }
 
         [XmlIgnore]
         internal CallDepthProtection DepthProtection { get; set; }
@@ -108,14 +137,9 @@ namespace Tevador.RandomJS
         internal LoopCyclesProtection CyclesProtection { get; set; }
 
         [XmlIgnore]
-        internal byte[] Seed { get; set; }
-
-        
-        
-
-        public override string ToString()
+        internal VariableOptions VariableOptions
         {
-            return "Seed: " + BinaryUtils.ByteArrayToString(Seed);
+            get { return AllowFunctionOverwriting ? VariableOptions.NonFunctionInitializer : 0; }
         }
     }
 }

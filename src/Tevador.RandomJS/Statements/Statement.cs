@@ -17,31 +17,23 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System;
-using Tevador.RandomJS.Expressions;
+using System.IO;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
-    class LoopControlExpression : Expression
+    abstract class Statement
     {
-        Expression _expr;
-        LoopCyclesProtection _protection;
+        public abstract void WriteTo(TextWriter w);
 
-        public LoopControlExpression(IScope scope, Expression expr)
+        public virtual bool IsTerminating
         {
-            _protection = scope.Options.CyclesProtection;
-            _expr = expr;
+            get { return false; }
         }
 
-        public override void WriteTo(System.IO.TextWriter w)
+        public int StatementDepth
         {
-            if (_expr != null)
-            {
-                _expr.WriteTo(w);
-                if (_protection != null)
-                    w.Write("&&");
-            }
-            _protection?.WriteTo(w);
+            get;
+            protected set;
         }
     }
 }

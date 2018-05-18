@@ -18,23 +18,24 @@
 */
 
 using System.Collections.Generic;
+using Tevador.RandomJS.Statements;
 
 namespace Tevador.RandomJS.Expressions
 {
     class FunctionExpression : Expression, IScope
     {
-        public FunctionExpression(IScope parent)
+        public FunctionExpression(IScope parentScope, Expression parentExpression)
+            : base(parentExpression)
         {
-            Parent = parent;
+            Parent = parentScope;
             VariableCounter = Parent.VariableCounter;
             StatementDepth = Parent.StatementDepth; //increased in Body
         }
 
-        /* public string Name { get; private set; } anonymous */
-        private List<Variable> _parameters = new List<Variable>();
+        public readonly List<Variable> Parameters = new List<Variable>();
         private List<Variable> _unusedVariables = new List<Variable>(); // TODO
-        public Expression DefaultReturnValue { get; private set; }
-        public Block Body { get; private set; }
+        public Expression DefaultReturnValue { get; set; }
+        public Block Body { get; set; }
 
         public IEnumerable<Variable> Variables
         {
@@ -47,16 +48,11 @@ namespace Tevador.RandomJS.Expressions
                         yield return v;
                     }
                 }
-                foreach (var v in _parameters)
+                foreach (var v in Parameters)
                 {
                     yield return v;
                 }
             }
-        }
-
-        public Expression MakeReturn(IRandom rand)
-        {
-            return new NonEmptyExpression(Expression.Generate(rand, this, null, true), rand, this);
         }
 
         public IScope Parent
@@ -68,7 +64,7 @@ namespace Tevador.RandomJS.Expressions
         public override void WriteTo(System.IO.TextWriter w)
         {
             w.Write("function (");
-            using (var enumerator = _parameters.GetEnumerator())
+            using (var enumerator = Parameters.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
@@ -96,43 +92,19 @@ namespace Tevador.RandomJS.Expressions
             set;
         }
 
-        public int StatementDepth
-        {
-            get;
-            private set;
-        }
-
-
         public void Require(Global gf)
         {
             Parent.Require(gf);
         }
 
-
-        public ProgramOptions Options
-        {
-            get { return Parent.Options; }
-        }
-
-        public static FunctionExpression Generate(IRandom rand, IScope scope, Expression parent)
-        {
-            var func = new FunctionExpression(scope);
-            //func.ExpressionDepth = scope.StatementDepth + 1;
-            int paramCount = rand.GenInt(1, scope.Options.MaxFunctionParameterCount);
-            for (int i = 0; i < paramCount; ++i)
-            {
-                func._parameters.Add(Variable.Generate(rand, func, true, false));
-            }
-            func._unusedVariables.AddRange(func._parameters);
-            func.DefaultReturnValue = func.MakeReturn(rand);
-            func.Body = Block.Generate(rand, func);
-            return func;
-        }
-
-
         public bool InFunc
         {
             get { return true; }
+        }
+
+        public bool HasBreak
+        {
+            get { return false; }
         }
     }
 }

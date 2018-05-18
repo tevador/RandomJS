@@ -23,6 +23,10 @@ namespace Tevador.RandomJS.Expressions
 {
     class BinaryExpression : Expression
     {
+        public BinaryExpression(Expression parent)
+            : base(parent)
+        { }
+
         public BinaryOperator Operator { get; set; }
         public Expression Lhs { get; set; }
         public Expression Rhs { get; set; }
@@ -46,28 +50,6 @@ namespace Tevador.RandomJS.Expressions
                 Rhs.WriteTo(w);
                 w.Write(")");
             }
-        }
-
-        public static new BinaryExpression Generate(IRandom rand, IScope scope, Expression parent, bool isReturn)
-        {
-            BinaryExpression be = new BinaryExpression();
-            be.ParentExpression = parent;
-            var op = scope.Options.BinaryOperators.ChooseRandom(rand);
-            be.Operator = op;
-            var lhs = Expression.Generate(rand, scope, be, isReturn);
-            var rhs = Expression.Generate(rand, scope, be, isReturn);
-            if (op.Has(OperatorRequirement.NumericOnly))
-            {
-                lhs = new NumericExpression(scope, lhs, NumericLiteral.Generate(rand, scope));
-                rhs = new NumericExpression(scope, rhs, NumericLiteral.Generate(rand, scope));
-                if (op.Has(OperatorRequirement.RhsNonzero))
-                {
-                    rhs = new NonZeroExpression(scope, rhs);
-                }
-            }
-            be.Lhs = lhs;
-            be.Rhs = rhs;
-            return be;
         }
     }
 }

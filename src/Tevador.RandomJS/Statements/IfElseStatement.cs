@@ -17,12 +17,35 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System.IO;
+using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
-    abstract class Statement
+    class IfElseStatement : Statement
     {
-        public abstract void WriteTo(TextWriter w);
+        public IfElseStatement(Statement parent)
+        {
+            if(parent != null)
+            {
+                StatementDepth = parent.StatementDepth + 1;
+            }
+        }
+
+        public Expression Condition { get; set; }
+        public Statement Body { get; set; }
+        public Statement ElseBody { get; set; }
+
+        public override void WriteTo(System.IO.TextWriter w)
+        {
+            w.Write("if(");
+            Condition.WriteTo(w);
+            w.Write(")");
+            Body.WriteTo(w);
+            if (ElseBody != null)
+            {
+                w.Write("else ");
+                ElseBody.WriteTo(w);
+            }
+        }
     }
 }

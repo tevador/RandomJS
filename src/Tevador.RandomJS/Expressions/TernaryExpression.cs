@@ -21,9 +21,13 @@ namespace Tevador.RandomJS.Expressions
 {
     class TernaryExpression : Expression
     {
-        public Expression Condition { get; private set; }
-        public Expression TrueExpr { get; private set; }
-        public Expression FalseExpr { get; private set; }
+        public TernaryExpression(Expression parent)
+            : base(parent)
+        { }
+
+        public Expression Condition { get; set; }
+        public Expression TrueExpr { get; set; }
+        public Expression FalseExpr { get; set; }
 
         public override void WriteTo(System.IO.TextWriter w)
         {
@@ -32,16 +36,6 @@ namespace Tevador.RandomJS.Expressions
             TrueExpr.WriteTo(w);
             w.Write(" : ");
             FalseExpr.WriteTo(w);
-        }
-
-        public static new TernaryExpression Generate(IRandom rand, IScope scope, Expression parent, bool isReturn)
-        {
-            TernaryExpression te = new TernaryExpression();
-            te.ParentExpression = parent;
-            te.Condition = Expression.Generate(rand, scope, te, isReturn);
-            te.TrueExpr = Expression.Generate(rand, scope, te, isReturn);
-            te.FalseExpr = Expression.Generate(rand, scope, te, isReturn);
-            return te;
         }
     }
 }

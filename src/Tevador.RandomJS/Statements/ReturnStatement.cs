@@ -20,17 +20,17 @@
 using System;
 using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
     class ReturnStatement : Block
     {
-        public ReturnStatement(IScope scope, Expression value)
+        public ReturnStatement(IScope scope, Expression value, CallDepthProtection depthProtection)
             : base(scope)
         {
             if (!scope.InFunc) throw new InvalidOperationException("Return statement must be inside a function");
-            if (scope.Options.DepthProtection != null)
-                _statements.Add(scope.Options.DepthProtection.Cleanup);
-            _statements.Add(new _Return(value));
+            if (depthProtection != null)
+                Statements.Add(depthProtection.Cleanup);
+            Statements.Add(new _Return(value));
         }
 
         class _Return : Statement
@@ -52,6 +52,11 @@ namespace Tevador.RandomJS
                 }
                 w.Write(";");
             }
+        }
+
+        public override bool IsTerminating
+        {
+            get { return true; }
         }
     }
 }

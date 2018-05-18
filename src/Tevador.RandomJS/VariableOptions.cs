@@ -17,25 +17,16 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System.IO;
-using Tevador.RandomJS.Expressions;
+using System;
 
 namespace Tevador.RandomJS
 {
-    class ExpressionStatement<T> : Statement
-        where T : Expression
+    [Flags]
+    enum VariableOptions
     {
-        private T _expr;
-
-        public ExpressionStatement(T expr)
-        {
-            _expr = expr;
-        }
-
-        public override void WriteTo(TextWriter w)
-        {
-            _expr.WriteTo(w);
-            w.Write(";");
-        }
+        None = 0,
+        ForWriting = 1 << 0,
+        ParametersOnly = 1 << 1,
+        NonFunctionInitializer = 1 << 1 
     }
 }

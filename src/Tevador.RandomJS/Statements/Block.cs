@@ -20,7 +20,7 @@
 using System.Collections.Generic;
 using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
     class Block : Statement, IScope
     {
@@ -32,11 +32,12 @@ namespace Tevador.RandomJS
                 VariableCounter = Parent.VariableCounter;
                 StatementDepth = Parent.StatementDepth + 1;
                 InFunc = parent.InFunc;
+                HasBreak = parent.HasBreak;
             }
         }
 
-        protected List<Statement> _statements = new List<Statement>();
-        protected List<Variable> _declaredVariables = new List<Variable>();
+        public readonly List<Statement> Statements = new List<Statement>();
+        public readonly List<Variable> DeclaredVariables = new List<Variable>();
 
         public IEnumerable<Variable> Variables
         {
@@ -49,7 +50,7 @@ namespace Tevador.RandomJS
                         yield return v;
                     }
                 }
-                foreach (var v in _declaredVariables)
+                foreach (var v in DeclaredVariables)
                 {
                     yield return v;
                 }
@@ -67,22 +68,22 @@ namespace Tevador.RandomJS
         public override void WriteTo(System.IO.TextWriter w)
         {
             bool hasBrackets = false;
-            if (Parent != null && (Parent is FunctionExpression || _statements.Count > 1 || _declaredVariables.Count > 0))
+            if (Parent != null && (Parent is FunctionExpression || Statements.Count > 1 || DeclaredVariables.Count > 0))
             {
                 w.Write("{");
                 hasBrackets = true;
             }
 
-            foreach (var v in _declaredVariables)
+            foreach (var v in DeclaredVariables)
             {
                 v.Declaration.WriteTo(w);
             }
 
-            if (!hasBrackets && _statements.Count == 0)
+            if (!hasBrackets && Statements.Count == 0)
             {
                 w.Write(";");
             }
-            foreach (var s in _statements)
+            foreach (var s in Statements)
             {
                 s.WriteTo(w);
             }
@@ -98,13 +99,6 @@ namespace Tevador.RandomJS
             set;
         }
 
-        public virtual int StatementDepth
-        {
-            get;
-            private set;
-        }
-
-
         public virtual void Require(Global gf)
         {
             if (Parent != null)
@@ -113,36 +107,10 @@ namespace Tevador.RandomJS
             }
         }
 
-
-        public virtual ProgramOptions Options
+        public virtual bool HasBreak
         {
-            get { return Parent.Options; }
-        }
-
-        public static Block Generate(IRandom rand, IScope scope)
-        {
-            var block = new Block(scope);
-            block.StatementDepth = scope.StatementDepth + 1;
-            var func = scope as FunctionExpression;
-            if (func != null)
-            {
-                if (func.Options.DepthProtection != null)
-                {
-                    block._statements.Add(func.Options.DepthProtection.Check);
-                    block._statements.Add(new ReturnStatement(block, func.DefaultReturnValue));
-                }
-                block._statements.Add(new ReturnStatement(block, func.MakeReturn(rand)));
-            }
-            else
-            {
-                Variable v = rand.ChooseVariable(scope, true);
-                if (v != null)
-                {
-                    block._statements.Add(new AssignmentStatement(AssignmentExpression.Generate(rand, block, v, null)));
-                }
-            }
-
-            return block;
+            get;
+            private set;
         }
     }
 }

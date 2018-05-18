@@ -31,6 +31,11 @@ namespace Tevador.RandomJS
         private List<TableEntry<T>> _items = new List<TableEntry<T>>();
         private double _total;
 
+        public double Total
+        {
+            get { return _total; }
+        }
+
         public void Add(TableEntry<T> item)
         {
             _items.Add(item);
@@ -107,6 +112,9 @@ namespace Tevador.RandomJS
             double weight;
             if (!double.TryParse(weightStr, NumberStyles.Any, CultureInfo.InvariantCulture, out weight))
                 Error("Invalid value of attribute 'weight' = " + weightStr, reader);
+
+            if (weight < 0)
+                Error("Weight cannot be negative", reader);
 
             AddValue(valueStr, weight, reader);
         }

@@ -17,28 +17,17 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System.Collections.Generic;
 using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
-    class OutputStatement : Statement
+    abstract class Loop : BreakableStatement
     {
-        public Expression Value { get; private set; }
-        //private List<Expression> Parameters = new List<Expression>();
+        protected Loop(IScope parent)
+            : base(parent)
+        { }
 
-        public override void WriteTo(System.IO.TextWriter w)
-        {
-            w.Write(GlobalFunction.PRNT.Name);
-            w.Write("(");
-            Value.WriteTo(w);
-            w.WriteLine(");");
-        }
-
-        public static OutputStatement Generate(IRandom rand, Program program, Variable v)
-        {
-            program.Require(GlobalFunction.PRNT);
-            var os = new OutputStatement() { Value = VariableInvocationExpression.Generate(rand, program, v, null) };
-            return os;
-        }
+        public LoopControlExpression Control { get; set; }
     }
 }

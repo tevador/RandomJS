@@ -19,7 +19,7 @@
 
 using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
     class AssignmentStatement : ExpressionStatement<AssignmentExpression>
     {

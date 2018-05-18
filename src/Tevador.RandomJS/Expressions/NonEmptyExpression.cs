@@ -24,11 +24,11 @@ namespace Tevador.RandomJS.Expressions
         public Expression Lhs { get; private set; }
         public Literal Rhs { get; set; }
 
-        public NonEmptyExpression(Expression value, IRandom rand, IScope scope)
+        public NonEmptyExpression(Expression value, Literal defaultValue)
+            : base(value)
         {
-            ParentExpression = value;
             Lhs = value;
-            Rhs = Literal.Generate(rand, scope);
+            Rhs = defaultValue;
         }
 
         public override void WriteTo(System.IO.TextWriter w)

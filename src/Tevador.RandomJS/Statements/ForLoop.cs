@@ -18,42 +18,44 @@
 */
 
 using System.Collections.Generic;
+using System.IO;
 
-namespace Tevador.RandomJS.Expressions
+namespace Tevador.RandomJS.Statements
 {
-    class FunctionInvocationExpression : Expression
+    class ForLoop : Loop
     {
-        public FunctionExpression Function { get; set; }
-        public readonly List<Expression> Parameters = new List<Expression>();
+        public ForLoop(IScope scope)
+            : base(scope)
+        { }
 
-        public FunctionInvocationExpression(Expression parent)
-            : base(parent)
+        public Variable IteratorVariable { get; set; }
+        public Expressions.Expression IteratorExpression { get; set; }
+        public Statement Body { get; set; }
+
+        public override IEnumerable<Variable> Variables
         {
+            get
+            {
+                if(Parent != null)
+                {
+                    foreach (var v in Parent.Variables)
+                    {
+                        yield return v;
+                    }
+                }
+                //yield return IteratorVariable;
+            }
         }
 
-        public override void WriteTo(System.IO.TextWriter w)
+        public override void WriteTo(TextWriter w)
         {
-            w.Write("(");
-            Function.WriteTo(w);
-            w.Write(")(");
-            using (var enumerator = Parameters.GetEnumerator())
-            {
-                if (enumerator.MoveNext())
-                {
-                    bool isLast;
-                    do
-                    {
-                        var param = enumerator.Current;
-                        isLast = !enumerator.MoveNext();
-
-                        param.WriteTo(w);
-                        if (!isLast)
-                            w.Write(", ");
-                    }
-                    while (!isLast);
-                }
-            }
+            w.Write("for(");
+            IteratorVariable.Declaration.WriteTo(w);
+            Control.WriteTo(w);
+            w.Write(";");
+            IteratorExpression.WriteTo(w);
             w.Write(")");
+            Body.WriteTo(w);
         }
     }
 }

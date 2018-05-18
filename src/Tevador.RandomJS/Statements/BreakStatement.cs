@@ -17,27 +17,20 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using Tevador.RandomJS.Expressions;
+using System.IO;
 
-namespace Tevador.RandomJS
+namespace Tevador.RandomJS.Statements
 {
-    class IfElseStatement : Statement
+    class BreakStatement : Statement
     {
-        public Expression Condition { get; private set; }
-        public Statement Body { get; private set; }
-        public Statement ElseBody { get; private set; }
-
-        public override void WriteTo(System.IO.TextWriter w)
+        public override void WriteTo(TextWriter w)
         {
-            w.Write("if(");
-            Condition.WriteTo(w);
-            w.WriteLine(")");
-            Body.WriteTo(w);
-            if (ElseBody != null)
-            {
-                w.WriteLine("else ");
-                ElseBody.WriteTo(w);
-            }
+            w.Write("break;");
+        }
+
+        public override bool IsTerminating
+        {
+            get { return true; }
         }
     }
 }

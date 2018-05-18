@@ -37,6 +37,7 @@ namespace Tevador.RandomJS
         }
 
         public LoopCyclesProtection(int maxCycles)
+            : base(null)
         {
             MaxCycles = maxCycles;
             _maxCycles.Initializer = new Literal(maxCycles.ToString());
@@ -50,7 +51,7 @@ namespace Tevador.RandomJS
 
         public override void WriteTo(TextWriter w)
         {
-            w.Write("{0}++<{1}", _cyclesVaribleName, _maxCyclesConstantName);
+            w.Write("({0}++<{1})", _cyclesVaribleName, _maxCyclesConstantName);
         }
     }
 }

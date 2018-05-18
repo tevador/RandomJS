@@ -19,16 +19,16 @@
 
 namespace Tevador.RandomJS
 {
-    enum StatementType
+    public enum StatementType
     {
-        Return,
-        Break,
-        Assignment,
-        IfElse,
-        ForLoop,
+        ReturnStatement,
+        BreakStatement,
+        AssignmentStatement,
+        IfElseStatement,
+        ForLoopStatement,
         //WhileLoop, TODO
         //DoWhileLoop, TODO
-        Block,
-        VariableInvocation,
+        BlockStatement,
+        VariableInvocationStatement,
     }
 }

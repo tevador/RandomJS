@@ -127,20 +127,25 @@ namespace Tevador.RandomJS
             return items[rand.GenInt(items.Count)];
         }
 
-        public static Variable ChooseVariable(this IRandom rand, IScope scope, bool forWriting = false, bool parametersOnly = false)
+        public static bool Has(this VariableOptions options, VariableOptions vo)
+        {
+            return (options & vo) != 0;
+        }
+
+        public static Variable ChooseVariable(this IRandom rand, IScope scope, VariableOptions options = VariableOptions.None)
         {
             Variable[] candidates;
-            if (forWriting)
+            if (options.Has(VariableOptions.ForWriting))
             {
                 candidates = scope.Variables
                     .Where(
                         var => 
-                            (var.IsParameter || !parametersOnly) &&
+                            (var.IsParameter || !options.Has(VariableOptions.ParametersOnly)) &&
                             !var.IsConstant && 
-                            (scope.Options.AllowFunctionOverwriting || !(var.Initializer is FunctionExpression)))
+                            (options.Has(VariableOptions.NonFunctionInitializer) || !(var.Initializer is FunctionExpression)))
                     .ToArray();
             }
-            else if (parametersOnly)
+            else if (options.Has(VariableOptions.ParametersOnly))
             {
                 candidates = scope.Variables.Where(var => var.IsParameter).ToArray();
             }

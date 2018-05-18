@@ -17,6 +17,8 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using Tevador.RandomJS.Statements;
+
 namespace Tevador.RandomJS
 {
     class CallDepthProtection

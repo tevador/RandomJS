@@ -22,7 +22,7 @@ namespace Tevador.RandomJS.Expressions
     class VariableExpression : VariableInvocationExpression
     {
         public VariableExpression(IVariable variable)
-            : base(variable)
+            : base(variable, null)
         {
         }
 

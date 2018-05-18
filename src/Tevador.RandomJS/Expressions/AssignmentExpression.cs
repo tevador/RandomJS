@@ -23,43 +23,55 @@ namespace Tevador.RandomJS.Expressions
 {
     class AssignmentExpression : Expression
     {
-        public VariableExpression Variable { get; private set; }
-        public AssignmentOperator Operator { get; private set; }
-        public NumericLiteral DefaultValue { get; private set; }
-        public Expression Rhs { get; private set; }
+        public AssignmentExpression(Expression parent)
+            :base(parent)
+        { }
+
+        public Variable Variable { get; set; }
+        public AssignmentOperator Operator { get; set; }
+        public NumericLiteral DefaultValue { get; set; }
+        public Expression Rhs { get; set; }
 
         public override void WriteTo(System.IO.TextWriter w)
         {
-            if (!Operator.Has(OperatorRequirement.NumericOnly))
+            if (Variable.IsLoopCounter || !Operator.Has(OperatorRequirement.NumericOnly))
             {
                 w.Write("(");
-                Variable.WriteTo(w);
-                w.Write(Operator);
-                Rhs.WriteTo(w);
+                if (Operator.Has(OperatorRequirement.Prefix))
+                {
+                    w.Write(Operator);
+                    w.Write(Variable);
+                }
+                else
+                {
+                    w.Write(Variable);
+                    w.Write(Operator);
+                }
+                Rhs?.WriteTo(w);
                 w.Write(")");
             }
             else
             {
                 w.Write(GlobalFunction.CALC);
                 w.Write("(");
-                Variable.WriteTo(w);
+                w.Write(Variable);
                 w.Write(", function() { return (");
                 if (Operator.Has(OperatorRequirement.WithoutRhs))
                 {
                     if (Operator.Has(OperatorRequirement.Prefix))
                     {
                         w.Write(Operator);
-                        Variable.WriteTo(w);
+                        w.Write(Variable);
                     }
                     else
                     {
-                        Variable.WriteTo(w);
+                        w.Write(Variable);
                         w.Write(Operator);
                     }
                 }
                 else
                 {
-                    Variable.WriteTo(w);
+                    w.Write(Variable);
                     w.Write(Operator);
                     Rhs.WriteTo(w);
                 }
@@ -67,34 +79,6 @@ namespace Tevador.RandomJS.Expressions
                 DefaultValue.WriteTo(w);
                 w.Write(")");
             }
-        }
-
-        public static AssignmentExpression Generate(IRandom rand, IScope scope, Variable v, Expression parent, bool isReturn = false)
-        {
-            AssignmentOperator op = scope.Options.AssignmentOperators.ChooseRandom(rand);
-            AssignmentExpression ae = new AssignmentExpression();
-            ae.ParentExpression = parent;
-            ae.Operator = op;
-            if (op.Has(OperatorRequirement.NumericOnly))
-            {
-                scope.Require(GlobalFunction.CALC);
-                ae.DefaultValue = NumericLiteral.Generate(rand, scope);
-            }
-            if (!op.Has(OperatorRequirement.WithoutRhs))
-            {
-                Expression expr = Expression.Generate(rand, scope, ae, isReturn);
-                if (op.Has(OperatorRequirement.NumericOnly))
-                {
-                    expr = new NumericExpression(scope, expr, NumericLiteral.Generate(rand, scope));
-                }
-                if (op.Has(OperatorRequirement.RhsNonzero))
-                {
-                    expr = new NonZeroExpression(scope, expr);
-                }
-                ae.Rhs = expr;
-            }
-            ae.Variable = new VariableExpression(v);
-            return ae;
         }
     }
 }

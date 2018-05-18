@@ -23,36 +23,13 @@ namespace Tevador.RandomJS.Expressions
 {
     class UnaryExpression : Expression
     {
-        public UnaryOperator Operator { get; private set; }
-        public Expression Value { get; private set; }
-        public NumericLiteral DefaultValue { get; private set; }
+        public UnaryExpression(Expression parent)
+            : base(parent)
+        { }
 
-        public static new UnaryExpression Generate(IRandom rand, IScope scope, Expression parent, bool isReturn)
-        {
-            UnaryExpression ue = new UnaryExpression();
-            ue.ParentExpression = parent;
-            UnaryOperator op = scope.Options.UnaryOperators.ChooseRandom(rand);
-            ue.Operator = op;
-            Expression expr = Expression.Generate(rand, scope, ue, isReturn);
-            if (op.Has(OperatorRequirement.NumericOnly))
-            {
-                expr = new NumericExpression(scope, expr, NumericLiteral.Generate(rand, scope));
-            }
-            if (op.Has(OperatorRequirement.RhsNonnegative))
-            {
-                expr = new NonNegativeExpression(scope, expr);
-            }
-            if (op.Has(OperatorRequirement.RhsNonzero))
-            {
-                expr = new NonZeroExpression(scope, expr);
-            }
-            if (op.Has(OperatorRequirement.LimitedPrecision))
-            {
-                scope.Require(GlobalFunction.PREC);
-            }
-            ue.Value = expr;
-            return ue;
-        }
+        public UnaryOperator Operator { get; set; }
+        public Expression Value { get; set; }
+        public NumericLiteral DefaultValue { get; set; }
 
         public override void WriteTo(System.IO.TextWriter w)
         {

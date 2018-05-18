@@ -17,10 +17,29 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-namespace Tevador.RandomJS
+using Tevador.RandomJS.Operators;
+
+namespace Tevador.RandomJS.Statements
 {
-    abstract class Loop : Statement
+    class VariableDeclaration : Statement
     {
-        protected LoopControlExpression Control { get; set; }
+        IVariable _value;
+
+        public VariableDeclaration(IVariable v)
+        {
+            _value = v;
+        }
+
+        public override void WriteTo(System.IO.TextWriter w)
+        {
+            w.Write(_value.IsConstant ? "const " : "let ");
+            w.Write(_value.Name);
+            if (_value.Initializer != null)
+            {
+                w.Write(AssignmentOperator.Basic);
+                _value.Initializer.WriteTo(w);
+            }
+            w.Write(";");
+        }
     }
 }

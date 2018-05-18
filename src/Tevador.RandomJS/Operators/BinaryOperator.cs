@@ -31,6 +31,8 @@ namespace Tevador.RandomJS.Operators
         public readonly static BinaryOperator Greater = new BinaryOperator(">");
         public readonly static BinaryOperator Equal = new BinaryOperator("==");
         public readonly static BinaryOperator NotEqual = new BinaryOperator("!=");
+        public readonly static BinaryOperator And = new BinaryOperator("&&");
+        public readonly static BinaryOperator Or = new BinaryOperator("||");
         public readonly static BinaryOperator BitAnd = new BinaryOperator("&", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator BitOr = new BinaryOperator("|", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator Xor = new BinaryOperator("^", OperatorRequirement.NumericOnly);
