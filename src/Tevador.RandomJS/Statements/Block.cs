@@ -73,21 +73,17 @@ namespace Tevador.RandomJS.Statements
                 w.Write("{");
                 hasBrackets = true;
             }
-
-            foreach (var v in DeclaredVariables)
-            {
-                v.Declaration.WriteTo(w);
-            }
-
             if (!hasBrackets && Statements.Count == 0)
             {
                 w.Write(";");
             }
-            foreach (var s in Statements)
+            else
             {
-                s.WriteTo(w);
+                foreach (var s in Statements)
+                {
+                    s.WriteTo(w);
+                }
             }
-
             if (hasBrackets)
                 w.Write("}");
         }

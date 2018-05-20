@@ -24,8 +24,18 @@ const port = 18111;
 const maxScriptLength = 1024 * 1024; //1 MiB
 const vmOptions = { 
     displayErrors: true,
-    timeout: 1000
+    timeout: 10000
 };
+
+function nanotime() {
+    let hrtime = process.hrtime();
+    return hrtime[0] + hrtime[1] / 1e9;
+}
+
+let outputRuntime = process.argv[2] === '--perf';
+
+if(outputRuntime)
+    console.log('Runtime will be appended to the script output');
 
 http.createServer(function (request, response) {
     if(request.method === "POST") {
@@ -38,7 +48,6 @@ http.createServer(function (request, response) {
             }
         });
         request.on('end', function() {
-            console.log('Request script length: ' + source.length);
             const sandbox = { 
                 console: {
                     output: '',
@@ -49,12 +58,18 @@ http.createServer(function (request, response) {
             };
             vm.createContext(sandbox);
             let status = 200;
+            let startTime = nanotime();
             try{
                 vm.runInContext(source, sandbox, vmOptions);
             } catch (error) {
                 sandbox.console.output += error;
                 status = 500;
             }
+            let endTime = nanotime();
+            let executionTime = endTime - startTime;
+            console.log('Request script length: ' + source.length + ', Execution time: ' + executionTime);
+            if (outputRuntime)
+                sandbox.console.output += '\nRUNTIME: ' + (endTime - startTime);
             response.writeHead(status, {'Content-Type': 'text/plain'});
             response.end(sandbox.console.output);
         });

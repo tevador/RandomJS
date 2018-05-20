@@ -43,7 +43,7 @@ namespace Tevador.RandomJS.Statements
                         yield return v;
                     }
                 }
-                //yield return IteratorVariable;
+                yield return IteratorVariable;
             }
         }
 

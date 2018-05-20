@@ -42,6 +42,15 @@ namespace Tevador.RandomJS.Expressions
                 Rhs.WriteTo(w);
                 w.Write(")");
             }
+            else if (Operator.Has(OperatorRequirement.StringLengthLimit))
+            {
+                w.Write(GlobalFunction.STRL);
+                w.Write("(");
+                Lhs.WriteTo(w);
+                w.Write(Operator);
+                Rhs.WriteTo(w);
+                w.Write(")");
+            }
             else
             {
                 w.Write("(");

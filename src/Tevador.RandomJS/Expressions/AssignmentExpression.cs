@@ -34,7 +34,22 @@ namespace Tevador.RandomJS.Expressions
 
         public override void WriteTo(System.IO.TextWriter w)
         {
-            if (Variable.IsLoopCounter || !Operator.Has(OperatorRequirement.NumericOnly))
+            if (!Variable.IsLoopCounter && Operator.Has(OperatorRequirement.StringLengthLimit))
+            {
+                // ((var += expr), var = __strl(var))
+                w.Write("((");
+                w.Write(Variable);
+                w.Write(Operator);
+                Rhs.WriteTo(w);
+                w.Write("),");
+                w.Write(Variable);
+                w.Write(AssignmentOperator.Basic);
+                w.Write(GlobalFunction.STRL);
+                w.Write("(");
+                w.Write(Variable);
+                w.Write("))");
+            }
+            else if (Variable.IsLoopCounter || !Operator.Has(OperatorRequirement.NumericOnly))
             {
                 w.Write("(");
                 if (Operator.Has(OperatorRequirement.Prefix))

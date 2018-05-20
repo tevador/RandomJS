@@ -26,9 +26,11 @@ namespace Tevador.RandomJS.Operators
         public readonly static UnaryOperator Typeof = new UnaryOperator("typeof ");
         public readonly static UnaryOperator Minus = new UnaryOperator("-", OperatorRequirement.NumericOnly);
         public readonly static UnaryOperator Sqrt = new UnaryOperator("Math.sqrt", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall | OperatorRequirement.LimitedPrecision | OperatorRequirement.RhsNonnegative);
+        public readonly static UnaryOperator Cbrt = new UnaryOperator("Math.cbrt", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall | OperatorRequirement.LimitedPrecision);
         public readonly static UnaryOperator Abs = new UnaryOperator("Math.abs", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall);
         public readonly static UnaryOperator Ceil = new UnaryOperator("Math.ceil", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall);
         public readonly static UnaryOperator Floor = new UnaryOperator("Math.floor", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall);
+        public readonly static UnaryOperator Trunc = new UnaryOperator("Math.trunc", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall);
         public readonly static UnaryOperator Sin = new UnaryOperator("Math.sin", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall | OperatorRequirement.LimitedPrecision);
         public readonly static UnaryOperator Cos = new UnaryOperator("Math.cos", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall | OperatorRequirement.LimitedPrecision);
         public readonly static UnaryOperator Exp = new UnaryOperator("Math.exp", OperatorRequirement.NumericOnly | OperatorRequirement.FunctionCall | OperatorRequirement.LimitedPrecision);

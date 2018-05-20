@@ -22,7 +22,7 @@ namespace Tevador.RandomJS.Operators
     public sealed class AssignmentOperator : Operator
     {
         public readonly static AssignmentOperator Basic = new AssignmentOperator("=");
-        public readonly static AssignmentOperator Add = new AssignmentOperator("+=");
+        public readonly static AssignmentOperator Add = new AssignmentOperator("+=", OperatorRequirement.StringLengthLimit);
         public readonly static AssignmentOperator Sub = new AssignmentOperator("-=", OperatorRequirement.NumericOnly);
         public readonly static AssignmentOperator Mul = new AssignmentOperator("*=", OperatorRequirement.NumericOnly);
         public readonly static AssignmentOperator Div = new AssignmentOperator("/=", OperatorRequirement.NumericOnly | OperatorRequirement.RhsNonzero);

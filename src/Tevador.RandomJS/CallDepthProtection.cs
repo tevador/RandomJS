@@ -24,21 +24,13 @@ namespace Tevador.RandomJS
     class CallDepthProtection
     {
         static readonly string _depthVaribleName = "__depth";
-        static readonly string _maxDepthConstantName = "__maxDepth";
+        public static readonly string MaxDepthConstantName = "__maxDepth";
 
         readonly GlobalVariable _depthVarible = new GlobalVariable(_depthVaribleName) { Initializer = new Expressions.Literal("0") };
-        readonly GlobalVariable _maxDepthConstant = new GlobalVariable(_maxDepthConstantName, true);
+        readonly GlobalVariable _maxDepthConstant = new GlobalVariable(MaxDepthConstantName, true);
 
-        public int MaxDepth
+        public CallDepthProtection()
         {
-            get;
-            private set;
-        }
-
-        public CallDepthProtection(int maxDepth)
-        {
-            MaxDepth = maxDepth;
-            _maxDepthConstant.Initializer = new Expressions.Literal(maxDepth.ToString());
             Check = new CDPCheck();
             Cleanup = new CDPCleanup();
         }
@@ -56,7 +48,7 @@ namespace Tevador.RandomJS
         {
             public override void WriteTo(System.IO.TextWriter w)
             {
-                w.Write("if(++{0}>{1})", _depthVaribleName, _maxDepthConstantName);
+                w.Write("if(++{0}>{1})", _depthVaribleName, MaxDepthConstantName);
             }
         }
 

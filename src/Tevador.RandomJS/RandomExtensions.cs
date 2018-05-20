@@ -63,8 +63,7 @@ namespace Tevador.RandomJS
             {
                 char c = '\0';
                 while (length-- > 0 && (c = charset[rand.GenInt(charset.Length)]) == '0');
-                if(length >= 0 && c != '0')
-                    sb.Append(c);
+                sb.Append(c);
             }
             while (length-- > 0)
             {

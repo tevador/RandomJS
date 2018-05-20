@@ -84,44 +84,17 @@ namespace Tevador.RandomJS
         public Interval GlobalVariablesCountRange { get; set; }
         public Interval LocalVariablesCountRange { get; set; }
         public Interval SwitchLabelsCountRange { get; set; }
+        public Interval MaxCallDepthRange { get; set; }
+        public Interval MaxLoopCyclesRange { get; set; }
+        public Interval MaxStringLengthRange { get; set; }
+        public Interval MathPrecisionRange { get; set; }
 
-        public int MaxCallDepth
-        {
-            get
-            {
-                if (DepthProtection != null) return DepthProtection.MaxDepth;
-                return 0;
-            }
-            set
-            {
-                if (value > 0)
-                {
-                    DepthProtection = new CallDepthProtection(value);
-                }
-            }
-        }
-
-        public int MaxLoopCycles
-        {
-            get
-            {
-                if (CyclesProtection != null) return CyclesProtection.MaxCycles;
-                return 0;
-            }
-            set
-            {
-                if (value > 0)
-                {
-                    CyclesProtection = new LoopCyclesProtection(value);
-                }
-            }
-        }
         public int MaxExpressionDepth { get; set; }
         public int MaxStatementDepth { get; set; }
-        public int MaxStringVariableLength { get; set; }
+        public bool EnableCallDepthProtection { get; set; }
+        public bool EnableLoopCyclesProtection { get; set; }
         public int MaxExpressionAttempts { get; set; }
         public int MaxStatementAttempts { get; set; }
-        public int FpMathPrecision { get; set; }
         public double ConstVariableChance { get; set; }
         public double ElseChance { get; set; }
         public bool AllowFunctionOverwriting { get; set; }
@@ -129,12 +102,7 @@ namespace Tevador.RandomJS
         public bool PreferFuncParameters { get; set; }
         public int MaxSmallInteger { get; set; }
         public double ForLoopVariableBoundsChance { get; set; }
-
-        [XmlIgnore]
-        internal CallDepthProtection DepthProtection { get; set; }
-
-        [XmlIgnore]
-        internal LoopCyclesProtection CyclesProtection { get; set; }
+        public bool AllowFunctionInvocationInLoop { get; set; }
 
         [XmlIgnore]
         internal VariableOptions VariableOptions

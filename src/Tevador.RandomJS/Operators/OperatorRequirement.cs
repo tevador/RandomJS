@@ -31,6 +31,7 @@ namespace Tevador.RandomJS.Operators
         FunctionCall = 1 << 3,
         LimitedPrecision = 1 << 4,
         Prefix = 1 << 5,
-        WithoutRhs = 1 << 6
+        WithoutRhs = 1 << 6,
+        StringLengthLimit = 1 << 7,
     }
 }

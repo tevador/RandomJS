@@ -25,22 +25,15 @@ namespace Tevador.RandomJS
     class LoopCyclesProtection : Expression
     {
         static readonly string _cyclesVaribleName = "_cycles";
-        static readonly string _maxCyclesConstantName = "__maxCycles";
+        public static readonly string MaxCyclesConstantName = "__maxCycles";
 
         readonly static GlobalVariable _cycles = new GlobalVariable(_cyclesVaribleName) { Initializer = new Literal("0") };
-        readonly static GlobalVariable _maxCycles = new GlobalVariable(_maxCyclesConstantName, true);
+        readonly static GlobalVariable _maxCycles = new GlobalVariable(MaxCyclesConstantName, true);
 
-        public int MaxCycles
-        {
-            get;
-            private set;
-        }
-
-        public LoopCyclesProtection(int maxCycles)
+        public LoopCyclesProtection()
             : base(null)
         {
-            MaxCycles = maxCycles;
-            _maxCycles.Initializer = new Literal(maxCycles.ToString());
+
         }
 
         public void AttachTo(IScope scope)
@@ -51,7 +44,7 @@ namespace Tevador.RandomJS
 
         public override void WriteTo(TextWriter w)
         {
-            w.Write("({0}++<{1})", _cyclesVaribleName, _maxCyclesConstantName);
+            w.Write("({0}++<{1})", _cyclesVaribleName, MaxCyclesConstantName);
         }
     }
 }

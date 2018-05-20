@@ -21,7 +21,7 @@ namespace Tevador.RandomJS.Operators
 {
     public sealed class BinaryOperator : Operator
     {
-        public readonly static BinaryOperator Add = new BinaryOperator("+");
+        public readonly static BinaryOperator Add = new BinaryOperator("+", OperatorRequirement.StringLengthLimit);
         public readonly static BinaryOperator Comma = new BinaryOperator(",");
         public readonly static BinaryOperator Sub = new BinaryOperator("-", OperatorRequirement.NumericOnly);
         public readonly static BinaryOperator Mul = new BinaryOperator("*", OperatorRequirement.NumericOnly);
