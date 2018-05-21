@@ -60,8 +60,6 @@ namespace Tevador.RandomJS
             if (Expressions.Total <= 0) ErrorTable(nameof(Expressions));
             if (Statements.Total <= 0) ErrorTable(nameof(Statements));
             if (AssignmentInForLoop.Total <= 0) ErrorTable(nameof(AssignmentInForLoop));
-
-            if (MaxSmallInteger <= 0) throw new ProgramOptionsException($"Value of {nameof(MaxSmallInteger)} must be greater than zero.");
         }
 
         public void ErrorTable(string table)
@@ -88,9 +86,13 @@ namespace Tevador.RandomJS
         public Interval MaxLoopCyclesRange { get; set; }
         public Interval MaxStringLengthRange { get; set; }
         public Interval MathPrecisionRange { get; set; }
+        public Interval ObjectLiteralSizeRange { get; set; }
+        public Interval MaxObjectSizeRange { get; set; }
 
         public int MaxExpressionDepth { get; set; }
         public int MaxStatementDepth { get; set; }
+        public int MaxObjectLiteralDepth { get; set; }
+        public int MaxFunctionDepth { get; set; }
         public bool EnableCallDepthProtection { get; set; }
         public bool EnableLoopCyclesProtection { get; set; }
         public int MaxExpressionAttempts { get; set; }
@@ -98,9 +100,7 @@ namespace Tevador.RandomJS
         public double ConstVariableChance { get; set; }
         public double ElseChance { get; set; }
         public bool AllowFunctionOverwriting { get; set; }
-        public bool AllowNestedFunctions { get; set; }
         public bool PreferFuncParameters { get; set; }
-        public int MaxSmallInteger { get; set; }
         public double ForLoopVariableBoundsChance { get; set; }
         public bool AllowFunctionInvocationInLoop { get; set; }
 

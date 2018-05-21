@@ -37,5 +37,10 @@ namespace Tevador.RandomJS.Expressions
             w.Write(" : ");
             FalseExpr.WriteTo(w);
         }
+
+        public override bool IsNumeric
+        {
+            get { return TrueExpr.IsNumeric && FalseExpr.IsNumeric; }
+        }
     }
 }

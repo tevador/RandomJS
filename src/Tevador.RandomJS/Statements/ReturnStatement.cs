@@ -27,7 +27,7 @@ namespace Tevador.RandomJS.Statements
         public ReturnStatement(IScope scope, Expression value, CallDepthProtection depthProtection)
             : base(scope)
         {
-            if (!scope.InFunc) throw new InvalidOperationException("Return statement must be inside a function");
+            if (scope.FunctionDepth == 0) throw new InvalidOperationException("Return statement must be inside a function");
             if (depthProtection != null)
                 Statements.Add(depthProtection.Cleanup);
             Statements.Add(new _Return(value));

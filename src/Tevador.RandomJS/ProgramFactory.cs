@@ -81,7 +81,7 @@ namespace Tevador.RandomJS
         internal ReturnStatement GenReturnStatement(IScope scope, Expression expr = null)
         {
             expr = expr ?? GenExpression(scope, null, true);
-            return new ReturnStatement(scope, new NonEmptyExpression(expr, GenLiteral()), _depthProtection);
+            return new ReturnStatement(scope, new NonEmptyExpression(expr, GenLiteral(scope)), _depthProtection);
         }
 
         internal Statement GenStatement(IScope scope, Statement parent)
@@ -113,7 +113,7 @@ namespace Tevador.RandomJS
                         }
 
                     case StatementType.ReturnStatement:
-                        if (scope.InFunc)
+                        if (scope.FunctionDepth > 0)
                         {
                             return GenReturnStatement(scope);
                         }
@@ -203,7 +203,7 @@ namespace Tevador.RandomJS
                 switch (type)
                 {
                     case ExpressionType.Literal:
-                        return GenLiteral();
+                        return GenLiteral(scope);
 
                     case ExpressionType.AssignmentExpression:
                         if (scope.VariableCounter > 0 && (v = _rand.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
@@ -216,7 +216,7 @@ namespace Tevador.RandomJS
                         }
 
                     case ExpressionType.VariableInvocationExpression:
-                        if(scope.InFunc && _options.PreferFuncParameters)
+                        if(scope.FunctionDepth > 0 && _options.PreferFuncParameters)
                         {
                             v = _rand.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ParametersOnly);
                         }
@@ -239,7 +239,7 @@ namespace Tevador.RandomJS
                         {
                             continue;
                         }
-                        else if((!scope.InFunc || _options.AllowNestedFunctions) && (!scope.HasBreak || _options.AllowFunctionInvocationInLoop))
+                        else if((scope.FunctionDepth < _options.MaxFunctionDepth) && (!scope.HasBreak || _options.AllowFunctionInvocationInLoop))
                         {
                             return GenFunctionInvocationExpression(scope, parent);
                         }
@@ -252,9 +252,8 @@ namespace Tevador.RandomJS
                         }
                         else
                         {
-                            if (parent == null)
+                            if(parent == null && scope.FunctionDepth < _options.MaxFunctionDepth)
                             {
-                                if (scope.InFunc && !_options.AllowNestedFunctions) continue;
                                 return GenFunctionExpression(scope, parent);
                             }
                             else
@@ -279,7 +278,7 @@ namespace Tevador.RandomJS
                         return GenTernaryExpression(scope, parent, isReturn);
                 }
             }
-            return GenLiteral(); //fall back to a Literal
+            return GenLiteral(scope); //fall back to a Literal
         }
 
         internal FunctionInvocationExpression GenFunctionInvocationExpression(IScope scope, Expression parent)
@@ -307,7 +306,7 @@ namespace Tevador.RandomJS
             if (!op.Has(OperatorRequirement.WithoutRhs))
             {
                 Expression expr = GenExpression(scope, ae, isReturn);
-                if (op.Has(OperatorRequirement.NumericOnly))
+                if (op.Has(OperatorRequirement.NumericOnly) && !expr.IsNumeric)
                 {
                     expr = new NumericExpression(scope, expr, GenNumericLiteral());
                 }
@@ -321,14 +320,51 @@ namespace Tevador.RandomJS
             return ae;
         }
 
+        internal Literal GenLiteral(IScope scope)
+        {
+            return GenLiteral(scope, _options.MaxObjectLiteralDepth);
+        }
+
+        internal Literal GenLiteral(IScope scope, int maxDepth)
+        {
+            LiteralType list = LiteralType.String | LiteralType.Numeric | LiteralType.Object;
+            if (maxDepth <= 0)
+                list &= ~LiteralType.Object;
+            switch (_options.Literals.ChooseRandom(_rand, list))
+            {
+                case LiteralType.Numeric:
+                    return GenNumericLiteral();
+
+                case LiteralType.Object:
+                    return GenObjectLiteral(scope, maxDepth);
+
+                default:
+                    int stringLength = _options.StringLiteralLengthRange.RandomValue(_rand);
+                    return new Literal(_rand.GenStringLiteral(stringLength));
+            }
+        }
+
+        internal ObjectLiteral GenObjectLiteral(IScope scope, int maxDepth)
+        {
+            scope.Require(GlobalOverride.OVOF);
+            var ol = new ObjectLiteral();
+            int propertiesCount = _options.ObjectLiteralSizeRange.RandomValue(_rand);
+            while(propertiesCount-- > 0)
+            {
+                ol.Values.Add(GenLiteral(scope, maxDepth - 1));
+            }
+            return ol;
+        }
+
         internal NumericLiteral GenNumericLiteral()
         {
             return GenNumericLiteral(_options.NumericLiterals.ChooseRandom(_rand));
         }
 
-        internal NumericLiteral GenNumericLiteral(NumericLiteralType type, bool allowNegative = true)
+        internal NumericLiteral GenNumericLiteral(NumericLiteralType type)
         {
-            StringBuilder sb = new StringBuilder(35);
+            StringBuilder sb = new StringBuilder(37);
+            bool negative = false;
             switch (type)
             {
                 case NumericLiteralType.Boolean:
@@ -339,50 +375,79 @@ namespace Tevador.RandomJS
                     break;
 
                 case NumericLiteralType.SmallInteger:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
-                    sb.Append(_rand.GenInt(_options.MaxSmallInteger + 1));
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
+                    _rand.GenString(sb, 2, RandomExtensions.DecimalChars, false);
                     break;
 
                 case NumericLiteralType.BinaryInteger:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
                     sb.Append("0b");
                     _rand.GenString(sb, 32, RandomExtensions.BinaryChars);
                     break;
 
                 case NumericLiteralType.OctalInteger:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
                     sb.Append("0o");
                     _rand.GenString(sb, 10, RandomExtensions.OctalChars);
                     break;
 
                 case NumericLiteralType.HexInteger:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
                     sb.Append("0x");
                     _rand.GenString(sb, 8, RandomExtensions.HexChars);
                     break;
 
                 case NumericLiteralType.FixedFloat:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
                     _rand.GenString(sb, 5, RandomExtensions.DecimalChars, false);
                     sb.Append('.');
                     _rand.GenString(sb, 5, RandomExtensions.DecimalChars, true);
                     break;
 
                 case NumericLiteralType.ExpFloat:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
                     sb.Append(RandomExtensions.DecimalChars[_rand.GenInt(10)]);
                     sb.Append('.');
                     _rand.GenString(sb, 5, RandomExtensions.DecimalChars, true);
                     sb.Append('e');
                     if (_rand.FlipCoin()) sb.Append('-');
-                    sb.Append(_rand.GenInt(_options.MaxSmallInteger + 1));
+                    _rand.GenString(sb, 2, RandomExtensions.DecimalChars, true);
                     break;
 
                 default:
-                    if (allowNegative && _rand.FlipCoin()) sb.Append('-');
+                    if (_rand.FlipCoin())
+                    {
+                        sb.Append("(-");
+                        negative = true;
+                    }
                     _rand.GenString(sb, 9, RandomExtensions.DecimalChars, false);
                     break;
             }
+            if (negative) sb.Append(')');
             return new NumericLiteral(sb.ToString());
         }
 
@@ -403,7 +468,7 @@ namespace Tevador.RandomJS
             UnaryOperator op = _options.UnaryOperators.ChooseRandom(_rand);
             ue.Operator = op;
             Expression expr = GenExpression(scope, ue, isReturn);
-            if (op.Has(OperatorRequirement.NumericOnly))
+            if (op.Has(OperatorRequirement.NumericOnly) && !expr.IsNumeric)
             {
                 expr = new NumericExpression(scope, expr, GenNumericLiteral());
             }
@@ -436,8 +501,10 @@ namespace Tevador.RandomJS
             }
             if (op.Has(OperatorRequirement.NumericOnly))
             {
-                lhs = new NumericExpression(scope, lhs, GenNumericLiteral());
-                rhs = new NumericExpression(scope, rhs, GenNumericLiteral());
+                if(!lhs.IsNumeric)
+                    lhs = new NumericExpression(scope, lhs, GenNumericLiteral());
+                if (!rhs.IsNumeric)
+                    rhs = new NumericExpression(scope, rhs, GenNumericLiteral());
                 if (op.Has(OperatorRequirement.RhsNonzero))
                 {
                     rhs = new NonZeroExpression(scope, rhs);
@@ -455,19 +522,6 @@ namespace Tevador.RandomJS
             te.TrueExpr = GenExpression(scope, te, isReturn);
             te.FalseExpr = GenExpression(scope, te, isReturn);
             return te;
-        }
-
-        internal Literal GenLiteral()
-        {
-            switch (_options.Literals.ChooseRandom(_rand))
-            {
-                case LiteralType.Numeric:
-                    return GenNumericLiteral();
-
-                default:
-                    int stringLength = _options.StringLiteralLengthRange.RandomValue(_rand);
-                    return new Literal(_rand.GenStringLiteral(stringLength));
-            }
         }
 
         internal FunctionExpression GenFunctionExpression(IScope scope, Expression parent = null)

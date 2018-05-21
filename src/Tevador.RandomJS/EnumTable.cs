@@ -23,7 +23,7 @@ using System.Xml;
 namespace Tevador.RandomJS
 {
     public class EnumTable<T> : RandomTable<T>
-        where T : struct
+        where T : struct, IConvertible
     {
         public EnumTable()
         {
@@ -38,6 +38,34 @@ namespace Tevador.RandomJS
                 Error("Invalid value of attribute 'type' = " + valueStr, reader);
 
             Add(type, weight);
+        }
+
+        private bool IsInList(int index, ulong mask)
+        {
+            return (_items[index].Value.ToUInt64(null) & mask) != 0;
+        }
+
+        internal T ChooseRandom(IRandom rand, T list)
+        {
+            double total = 0.0;
+            ulong mask = list.ToUInt64(null);
+            for(int j = 0; j < _items.Count; ++j)
+            {
+                if (IsInList(j, mask))
+                    total += _items[j].Weight;
+            }
+            if (total == 0)
+                return default(T);
+            double pivot = rand.Gen() * total;
+            int i = 0;
+            double probe = IsInList(i, mask) ? _items[i].Weight : 0.0;
+            while (probe < pivot)
+            {
+                ++i;
+                if (IsInList(i, mask))
+                    probe += _items[i].Weight;
+            }
+            return _items[i].Value;
         }
     }
 }

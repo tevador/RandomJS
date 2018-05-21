@@ -50,10 +50,9 @@ namespace Tevador.RandomJS
             if (!_globalNames.ContainsKey(gl.Name))
             {
                 _globalNames.Add(gl.Name, gl);
-                var gfunc = gl as GlobalFunction;
-                if (gfunc?.References != null)
+                if (gl.References != null)
                 {
-                    Require(gfunc.References);
+                    Require(gl.References);
                 }
                 _globals.Add(gl);
             }
@@ -108,7 +107,9 @@ namespace Tevador.RandomJS
                 seed = BinaryUtils.GenerateSeed(Environment.TickCount);
             }
             var random = new Xoshiro256Plus();
-            var p = new ProgramFactory(random).GenProgram(seed);
+            random.Seed(seed);
+            var factory = new ProgramFactory(random);
+            var p = factory.GenProgram(seed);
             p.WriteTo(Console.Out);
             Console.WriteLine($"// {random.Counter} random numbers used");
         }

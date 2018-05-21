@@ -52,7 +52,8 @@
   </BinaryOperators>
   <Literals>
     <item type="String" weight="0.2" />
-    <item type="Numeric" weight="0.8" />
+    <item type="Numeric" weight="0.5" />
+    <item type="Object" weight="0.4" />
   </Literals>
   <NumericLiterals>
     <item type="Boolean" weight="1" />
@@ -106,11 +107,14 @@
   <MaxLoopCyclesRange>3000-6000</MaxLoopCyclesRange>
   <MaxStringLengthRange>15-25</MaxStringLengthRange>
   <MathPrecisionRange>10-14</MathPrecisionRange>  <!-- Functions with inexact results (such as Math.exp or Math.sqrt) are rounded to MathPrecision significant digits. -->
+  <ObjectLiteralSizeRange>0-4</ObjectLiteralSizeRange>
   
   <!--
       SCALAR OPTIONS.
   -->
 
+  <MaxFunctionDepth>1</MaxFunctionDepth>
+  <MaxObjectLiteralDepth>1</MaxObjectLiteralDepth>
   <EnableCallDepthProtection>true</EnableCallDepthProtection>
   <EnableLoopCyclesProtection>true</EnableLoopCyclesProtection>
   <MaxExpressionDepth>4</MaxExpressionDepth>
@@ -118,11 +122,9 @@
   <ConstVariableChance>0.1</ConstVariableChance>
   <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
   <AllowFunctionOverwriting>false</AllowFunctionOverwriting> <!-- Determines whether a function variable can be assigned to. -->
-  <AllowNestedFunctions>false</AllowNestedFunctions>
   <PreferFuncParameters>true</PreferFuncParameters> <!-- Determines if function parameters are selected preferentially to variables from the parent scope. -->
   <MaxExpressionAttempts>3</MaxExpressionAttempts>  <!-- When this is exceeded, a literal expression is generated. -->
   <MaxStatementAttempts>3</MaxStatementAttempts> <!-- When this is exceeded, an empty statement is generated. -->
-  <MaxSmallInteger>40</MaxSmallInteger> <!-- SmallInteger literal ranges from -MaxSmallInteger to MaxSmallInteger. -->
   <ForLoopVariableBoundsChance>0.35</ForLoopVariableBoundsChance> <!-- for(expr; var1 < var2; expr) instead of for(expr; var1 < literal; expr) -->
   <AllowFunctionInvocationInLoop>false</AllowFunctionInvocationInLoop>
 </ProgramOptions>

@@ -25,7 +25,7 @@ namespace Tevador.RandomJS
     {
         IEnumerable<Variable> Variables { get; }
         IScope Parent { get; }
-        bool InFunc { get; }
+        int FunctionDepth { get; }
         bool HasBreak { get; }
         int VariableCounter { get; set; }
         int StatementDepth { get; }

@@ -32,5 +32,10 @@ namespace Tevador.RandomJS.Expressions
         }
 
         public int ExpressionDepth { get; private set; }
+
+        public virtual bool IsNumeric
+        {
+            get { return false; }
+        }
     }
 }

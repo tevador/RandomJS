@@ -21,7 +21,8 @@ namespace Tevador.RandomJS
 {
     public enum LiteralType : ulong
     {
-        String = 0,
-        Numeric
+        String = 1 << 0,
+        Numeric = 1 << 1,
+        Object = 1 << 2
     }
 }

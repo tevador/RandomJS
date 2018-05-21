@@ -95,5 +95,10 @@ namespace Tevador.RandomJS.Expressions
                 w.Write(")");
             }
         }
+
+        public override bool IsNumeric
+        {
+            get { return Operator.Has(OperatorRequirement.NumericOnly); }
+        }
     }
 }

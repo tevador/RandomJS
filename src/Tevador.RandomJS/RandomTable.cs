@@ -28,7 +28,7 @@ namespace Tevador.RandomJS
 {
     public abstract class RandomTable<T> : ICollection<TableEntry<T>>, IXmlSerializable
     {
-        private List<TableEntry<T>> _items = new List<TableEntry<T>>();
+        protected List<TableEntry<T>> _items = new List<TableEntry<T>>();
         private double _total;
 
         public double Total

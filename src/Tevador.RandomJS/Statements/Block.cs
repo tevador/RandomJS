@@ -31,7 +31,7 @@ namespace Tevador.RandomJS.Statements
             {
                 VariableCounter = Parent.VariableCounter;
                 StatementDepth = Parent.StatementDepth + 1;
-                InFunc = parent.InFunc;
+                FunctionDepth = parent.FunctionDepth;
                 HasBreak = parent.HasBreak;
             }
         }
@@ -63,7 +63,7 @@ namespace Tevador.RandomJS.Statements
             private set;
         }
 
-        public virtual bool InFunc { get; private set; }
+        public virtual int FunctionDepth { get; private set; }
 
         public override void WriteTo(System.IO.TextWriter w)
         {

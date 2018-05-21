@@ -17,18 +17,27 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using Tevador.RandomJS.Statements;
+using System.IO;
+using Tevador.RandomJS.Operators;
 
 namespace Tevador.RandomJS
 {
-    abstract class Global : Statement
+    class GlobalOverride : GlobalFunction
     {
-        public string Name { get; protected set; }
-        public Global References { get; protected set; }
+        public readonly static GlobalOverride OTST = new GlobalOverride("Object.prototype.toString", "function() { return JSON.stringify(this); }");
+        public readonly static GlobalOverride OVOF = new GlobalOverride("Object.prototype.valueOf", "function() { for(let _ in this) if (typeof this[_] === 'number') return this[_]; return this; }", OTST);
 
-        public override string ToString()
+        public GlobalOverride(string name, string declaration, Global references = null)
+            : base(name, declaration, references)
         {
-            return Name;
+        }
+
+        public override void WriteTo(TextWriter w)
+        {
+            w.Write(Name);
+            w.Write(AssignmentOperator.Basic);
+            w.Write(Declaration);
+            w.Write(";");
         }
     }
 }

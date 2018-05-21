@@ -28,6 +28,7 @@ namespace Tevador.RandomJS.Expressions
             : base(parentExpression)
         {
             Parent = parentScope;
+            FunctionDepth = Parent.FunctionDepth + 1;
             VariableCounter = Parent.VariableCounter;
             StatementDepth = Parent.StatementDepth; //increased in Body
         }
@@ -97,9 +98,9 @@ namespace Tevador.RandomJS.Expressions
             Parent.Require(gf);
         }
 
-        public bool InFunc
+        public int FunctionDepth
         {
-            get { return true; }
+            get; private set;
         }
 
         public bool HasBreak

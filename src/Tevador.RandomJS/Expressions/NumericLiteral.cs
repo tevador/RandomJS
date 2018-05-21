@@ -26,5 +26,10 @@ namespace Tevador.RandomJS.Expressions
         public NumericLiteral(string value)
             : base(value)
         { }
+
+        public override bool IsNumeric
+        {
+            get { return true; }
+        }
     }
 }
