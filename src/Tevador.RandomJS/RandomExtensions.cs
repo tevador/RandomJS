@@ -126,6 +126,11 @@ namespace Tevador.RandomJS
             return items[rand.GenInt(items.Count)];
         }
 
+        public static T Choose<T>(this IRandom rand, IEnumerable<T> items, int count)
+        {
+            return items.ElementAt(rand.GenInt(count));
+        }
+
         public static bool Has(this VariableOptions options, VariableOptions vo)
         {
             return (options & vo) != 0;
@@ -133,28 +138,28 @@ namespace Tevador.RandomJS
 
         public static Variable ChooseVariable(this IRandom rand, IScope scope, VariableOptions options = VariableOptions.None)
         {
-            Variable[] candidates;
+            IEnumerable<Variable> candidates;
             if (options.Has(VariableOptions.ForWriting))
             {
                 candidates = scope.Variables
                     .Where(
-                        var => 
+                        var =>
                             (var.IsParameter || !options.Has(VariableOptions.ParametersOnly)) &&
-                            !var.IsConstant && 
-                            (options.Has(VariableOptions.NonFunctionInitializer) || !(var.Initializer is FunctionExpression)))
-                    .ToArray();
+                            !var.IsConstant &&
+                            (options.Has(VariableOptions.NonFunctionInitializer) || !(var.Initializer is FunctionExpression)));
             }
             else if (options.Has(VariableOptions.ParametersOnly))
             {
-                candidates = scope.Variables.Where(var => var.IsParameter).ToArray();
+                candidates = scope.Variables.Where(var => var.IsParameter);
             }
             else
             {
-                candidates = scope.Variables.ToArray();
+                candidates = scope.Variables;
             }
-            if (candidates.Length > 0)
+            var count = candidates.Count();
+            if (count > 0)
             {
-                return rand.Choose(candidates);
+                return rand.Choose(candidates, count);
             }
             return null;
         }

@@ -59,5 +59,20 @@ namespace Tevador.RandomJS
         {
             return (value << count) | (value >> ((sizeof(ulong) * 8) - count));
         }
+
+        public static unsafe byte[] GenerateSeed(int init)
+        {
+            ulong smallSeed = (ulong)init;
+            byte[] bigSeed = new byte[4 * sizeof(ulong)];
+            fixed (byte* buffer = bigSeed)
+            {
+                ulong* s = (ulong*)buffer;
+                s[0] = Xoshiro256Plus.SplitMix64(ref smallSeed);
+                s[1] = Xoshiro256Plus.SplitMix64(ref smallSeed);
+                s[2] = Xoshiro256Plus.SplitMix64(ref smallSeed);
+                s[3] = Xoshiro256Plus.SplitMix64(ref smallSeed);
+            }
+            return bigSeed;
+        }
     }
 }

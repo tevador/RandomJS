@@ -90,10 +90,6 @@ namespace Tevador.RandomJS
 
         internal T ChooseRandom(IRandom rand)
         {
-            if (Count == 0)
-            {
-                throw new ProgramOptionsException("RandomTable is empty");
-            }
             double pivot = rand.Gen() * _total;
             int i = 0;
             double probe = _items[i].Weight;

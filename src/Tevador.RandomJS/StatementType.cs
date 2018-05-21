@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS
 {
-    public enum StatementType
+    public enum StatementType : ulong
     {
         ReturnStatement,
         BreakStatement,

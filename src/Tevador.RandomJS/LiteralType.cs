@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS
 {
-    public enum LiteralType
+    public enum LiteralType : ulong
     {
         String = 0,
         Numeric

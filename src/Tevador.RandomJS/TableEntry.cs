@@ -19,7 +19,7 @@
 
 namespace Tevador.RandomJS
 {
-    public class TableEntry<T>
+    public struct TableEntry<T>
     {
         public TableEntry(T value, double weight)
         {

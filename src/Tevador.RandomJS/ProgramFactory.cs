@@ -86,17 +86,6 @@ namespace Tevador.RandomJS
 
         internal Statement GenStatement(IScope scope, Statement parent)
         {
-            if (scope.StatementDepth >= _options.MaxStatementDepth || parent.StatementDepth >= _options.MaxStatementDepth)
-            {
-                if (scope.InFunc)
-                {
-                    return GenReturnStatement(scope);
-                }
-                else
-                {
-                    return new EmptyStatement();
-                }
-            }
             for (int i = 0; i < _options.MaxStatementAttempts; ++i)
             {
                 var type = _options.Statements.ChooseRandom(_rand);
@@ -134,6 +123,8 @@ namespace Tevador.RandomJS
                         }
 
                     case StatementType.IfElseStatement:
+                        if (scope.StatementDepth >= _options.MaxStatementDepth || parent.StatementDepth >= _options.MaxStatementDepth)
+                            continue;
                         return GenIfElseStatement(scope, parent);
 
                     case StatementType.VariableInvocationStatement:
@@ -148,10 +139,8 @@ namespace Tevador.RandomJS
                         continue;
 
                     case StatementType.BlockStatement:
-                        if (parent is Block)
-                        {
+                        if (parent is Block || scope.StatementDepth >= _options.MaxStatementDepth || parent.StatementDepth >= _options.MaxStatementDepth)
                             continue;
-                        }
                         return GenBlock(scope);
 
                     case StatementType.ForLoopStatement:
@@ -207,10 +196,6 @@ namespace Tevador.RandomJS
 
         internal Expression GenExpression(IScope scope, Expression parent, bool isReturn)
         {
-            if (parent != null && parent.ExpressionDepth >= _options.MaxExpressionDepth)
-            {
-                return GenLiteral();
-            }
             for (int i = 0; i < _options.MaxExpressionAttempts; ++i)
             {
                 Variable v = null;
@@ -241,7 +226,7 @@ namespace Tevador.RandomJS
                         }
                         if(v != null)
                         {
-                            if (isReturn || (scope.HasBreak && !_options.AllowFunctionInvocationInLoop))
+                            if (isReturn || (scope.HasBreak && !_options.AllowFunctionInvocationInLoop) || (parent != null && parent.ExpressionDepth >= _options.MaxExpressionDepth))
                             {
                                 return new VariableExpression(v);
                             }
@@ -250,7 +235,7 @@ namespace Tevador.RandomJS
                         continue;
 
                     case ExpressionType.FunctionInvocationExpression:
-                        if (scope.StatementDepth >= _options.MaxStatementDepth)
+                        if (scope.StatementDepth >= _options.MaxStatementDepth || (parent != null && parent.ExpressionDepth >= _options.MaxExpressionDepth))
                         {
                             continue;
                         }
@@ -279,12 +264,18 @@ namespace Tevador.RandomJS
                         }
 
                     case ExpressionType.UnaryExpression:
+                        if ((parent != null && parent.ExpressionDepth >= _options.MaxExpressionDepth))
+                            continue;
                         return GenUnaryExpression(scope, parent, isReturn);
 
                     case ExpressionType.BinaryExpression:
+                        if ((parent != null && parent.ExpressionDepth >= _options.MaxExpressionDepth))
+                            continue;
                         return GenBinaryExpression(scope, parent, isReturn);
 
                     case ExpressionType.TernaryExpression:
+                        if ((parent != null && parent.ExpressionDepth >= _options.MaxExpressionDepth))
+                            continue;
                         return GenTernaryExpression(scope, parent, isReturn);
                 }
             }
@@ -379,7 +370,7 @@ namespace Tevador.RandomJS
 
                 case NumericLiteralType.ExpFloat:
                     if (allowNegative && _rand.FlipCoin()) sb.Append('-');
-                    sb.Append(_rand.GenInt(0, 10));
+                    sb.Append(RandomExtensions.DecimalChars[_rand.GenInt(10)]);
                     sb.Append('.');
                     _rand.GenString(sb, 5, RandomExtensions.DecimalChars, true);
                     sb.Append('e');
