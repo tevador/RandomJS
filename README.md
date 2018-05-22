@@ -3,10 +3,8 @@ This is a concept implementation of a proof-of-work (PoW) algorithm proposal for
 
 ### Key features
 * __ASIC resistant__. This is important for a decentralized cryptocurrency and allows anyone with an ordinary computer to participate in securing the network. The algorithm internally uses the Google V8 Javascript engine, which is a large software package consisting of almost 2 million lines of code. Full hardware implementation would require an enormous investment.
-* __Asymmetrical__. Finding a single solution takes roughly 1 second¹ on a modern CPU core, while a valid solution can be verified in a few milliseconds¹. This is beneficial for mining pools by reducing their hardware requirements.
+* __Asymmetrical__. The algorithm supports configurable asymmetry. Finding a single solution takes 2<sup>N</sup> times more effort than verifying a valid solution. This is beneficial for mining pools by reducing their hardware requirements.
 * __DoS resistant__. The algorithm stores an intermediate value in the block header, allowing quick verification whether the PoW meets the difficulty target. This requires just two Blake2b hash calculations (roughly 500 nanoseconds on a modern CPU). This is beneficial both for mining pools and network nodes in case someone wanted to flood them with invalid blocks.
-
-¹ These performance numbers are not final as the javascript generation algorithm is still in development.
 
 ## Algorithm description
 
@@ -17,7 +15,7 @@ The primary general-purpose hash function used by RandomJS is Blake2b with outpu
 1. __Speed.__ Blake2b was specifically designed to be fast in software, especially on modern 64-bit processors, where it's around three times faster than SHA-3.
 1. __Built-in keyed mode.__ RandomJS requires both a plain hash function and a keyed hash function.
 
-In the description below, `Blake2b(X)` and `Blake2b(K,X)` refer to the plain and keyed variant of Blake2b, respectively (both with 256-bit output length). `X[0]` refers to the left-most octet of a binary string `X`.
+In the description below, `Blake2b(X)` and `Blake2b(K,X)` refer to the plain and keyed variant of Blake2b, respectively (both with 256-bit output length). `N >= 0` is a configurable parameter.
 
 ### Mining algorithm
 1. Get a block header `H`.
@@ -26,14 +24,14 @@ In the description below, `Blake2b(X)` and `Blake2b(K,X)` refer to the plain and
 1. Calculate `A = Blake2b(K, P)`.
 1. Execute program `P` and capture its output `Q`.
 1. Calculate `B = Blake2b(K, Q)`.
-1. If `A[0] != B[0]`, go back to step 1.
-1. Set `B[0] = 0`.
+1. If the leftmost N bits of `A` and `B` differ, go back to step 1.
+1. Clear N leftmost bits of `B`.
 1. Calculate `R = (A XOR B)`.
 1. Calculate `PoW = Blake2b(K, R)`.
 1. If `PoW` doesn't meet the difficulty target, go back to step 1.
 1. Submit `H, R` as the result to be included in the block.
 
-Finding and verifying a solution takes on average 769 Blake2b hash calculations, 256 random javascript program generations and 256 javascript executions.
+Finding and verifying a solution takes on average 3×2<sup>N</sup>+1 Blake2b hash calculations, 2<sup>N</sup> random javascript program generations and 2<sup>N</sup> javascript executions.
 
 ### Verification algorithm
 Input: `H, R` from the received block.
@@ -42,8 +40,8 @@ Input: `H, R` from the received block.
 1. If `PoW` doesn't meet the difficulty target, _discard the block_.
 1. Generate a random Javascript program `P` using `K` as the seed.
 1. Calculate `A = Blake2b(K, P)`.
-1. If `A[0] != R[0]`, _discard the block_.
-1. Set `A[0] = 0`.
+1. If the N leftmost bits of `A` and `R` differ, _discard the block_.
+1. Clear the N leftmost bits of `A`.
 1. Execute program `P` and capture its output `Q`.
 1. Calculate `B = Blake2b(K, Q)`.
 1. If `R != (A XOR B)`, _discard the block_.
@@ -57,7 +55,7 @@ The concept of random javascript generator and miner presented here is written i
 
 The project has 3 main units:
 
-* __Tevador.RandomJS.exe__ - generates a random javascript program to STDOUT. Optional parameter is a numerical seed (signed 32-bit integer).
+* __Tevador.RandomJS.exe__ - generates a random javascript program and prints it to standard output. Optional parameter is a 256-bit seed (64 hex characters).
 * __Tevador.RandomJS.Crypto.exe__ - runs the miner for about 60 seconds and shows the mining statistics. Optional parameter is a Monero block header template (152 hex characters).
 * __sandbox.js__ - NodeJS sandbox for executing javascript. The sandbox must be running to use Tevador.RandomJS.Crypto.exe.
 
