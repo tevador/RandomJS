@@ -24,8 +24,8 @@ namespace Tevador.RandomJS
 {
     class GlobalOverride : GlobalFunction
     {
-        public readonly static GlobalOverride OTST = new GlobalOverride("Object.prototype.toString", "function() { return JSON.stringify(this); }");
-        public readonly static GlobalOverride OVOF = new GlobalOverride("Object.prototype.valueOf", "function() { for(let _ in this) if (typeof this[_] === 'number') return this[_]; return this; }", OTST);
+        public readonly static GlobalOverride OTST = new GlobalOverride("Object.prototype.toString", "function() {try{return JSON.stringify(this);}catch(_e){return _e;}}");
+        public readonly static GlobalOverride OVOF = new GlobalOverride("Object.prototype.valueOf", "function() { for(let _ in this) if (typeof this[_] === 'number') return this[_]; return this; }");
 
         public GlobalOverride(string name, string declaration, Global references = null)
             : base(name, declaration, references)
@@ -36,7 +36,14 @@ namespace Tevador.RandomJS
         {
             w.Write(Name);
             w.Write(AssignmentOperator.Basic);
-            w.Write(Declaration);
+            if (References != null)
+            {
+                w.Write(Declaration, References);
+            }
+            else
+            {
+                w.Write(Declaration);
+            }
             w.Write(";");
         }
     }

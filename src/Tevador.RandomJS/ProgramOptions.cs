@@ -89,14 +89,13 @@ namespace Tevador.RandomJS
         public Interval ObjectLiteralSizeRange { get; set; }
         public Interval MaxObjectSizeRange { get; set; }
 
+        public int VariableInitializerDepth { get; set; }
         public int MaxExpressionDepth { get; set; }
         public int MaxStatementDepth { get; set; }
         public int MaxObjectLiteralDepth { get; set; }
         public int MaxFunctionDepth { get; set; }
         public bool EnableCallDepthProtection { get; set; }
         public bool EnableLoopCyclesProtection { get; set; }
-        public int MaxExpressionAttempts { get; set; }
-        public int MaxStatementAttempts { get; set; }
         public double ConstVariableChance { get; set; }
         public double ElseChance { get; set; }
         public bool AllowFunctionOverwriting { get; set; }

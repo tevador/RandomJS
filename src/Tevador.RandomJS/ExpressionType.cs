@@ -21,13 +21,23 @@ namespace Tevador.RandomJS
 {
     public enum ExpressionType : ulong
     {
-        Literal,
-        AssignmentExpression,
-        VariableInvocationExpression,
-        FunctionInvocationExpression,
-        FunctionExpression,
-        UnaryExpression,
-        BinaryExpression,
-        TernaryExpression,
+        All = ~0UL,
+        Literal = 1 << 0,
+        AssignmentExpression = 1 << 1,
+        VariableInvocationExpression = 1 << 2,
+        FunctionInvocationExpression = 1 << 3,
+        FunctionExpression = 1 << 4,
+        UnaryExpression = 1 << 5,
+        BinaryExpression = 1 << 6,
+        TernaryExpression = 1 << 7,
+        EvalExpression = 1 << 8,
+        VariableExpression = 1 << 9,
+        ObjectConstructorExpression = 1 << 10,
+        ObjectSetExpression = 1 << 11,
+
+        Function = FunctionExpression | FunctionInvocationExpression,
+        NoVariable = Literal | FunctionInvocationExpression | FunctionExpression,
+        NoCall = Literal | AssignmentExpression | UnaryExpression | BinaryExpression | TernaryExpression | VariableExpression | ObjectSetExpression,
+        Flat = Literal | VariableExpression,
     }
 }

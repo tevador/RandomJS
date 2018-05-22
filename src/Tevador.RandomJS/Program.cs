@@ -106,12 +106,18 @@ namespace Tevador.RandomJS
             {
                 seed = BinaryUtils.GenerateSeed(Environment.TickCount);
             }
-            var random = new Xoshiro256Plus();
-            random.Seed(seed);
-            var factory = new ProgramFactory(random);
-            var p = factory.GenProgram(seed);
-            p.WriteTo(Console.Out);
-            Console.WriteLine($"// {random.Counter} random numbers used");
+            try
+            {
+                var random = new Xoshiro256Plus();
+                var factory = new ProgramFactory(random);
+                var p = factory.GenProgram(seed);
+                p.WriteTo(Console.Out);
+                Console.WriteLine($"// {random.Counter} random numbers used");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

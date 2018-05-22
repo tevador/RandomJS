@@ -24,7 +24,7 @@ namespace Tevador.RandomJS
 {
     class Variable : IVariable
     {
-        public static readonly Variable This = new Variable() { Name = "this", IsConstant = true };
+        public static readonly Variable This = new Variable() { Name = "this", IsConstant = true, IsParameter = true };
 
         public string Name { get; set; }
         public bool IsParameter { get; set; }

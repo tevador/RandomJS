@@ -27,6 +27,6 @@ namespace Tevador.RandomJS
         None = 0,
         ForWriting = 1 << 0,
         ParametersOnly = 1 << 1,
-        NonFunctionInitializer = 1 << 1 
+        NonFunctionInitializer = 1 << 2,
     }
 }

@@ -69,11 +69,12 @@
     <item type="AssignmentExpression" weight="0.65" />
     <item type="BinaryExpression" weight="0.75" />
     <item type="FunctionExpression" weight="1" />
-    <item type="Literal" weight="0.5" />
+    <item type="Literal" weight="0.3" />
     <item type="TernaryExpression" weight="0.25" />
     <item type="UnaryExpression" weight="0.35" />
     <item type="VariableInvocationExpression" weight="0.5" />
     <item type="FunctionInvocationExpression" weight="0.15" />
+    <item type="VariableExpression" weight="0.4" />
   </Expressions>
   <Statements>
     <item type="ReturnStatement" weight="0.2" />
@@ -98,14 +99,14 @@
       First integer is the minimum (inclusive) and the second is the maximum (inclusive).
       The value of the associated parameter is generated from the specified range at random for every program.
   -->
-  <GlobalVariablesCountRange>8-12</GlobalVariablesCountRange>
+  <GlobalVariablesCountRange>12-12</GlobalVariablesCountRange>
   <LocalVariablesCountRange>0-3</LocalVariablesCountRange>
   <BlockStatementsRange>4-7</BlockStatementsRange>
   <FunctionParametersCountRange>1-3</FunctionParametersCountRange>
   <StringLiteralLengthRange>0-10</StringLiteralLengthRange>
   <MaxCallDepthRange>3-6</MaxCallDepthRange>
   <MaxLoopCyclesRange>3000-6000</MaxLoopCyclesRange>
-  <MaxStringLengthRange>15-25</MaxStringLengthRange>
+  <MaxStringLengthRange>25-35</MaxStringLengthRange>
   <MathPrecisionRange>10-14</MathPrecisionRange>  <!-- Functions with inexact results (such as Math.exp or Math.sqrt) are rounded to MathPrecision significant digits. -->
   <ObjectLiteralSizeRange>0-4</ObjectLiteralSizeRange>
   
@@ -113,12 +114,13 @@
       SCALAR OPTIONS.
   -->
 
+  <VariableInitializerDepth>1</VariableInitializerDepth>
   <MaxFunctionDepth>1</MaxFunctionDepth>
   <MaxObjectLiteralDepth>1</MaxObjectLiteralDepth>
   <EnableCallDepthProtection>true</EnableCallDepthProtection>
   <EnableLoopCyclesProtection>true</EnableLoopCyclesProtection>
   <MaxExpressionDepth>4</MaxExpressionDepth>
-  <MaxStatementDepth>4</MaxStatementDepth>
+  <MaxStatementDepth>3</MaxStatementDepth>
   <ConstVariableChance>0.1</ConstVariableChance>
   <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
   <AllowFunctionOverwriting>false</AllowFunctionOverwriting> <!-- Determines whether a function variable can be assigned to. -->

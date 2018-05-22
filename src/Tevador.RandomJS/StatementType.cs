@@ -21,14 +21,19 @@ namespace Tevador.RandomJS
 {
     public enum StatementType : ulong
     {
-        ReturnStatement,
-        BreakStatement,
-        AssignmentStatement,
-        IfElseStatement,
-        ForLoopStatement,
+        All = ~0UL,
+        ReturnStatement = 1 << 0,
+        BreakStatement = 1 << 1,
+        AssignmentStatement = 1 << 2,
+        ObjectSetStatement = 1 << 3,
+        IfElseStatement = 1 << 4,
+        ForLoopStatement = 1 << 5,
         //WhileLoop, TODO
         //DoWhileLoop, TODO
-        BlockStatement,
-        VariableInvocationStatement,
+        BlockStatement = 1 << 6,
+        VariableInvocationStatement = 1 << 7,
+
+        Flat = ReturnStatement | BreakStatement | AssignmentStatement | ObjectSetStatement | VariableInvocationStatement,
+        NoCall = All & ~VariableInvocationStatement,
     }
 }

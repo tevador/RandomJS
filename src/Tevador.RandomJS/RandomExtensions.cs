@@ -144,6 +144,7 @@ namespace Tevador.RandomJS
                 candidates = scope.Variables
                     .Where(
                         var =>
+                            !var.IsLoopCounter &&
                             (var.IsParameter || !options.Has(VariableOptions.ParametersOnly)) &&
                             !var.IsConstant &&
                             (options.Has(VariableOptions.NonFunctionInitializer) || !(var.Initializer is FunctionExpression)));

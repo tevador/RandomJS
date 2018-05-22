@@ -29,8 +29,9 @@ namespace Tevador.RandomJS
         public readonly static GlobalFunction NUMB = new GlobalFunction("__numb", "(_,__) { _=+_; if(!isNaN(_)) return _; else return __; }");
         public readonly static GlobalFunction PREC = new GlobalFunction("__prec", "(_) {{ return +_.toPrecision({0}); }}", new GlobalVariable("__fpMathPrec", true));
         public readonly static GlobalFunction NNEG = new GlobalFunction("__nneg", "(_) { return _ < 0 ? -_ : _; }");
-        public readonly static GlobalFunction OBJC = new GlobalFunction("__objc", "(_,...__){ if(typeof _ === 'function') return new _(...__); if(typeof _ === 'object') return _; return { a: _ }; }", GlobalOverride.OVOF);
-        public readonly static GlobalFunction OBJS = new GlobalFunction("__objs", "(_,_k,_v){ if(typeof _ === 'object') _[_k]=_v; return _; }", OBJC);
+        public readonly static GlobalFunction EVAL = new GlobalFunction("__eval", "(_) {{try{{return eval(_);}}catch(_e){{return {0}(_e);}}}}", STRL);
+        public readonly static GlobalFunction OBJC = new GlobalFunction("__objc", "(_,...__){ if(typeof _ === 'function') return new _(...__); if(typeof _ === 'object') return _; return { a: _ }; }");
+        public readonly static GlobalFunction OBJS = new GlobalFunction("__objs", "(_,_k,_v){ if(typeof _ === 'object') _[_k]=_v; return _; }");
 
         public string Declaration { get; protected set; }
 
