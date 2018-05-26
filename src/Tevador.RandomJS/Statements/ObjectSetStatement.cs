@@ -17,26 +17,14 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
+using Tevador.RandomJS.Expressions;
 
-namespace Tevador.RandomJS.Expressions
+namespace Tevador.RandomJS.Statements
 {
-    class FunctionInvocationExpression : Expression
+    class ObjectSetStatement : ExpressionStatement<ObjectSetExpression>
     {
-        public FunctionExpression Function { get; set; }
-        public readonly List<Expression> Parameters = new List<Expression>();
-
-        public override void WriteTo(System.IO.TextWriter w)
+        public ObjectSetStatement(ObjectSetExpression expr) : base(expr)
         {
-            w.Write("(");
-            Function.WriteTo(w);
-            w.Write(")(");
-            for (int i = 0; i < Parameters.Count; ++i)
-            {
-                Parameters[i].WriteTo(w);
-                if (i < Parameters.Count - 1) w.Write(",");
-            }
-            w.Write(")");
         }
     }
 }

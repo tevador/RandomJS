@@ -78,6 +78,11 @@ namespace Tevador.RandomJS
 
         #region Codegen methods
 
+        internal ObjectSetStatement GenObjectSetStatement(IScope scope)
+        {
+            return new ObjectSetStatement(GenObjectSetExpression(scope, _options.MaxExpressionDepth));
+        }
+
         internal ReturnStatement GenReturnStatement(IScope scope, Expression expr = null)
         {
             expr = expr ?? GenExpression(scope, 0);
@@ -125,6 +130,8 @@ namespace Tevador.RandomJS
                     case StatementType.BreakStatement:
                         return new BreakStatement();
 
+                case StatementType.ObjectSetStatement:
+                    return GenObjectSetStatement(scope);
 
                     case StatementType.ReturnStatement:
                         return GenReturnStatement(scope);
@@ -240,7 +247,7 @@ namespace Tevador.RandomJS
                 case ExpressionType.VariableInvocationExpression:
                     if(scope.FunctionDepth > 0 && _options.PreferFuncParameters)
                     {
-                        v = _rand.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ParametersOnly);
+                        v = _rand.ChooseVariable(scope, VariableOptions.ParametersOnly);
                     }
                     if (v == null && scope.VariableCounter > 0)
                     {
@@ -255,7 +262,7 @@ namespace Tevador.RandomJS
                 case ExpressionType.VariableExpression:
                     if (scope.FunctionDepth > 0 && _options.PreferFuncParameters)
                     {
-                        v = _rand.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ParametersOnly);
+                        v = _rand.ChooseVariable(scope, VariableOptions.ParametersOnly);
                     }
                     if (v == null && scope.VariableCounter > 0)
                     {
@@ -272,6 +279,9 @@ namespace Tevador.RandomJS
 
                 case ExpressionType.ObjectSetExpression:
                     return GenObjectSetExpression(scope, maxDepth - 1);
+
+                case ExpressionType.ObjectConstructorExpression:
+                    return GenObjectConstructorExpression(scope, maxDepth - 1);
 
                 case ExpressionType.FunctionInvocationExpression:
                     return GenFunctionInvocationExpression(scope, maxDepth - 1);
@@ -474,7 +484,7 @@ namespace Tevador.RandomJS
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             while (paramCount-- > 0)
             {
-                invk.Parameters.Add(GenExpression(scope, maxDepth));
+                invk.Parameters.Add(GenExpression(scope, maxDepth, ExpressionType.All & ~ExpressionType.FunctionExpression));
             }
             return invk;
         }
@@ -553,6 +563,35 @@ namespace Tevador.RandomJS
             func.DefaultReturnValue = GenExpression(func, 0);
             func.Body = GenBlock(func, _options.MaxStatementDepth);
             return func;
+        }
+
+        internal ObjectConstructorExpression GenObjectConstructorExpression(IScope scope, int maxDepth)
+        {
+            scope.Require(GlobalFunction.OBJC);
+            scope.Require(GlobalOverride.OVOF);
+            scope.Require(GlobalOverride.OTST);
+            var oce = new ObjectConstructorExpression();
+            int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
+            while (paramCount-- > 0)
+            {
+                oce.Parameters.Add(GenExpression(scope, maxDepth));
+            }
+            Expression constructor;
+            Variable v = _rand.ChooseVariable(scope);
+            if(v != null)
+            {
+                constructor = new VariableExpression(v);
+            }
+            else if(scope.FunctionDepth < _options.MaxFunctionDepth)
+            {
+                constructor = GenFunctionExpression(scope);
+            }
+            else
+            {
+                throw new System.Exception("Unable to create a constructor for ObjectCreateExpression");
+            }
+            oce.Constructor = constructor;
+            return oce;
         }
 
         internal Variable GenVariable(IScope scope, bool isParameter = false, bool isLoopCounter = false, bool isConstant = false, bool initialize = true)

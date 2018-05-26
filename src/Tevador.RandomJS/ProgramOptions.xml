@@ -77,6 +77,7 @@
     <item type="VariableExpression" weight="0.4" />
     <item type="EvalExpression" weight="0.1" />
     <item type="ObjectSetExpression" weight="0.2" />
+    <item type="ObjectConstructorExpression" weight="0.15" />
   </Expressions>
   <Statements>
     <item type="ReturnStatement" weight="0.2" />
@@ -86,6 +87,7 @@
     <item type="ForLoopStatement" weight="0.3" />
     <item type="BlockStatement" weight="1" />
     <item type="VariableInvocationStatement" weight="0.6" />
+    <item type="ObjectSetStatement" weight="0.3" />
   </Statements>
   <AssignmentInForLoop>
     <item type="Add" weight="1" />          <!-- for(expr; expr; var += expr) -->
@@ -128,7 +130,7 @@
   <ConstVariableChance>0.1</ConstVariableChance>
   <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
   <AllowFunctionOverwriting>false</AllowFunctionOverwriting> <!-- Determines whether a function variable can be assigned to. -->
-  <PreferFuncParameters>true</PreferFuncParameters> <!-- Determines if function parameters are selected preferentially to variables from the parent scope. -->
+  <PreferFuncParameters>false</PreferFuncParameters> <!-- Determines if function parameters are selected preferentially to variables from the parent scope. -->
   <MaxExpressionAttempts>3</MaxExpressionAttempts>  <!-- When this is exceeded, a literal expression is generated. -->
   <MaxStatementAttempts>3</MaxStatementAttempts> <!-- When this is exceeded, an empty statement is generated. -->
   <ForLoopVariableBoundsChance>0.35</ForLoopVariableBoundsChance> <!-- for(expr; var1 < var2; expr) instead of for(expr; var1 < literal; expr) -->

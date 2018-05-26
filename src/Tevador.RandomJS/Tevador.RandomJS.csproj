@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Expressions\EvalExpression.cs" />
+    <Compile Include="Expressions\ObjectConstructorExpression.cs" />
     <Compile Include="Expressions\ObjectLiteral.cs" />
     <Compile Include="Expressions\ObjectSetExpression.cs" />
     <Compile Include="GlobalOverride.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Expressions\NumericLiteral.cs" />
     <Compile Include="NumericLiteralType.cs" />
     <Compile Include="Operators\Operator.cs" />
+    <Compile Include="Statements\ObjectSetStatement.cs" />
     <Compile Include="Statements\OutputStatement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramOptionsException.cs" />

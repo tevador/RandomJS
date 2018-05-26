@@ -36,7 +36,7 @@ namespace Tevador.RandomJS
         ObjectSetExpression = 1 << 11,
 
         Function = FunctionExpression | FunctionInvocationExpression,
-        NoVariable = Literal | FunctionInvocationExpression | FunctionExpression | EvalExpression,
+        NoVariable = Literal | FunctionInvocationExpression | FunctionExpression | EvalExpression | ObjectConstructorExpression,
         NoCall = Literal | AssignmentExpression | UnaryExpression | BinaryExpression | TernaryExpression | VariableExpression | ObjectSetExpression,
         Flat = Literal | VariableExpression | EvalExpression,
     }

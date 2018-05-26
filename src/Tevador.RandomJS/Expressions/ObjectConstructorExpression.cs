@@ -17,34 +17,21 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Tevador.RandomJS.Expressions
 {
-    class VariableInvocationExpression : Expression
+    class ObjectConstructorExpression : Expression
     {
-        public readonly List<Expression> Parameters;
-        protected IVariable _variable;
+        public readonly List<Expression> Parameters = new List<Expression>();
+        public Expression Constructor { get; set; }
 
-        protected VariableInvocationExpression(IVariable variable)
+        public override void WriteTo(TextWriter w)
         {
-            if(variable == null) throw new ArgumentNullException();
-            _variable = variable;
-        }
-
-        public VariableInvocationExpression(IScope scope, IVariable variable)
-            : this(variable)
-        {
-            scope.Require(GlobalFunction.INVK);
-            Parameters = new List<Expression>();
-        }
-
-        public override void WriteTo(System.IO.TextWriter w)
-        {
-            w.Write(GlobalFunction.INVK);
+            w.Write(GlobalFunction.OBJC);
             w.Write("(");
-            w.Write(_variable.Name);
+            Constructor.WriteTo(w);
             foreach (var expr in Parameters)
             {
                 w.Write(",");
