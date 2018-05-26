@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expressions\EvalExpression.cs" />
     <Compile Include="Expressions\ObjectLiteral.cs" />
     <Compile Include="GlobalOverride.cs" />
     <Compile Include="Statements\BreakableStatement.cs" />

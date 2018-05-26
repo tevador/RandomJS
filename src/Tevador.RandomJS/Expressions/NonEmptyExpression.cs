@@ -25,7 +25,6 @@ namespace Tevador.RandomJS.Expressions
         public Literal Rhs { get; set; }
 
         public NonEmptyExpression(Expression value, Literal defaultValue)
-            : base(value)
         {
             Lhs = value;
             Rhs = defaultValue;

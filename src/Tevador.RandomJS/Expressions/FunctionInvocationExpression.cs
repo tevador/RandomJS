@@ -26,11 +26,6 @@ namespace Tevador.RandomJS.Expressions
         public FunctionExpression Function { get; set; }
         public readonly List<Expression> Parameters = new List<Expression>();
 
-        public FunctionInvocationExpression(Expression parent)
-            : base(parent)
-        {
-        }
-
         public override void WriteTo(System.IO.TextWriter w)
         {
             w.Write("(");

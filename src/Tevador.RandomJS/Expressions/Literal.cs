@@ -21,9 +21,10 @@ namespace Tevador.RandomJS.Expressions
 {
     class Literal : Expression
     {
-        protected Literal() : base(null) { }
+        protected Literal()
+        { }
 
-        public Literal(string value) : this()
+        public Literal(string value)
         {
             Value = value;
         }

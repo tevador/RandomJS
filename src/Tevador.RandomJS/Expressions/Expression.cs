@@ -23,16 +23,6 @@ namespace Tevador.RandomJS.Expressions
 {
     abstract class Expression : Statement
     {
-        protected Expression(Expression parent)
-        {
-            if (parent != null)
-            {
-                ExpressionDepth = parent.ExpressionDepth + 1;
-            }
-        }
-
-        public int ExpressionDepth { get; private set; }
-
         public virtual bool IsNumeric
         {
             get { return false; }

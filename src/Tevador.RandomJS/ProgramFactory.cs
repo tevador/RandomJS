@@ -166,7 +166,7 @@ namespace Tevador.RandomJS
             {
                 iteratorExpr = GenNumericLiteral();
             }
-            iteratorExpr = new BinaryExpression(null)
+            iteratorExpr = new BinaryExpression()
             {
                 Operator = _rand.FlipCoin() ? BinaryOperator.Less : BinaryOperator.Greater,
                 Lhs = new VariableExpression(i),
@@ -183,7 +183,7 @@ namespace Tevador.RandomJS
                     rhs = new NonZeroExpression(fl, rhs);
                 }
             }
-            fl.IteratorExpression = new AssignmentExpression(null)
+            fl.IteratorExpression = new AssignmentExpression()
             {
                 Operator = op,
                 Variable = i,
@@ -256,6 +256,8 @@ namespace Tevador.RandomJS
                     }
                     break;
 
+                case ExpressionType.EvalExpression:
+                    return GenEvalExpression(scope);
 
                 case ExpressionType.FunctionInvocationExpression:
                     return GenFunctionInvocationExpression(scope, parent, maxDepth - 1);
@@ -278,7 +280,7 @@ namespace Tevador.RandomJS
         internal FunctionInvocationExpression GenFunctionInvocationExpression(IScope scope, Expression parent, int maxDepth)
         {
             var expr = GenFunctionExpression(scope, parent);
-            FunctionInvocationExpression fi = new FunctionInvocationExpression(parent);
+            FunctionInvocationExpression fi = new FunctionInvocationExpression();
             fi.Function = GenFunctionExpression(scope, fi);
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             while (paramCount-- > 0)
@@ -291,7 +293,7 @@ namespace Tevador.RandomJS
         internal AssignmentExpression GenAssignmentExpression(IScope scope, Variable v, Expression parent, int maxDepth)
         {
             AssignmentOperator op = _options.AssignmentOperators.ChooseRandom(_rand);
-            AssignmentExpression ae = new AssignmentExpression(parent) { Operator = op };
+            AssignmentExpression ae = new AssignmentExpression() { Operator = op };
             if (op.Has(OperatorRequirement.NumericOnly))
             {
                 scope.Require(GlobalFunction.CALC);
@@ -319,9 +321,8 @@ namespace Tevador.RandomJS
             return GenLiteral(scope, _options.MaxObjectLiteralDepth);
         }
 
-        internal Literal GenLiteral(IScope scope, int maxDepth)
+        internal Literal GenLiteral(IScope scope, int maxDepth, LiteralType list = LiteralType.All)
         {
-            LiteralType list = LiteralType.String | LiteralType.Numeric | LiteralType.Object;
             if (maxDepth <= 0)
                 list &= ~LiteralType.Object;
             switch (_options.Literals.ChooseRandom(_rand, list))
@@ -446,9 +447,17 @@ namespace Tevador.RandomJS
             return new NumericLiteral(sb.ToString());
         }
 
+        internal EvalExpression GenEvalExpression(IScope scope)
+        {
+            scope.Require(GlobalFunction.EVAL);
+            var ee = new EvalExpression();
+            ee.Code = _rand.GenEvalString(_options.EvalStringLength.RandomValue(_rand));
+            return ee;
+        }
+
         internal VariableInvocationExpression GenVariableInvocationExpression(IScope scope, Variable v, Expression parent, int maxDepth)
         {
-            var invk = new VariableInvocationExpression(scope, v, parent);
+            var invk = new VariableInvocationExpression(scope, v);
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             while (paramCount-- > 0)
             {
@@ -459,7 +468,7 @@ namespace Tevador.RandomJS
 
         internal UnaryExpression GenUnaryExpression(IScope scope, Expression parent, int maxDepth)
         {
-            UnaryExpression ue = new UnaryExpression(parent);
+            UnaryExpression ue = new UnaryExpression();
             UnaryOperator op = _options.UnaryOperators.ChooseRandom(_rand);
             ue.Operator = op;
             Expression expr = GenExpression(scope, ue, maxDepth);
@@ -485,7 +494,7 @@ namespace Tevador.RandomJS
 
         internal BinaryExpression GenBinaryExpression(IScope scope, Expression parent, int maxDepth)
         {
-            BinaryExpression be = new BinaryExpression(parent);
+            BinaryExpression be = new BinaryExpression();
             var op = _options.BinaryOperators.ChooseRandom(_rand);
             be.Operator = op;
             var lhs = GenExpression(scope, be, maxDepth);
@@ -512,7 +521,7 @@ namespace Tevador.RandomJS
 
         internal TernaryExpression GenTernaryExpression(IScope scope, Expression parent, int maxDepth)
         {
-            TernaryExpression te = new TernaryExpression(parent);
+            TernaryExpression te = new TernaryExpression();
             te.Condition = GenExpression(scope, te, maxDepth);
             te.TrueExpr = GenExpression(scope, te, maxDepth);
             te.FalseExpr = GenExpression(scope, te, maxDepth);
@@ -521,7 +530,7 @@ namespace Tevador.RandomJS
 
         internal FunctionExpression GenFunctionExpression(IScope scope, Expression parent = null)
         {
-            var func = new FunctionExpression(scope, parent);
+            var func = new FunctionExpression(scope);
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             for (int i = 0; i < paramCount; ++i)
             {

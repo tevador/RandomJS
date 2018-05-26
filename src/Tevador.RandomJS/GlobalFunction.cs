@@ -24,12 +24,14 @@ namespace Tevador.RandomJS
         public readonly static GlobalFunction NONZ = new GlobalFunction("__nonz", "(_) { return _ == 0 ? 1 : _; }");
         public readonly static GlobalFunction CALC = new GlobalFunction("__calc", "(_,_f,_d) { if(typeof _ === 'number') return _f(_); return _d; }");
         public readonly static GlobalFunction STRL = new GlobalFunction("__strl", "(_) {{ if(typeof _ === 'string' && _.length > {0}) return _.substring(0, {0}); return _; }}", new GlobalVariable("__maxStrlen", true));
+        public readonly static GlobalFunction TSTR = new GlobalFunction("__tstr", "(_){{return _!=null?{0}(_.toString()):_;}}", STRL);
         public readonly static GlobalFunction INVK = new GlobalFunction("__invk", "(_,...__) {{ if(typeof _ === 'function') return {0}(_(...__)); else return {0}(_); }}", STRL);
-        public readonly static GlobalFunction PRNT = new GlobalFunction("__prnt", "(_) { console.log(_); }");
+        public readonly static GlobalFunction PRNT = new GlobalFunction("__prnt", "(_){{console.log({0}(_));}}", TSTR);
         public readonly static GlobalFunction NUMB = new GlobalFunction("__numb", "(_,__) { _=+_; if(!isNaN(_)) return _; else return __; }");
         public readonly static GlobalFunction PREC = new GlobalFunction("__prec", "(_) {{ return +_.toPrecision({0}); }}", new GlobalVariable("__fpMathPrec", true));
         public readonly static GlobalFunction NNEG = new GlobalFunction("__nneg", "(_) { return _ < 0 ? -_ : _; }");
-        public readonly static GlobalFunction EVAL = new GlobalFunction("__eval", "(_) {{try{{return eval(_);}}catch(_e){{return {0}(_e);}}}}", STRL);
+        public readonly static GlobalFunction TRYC = new GlobalFunction("__tryc", "(_) {{try{{return _();}}catch(_e){{return {0}(_e);}}}}", TSTR);
+        public readonly static GlobalFunction EVAL = new GlobalFunction("__eval", "(_) {{return {0}(function(){{return (0,eval)(_);}});}}", TRYC);
         public readonly static GlobalFunction OBJC = new GlobalFunction("__objc", "(_,...__){ if(typeof _ === 'function') return new _(...__); if(typeof _ === 'object') return _; return { a: _ }; }");
         public readonly static GlobalFunction OBJS = new GlobalFunction("__objs", "(_,_k,_v){ if(typeof _ === 'object') _[_k]=_v; return _; }");
 

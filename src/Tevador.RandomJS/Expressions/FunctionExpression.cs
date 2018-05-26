@@ -24,8 +24,7 @@ namespace Tevador.RandomJS.Expressions
 {
     class FunctionExpression : Expression, IScope
     {
-        public FunctionExpression(IScope parentScope, Expression parentExpression)
-            : base(parentExpression)
+        public FunctionExpression(IScope parentScope)
         {
             Parent = parentScope;
             FunctionDepth = Parent.FunctionDepth + 1;

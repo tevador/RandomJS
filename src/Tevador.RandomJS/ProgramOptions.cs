@@ -88,6 +88,7 @@ namespace Tevador.RandomJS
         public Interval MathPrecisionRange { get; set; }
         public Interval ObjectLiteralSizeRange { get; set; }
         public Interval MaxObjectSizeRange { get; set; }
+        public Interval EvalStringLength { get; set; }
 
         public int VariableInitializerDepth { get; set; }
         public int MaxExpressionDepth { get; set; }

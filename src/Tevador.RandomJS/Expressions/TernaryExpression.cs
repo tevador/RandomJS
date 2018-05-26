@@ -21,10 +21,6 @@ namespace Tevador.RandomJS.Expressions
 {
     class TernaryExpression : Expression
     {
-        public TernaryExpression(Expression parent)
-            : base(parent)
-        { }
-
         public Expression Condition { get; set; }
         public Expression TrueExpr { get; set; }
         public Expression FalseExpr { get; set; }

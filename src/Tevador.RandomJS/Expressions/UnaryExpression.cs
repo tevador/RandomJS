@@ -23,10 +23,6 @@ namespace Tevador.RandomJS.Expressions
 {
     class UnaryExpression : Expression
     {
-        public UnaryExpression(Expression parent)
-            : base(parent)
-        { }
-
         public UnaryOperator Operator { get; set; }
         public Expression Value { get; set; }
         public NumericLiteral DefaultValue { get; set; }

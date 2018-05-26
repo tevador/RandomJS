@@ -25,7 +25,6 @@ namespace Tevador.RandomJS.Expressions
         protected Expression _value;
 
         protected GlobalFunctionExpression(GlobalFunction func, IScope scope, Expression value)
-            : base(null)
         {
             _func = func;
             scope.Require(_func);

@@ -23,10 +23,6 @@ namespace Tevador.RandomJS.Expressions
 {
     class BinaryExpression : Expression
     {
-        public BinaryExpression(Expression parent)
-            : base(parent)
-        { }
-
         public BinaryOperator Operator { get; set; }
         public Expression Lhs { get; set; }
         public Expression Rhs { get; set; }

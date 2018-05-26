@@ -23,10 +23,6 @@ namespace Tevador.RandomJS.Expressions
 {
     class AssignmentExpression : Expression
     {
-        public AssignmentExpression(Expression parent)
-            :base(parent)
-        { }
-
         public Variable Variable { get; set; }
         public AssignmentOperator Operator { get; set; }
         public NumericLiteral DefaultValue { get; set; }

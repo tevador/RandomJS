@@ -23,6 +23,7 @@ namespace Tevador.RandomJS
     {
         String = 1 << 0,
         Numeric = 1 << 1,
-        Object = 1 << 2
+        Object = 1 << 2,
+        All = String | Numeric | Object
     }
 }

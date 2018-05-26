@@ -27,15 +27,14 @@ namespace Tevador.RandomJS.Expressions
         public List<Expression> Parameters = new List<Expression>();
         protected IVariable _variable;
 
-        protected VariableInvocationExpression(IVariable variable, Expression parent)
-            : base(parent)
+        protected VariableInvocationExpression(IVariable variable)
         {
             if(variable == null) throw new ArgumentNullException();
             _variable = variable;
         }
 
-        public VariableInvocationExpression(IScope scope, IVariable variable, Expression parent)
-            : this(variable, parent)
+        public VariableInvocationExpression(IScope scope, IVariable variable)
+            : this(variable)
         {
             scope.Require(GlobalFunction.INVK);
         }

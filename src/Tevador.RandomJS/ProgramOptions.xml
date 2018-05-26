@@ -75,6 +75,7 @@
     <item type="VariableInvocationExpression" weight="0.5" />
     <item type="FunctionInvocationExpression" weight="0.15" />
     <item type="VariableExpression" weight="0.4" />
+    <item type="EvalExpression" weight="0.1" />
   </Expressions>
   <Statements>
     <item type="ReturnStatement" weight="0.2" />
@@ -106,9 +107,10 @@
   <StringLiteralLengthRange>0-10</StringLiteralLengthRange>
   <MaxCallDepthRange>3-6</MaxCallDepthRange>
   <MaxLoopCyclesRange>3000-6000</MaxLoopCyclesRange>
-  <MaxStringLengthRange>25-35</MaxStringLengthRange>
+  <MaxStringLengthRange>35-50</MaxStringLengthRange>
   <MathPrecisionRange>10-14</MathPrecisionRange>  <!-- Functions with inexact results (such as Math.exp or Math.sqrt) are rounded to MathPrecision significant digits. -->
   <ObjectLiteralSizeRange>0-4</ObjectLiteralSizeRange>
+  <EvalStringLength>8-8</EvalStringLength>
   
   <!--
       SCALAR OPTIONS.

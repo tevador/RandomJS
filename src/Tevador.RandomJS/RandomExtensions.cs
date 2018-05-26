@@ -31,6 +31,7 @@ namespace Tevador.RandomJS
         public static readonly string DecimalChars = "0123456789";
         public static readonly string OctalChars = "01234567";
         public static readonly string BinaryChars = "01";
+        public static readonly string EvalChars = ":abx!01249/=,{}+";
 
         public static int GenInt(this IRandom rand, int max)
         {
@@ -57,6 +58,11 @@ namespace Tevador.RandomJS
             return rand.Gen() < chance;
         }
 
+        public static string GenEvalString(this IRandom rand, int length)
+        {
+            return rand.GenStringLiteral(length, EvalChars);
+        }
+
         public static void GenString(this IRandom rand, StringBuilder sb, int length, string charset, bool canStartWithZero = true)
         {
             if (!canStartWithZero)
@@ -73,12 +79,17 @@ namespace Tevador.RandomJS
 
         public static string GenStringLiteral(this IRandom rand, int length)
         {
+            return rand.GenStringLiteral(length, PrintableChars);
+        }
+
+        public static string GenStringLiteral(this IRandom rand, int length, string charset)
+        {
             char quote = rand.FlipCoin() ? '\'' : '"';
             var sb = new StringBuilder(length * 2);
             sb.Append(quote);
-            while (sb.Length < length)
+            while (length-- > 0)
             {
-                char c = PrintableChars[rand.GenInt(PrintableChars.Length)];
+                char c = charset[rand.GenInt(charset.Length)];
                 if (c == '\n')
                 {
                     sb.Append("\\n");
@@ -89,7 +100,7 @@ namespace Tevador.RandomJS
                     sb.Append("\\t");
                     continue;
                 }
-                if(c == quote || c == '\\')
+                if (c == quote || c == '\\')
                 {
                     sb.Append('\\');
                 }

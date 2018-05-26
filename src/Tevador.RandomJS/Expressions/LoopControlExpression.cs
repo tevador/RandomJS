@@ -28,7 +28,6 @@ namespace Tevador.RandomJS.Expressions
         LoopCyclesProtection _protection;
 
         public LoopControlExpression(Expression expr, LoopCyclesProtection loopProtection)
-            : base(null)
         {
             _protection = loopProtection;
             _expr = expr;
