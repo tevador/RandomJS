@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Expressions\EvalExpression.cs" />
     <Compile Include="Expressions\ObjectLiteral.cs" />
+    <Compile Include="Expressions\ObjectSetExpression.cs" />
     <Compile Include="GlobalOverride.cs" />
     <Compile Include="Statements\BreakableStatement.cs" />
     <Compile Include="Statements\BreakStatement.cs" />

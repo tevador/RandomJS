@@ -52,10 +52,6 @@ namespace Tevador.RandomJS.Expressions
                 {
                     yield return v;
                 }
-                if(FunctionDepth == 1) //only once for all nested functions
-                {
-                    yield return Variable.This;
-                }
             }
         }
 

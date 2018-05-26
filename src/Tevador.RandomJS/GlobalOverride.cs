@@ -24,7 +24,7 @@ namespace Tevador.RandomJS
 {
     class GlobalOverride : GlobalFunction
     {
-        public readonly static GlobalOverride OTST = new GlobalOverride("Object.prototype.toString", "function() {try{return JSON.stringify(this);}catch(_e){return _e;}}");
+        public readonly static GlobalOverride OTST = new GlobalOverride("Object.prototype.toString", "function() {{let _=this;return {0}(function(){{return JSON.stringify(_);}});}}", TRYC);
         public readonly static GlobalOverride OVOF = new GlobalOverride("Object.prototype.valueOf", "function() { for(let _ in this) if (typeof this[_] === 'number') return this[_]; return this; }");
 
         public GlobalOverride(string name, string declaration, Global references = null)

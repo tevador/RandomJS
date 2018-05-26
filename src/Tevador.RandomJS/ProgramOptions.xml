@@ -76,6 +76,7 @@
     <item type="FunctionInvocationExpression" weight="0.15" />
     <item type="VariableExpression" weight="0.4" />
     <item type="EvalExpression" weight="0.1" />
+    <item type="ObjectSetExpression" weight="0.2" />
   </Expressions>
   <Statements>
     <item type="ReturnStatement" weight="0.2" />
@@ -116,6 +117,7 @@
       SCALAR OPTIONS.
   -->
 
+  <ObjectSetPropertyCount>4</ObjectSetPropertyCount>
   <VariableInitializerDepth>1</VariableInitializerDepth>
   <MaxFunctionDepth>1</MaxFunctionDepth>
   <MaxObjectLiteralDepth>1</MaxObjectLiteralDepth>
