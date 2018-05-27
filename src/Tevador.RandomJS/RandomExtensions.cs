@@ -146,34 +146,5 @@ namespace Tevador.RandomJS
         {
             return (options & vo) != 0;
         }
-
-        public static Variable ChooseVariable(this IRandom rand, IScope scope, VariableOptions options = VariableOptions.None)
-        {
-            IEnumerable<Variable> candidates;
-            if (options.Has(VariableOptions.ForWriting))
-            {
-                candidates = scope.Variables
-                    .Where(
-                        var =>
-                            !var.IsLoopCounter &&
-                            (var.IsParameter || !options.Has(VariableOptions.ParametersOnly)) &&
-                            !var.IsConstant &&
-                            (options.Has(VariableOptions.NonFunctionInitializer) || !(var.Initializer is FunctionExpression)));
-            }
-            else if (options.Has(VariableOptions.ParametersOnly))
-            {
-                candidates = scope.Variables.Where(var => var.IsParameter);
-            }
-            else
-            {
-                candidates = scope.Variables;
-            }
-            var count = candidates.Count();
-            if (count > 0)
-            {
-                return rand.Choose(candidates, count);
-            }
-            return null;
-        }
     }
 }

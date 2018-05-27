@@ -89,6 +89,7 @@ namespace Tevador.RandomJS
         public Interval ObjectLiteralSizeRange { get; set; }
         public Interval EvalStringLength { get; set; }
 
+        public int VariableSelectorScopeFactor { get; set; }
         public int ObjectSetPropertyCount { get; set; }
         public int VariableInitializerDepth { get; set; }
         public int MaxExpressionDepth { get; set; }
@@ -100,7 +101,6 @@ namespace Tevador.RandomJS
         public double ConstVariableChance { get; set; }
         public double ElseChance { get; set; }
         public bool AllowFunctionOverwriting { get; set; }
-        public bool PreferFuncParameters { get; set; }
         public double ForLoopVariableBoundsChance { get; set; }
         public bool AllowFunctionInvocationInLoop { get; set; }
 

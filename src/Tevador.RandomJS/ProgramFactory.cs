@@ -32,6 +32,7 @@ namespace Tevador.RandomJS
         private IRandom _rand;
         private CallDepthProtection _depthProtection;
         private LoopCyclesProtection _cyclesProtection;
+        private VariableSelector _varSelector;
 
         public ProgramFactory()
             : this(new Xoshiro256Plus())
@@ -46,6 +47,7 @@ namespace Tevador.RandomJS
                 _depthProtection = new CallDepthProtection();
             if (_options.EnableLoopCyclesProtection)
                 _cyclesProtection = new LoopCyclesProtection();
+            _varSelector = new VariableSelector(_rand, _options.VariableSelectorScopeFactor);
         }
 
         public IProgram GenProgram(byte[] seed)
@@ -121,7 +123,7 @@ namespace Tevador.RandomJS
                 switch (type)
                 {
                     case StatementType.AssignmentStatement:
-                        if ((v = _rand.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
+                        if ((v = _varSelector.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
                         {
                             return new AssignmentStatement(GenAssignmentExpression(scope, v, _options.MaxExpressionDepth));
                         }
@@ -140,7 +142,7 @@ namespace Tevador.RandomJS
                         return GenIfElseStatement(scope, parent, maxDepth - 1);
 
                     case StatementType.VariableInvocationStatement:
-                        if ((v = _rand.ChooseVariable(scope)) != null)
+                        if ((v = _varSelector.ChooseVariable(scope)) != null)
                         {
                             var expr = GenVariableInvocationExpression(scope, v, _options.MaxExpressionDepth);
                             return new ExpressionStatement<VariableInvocationExpression>(expr);
@@ -165,7 +167,7 @@ namespace Tevador.RandomJS
             Expression iteratorExpr = null;
             if (_rand.FlipCoin(_options.ForLoopVariableBoundsChance))
             {
-                Variable v = _rand.ChooseVariable(scope);
+                Variable v = _varSelector.ChooseVariable(scope);
                 if (v != null)
                     iteratorExpr = new NumericExpression(fl, new VariableExpression(v), GenNumericLiteral());
             }
@@ -204,7 +206,7 @@ namespace Tevador.RandomJS
         {
             scope.Require(GlobalFunction.OBJS);
             var ose = new ObjectSetExpression();
-            Variable v = _rand.ChooseVariable(scope);
+            Variable v = _varSelector.ChooseVariable(scope);
             ose.Target = v != null ? (Expression)new VariableExpression(v) : GenObjectLiteral(scope, _options.MaxObjectLiteralDepth);
             ose.Value = GenExpression(scope, maxDepth - 1);
             ose.Property = Variable.GetVariableName(_rand.GenInt(_options.ObjectSetPropertyCount));
@@ -238,37 +240,21 @@ namespace Tevador.RandomJS
                     return GenLiteral(scope);
 
                 case ExpressionType.AssignmentExpression:
-                    if ((v = _rand.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
+                    if ((v = _varSelector.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
                     {
                         return GenAssignmentExpression(scope, v, maxDepth - 1);
                     }
                     break;
 
                 case ExpressionType.VariableInvocationExpression:
-                    if(scope.FunctionDepth > 0 && _options.PreferFuncParameters)
-                    {
-                        v = _rand.ChooseVariable(scope, VariableOptions.ParametersOnly);
-                    }
-                    if (v == null && scope.VariableCounter > 0)
-                    {
-                        v = _rand.ChooseVariable(scope);
-                    }
-                    if(v != null)
+                    if((v = _varSelector.ChooseVariable(scope)) != null)
                     {
                         return GenVariableInvocationExpression(scope, v, maxDepth - 1);
                     }
                     break;
 
                 case ExpressionType.VariableExpression:
-                    if (scope.FunctionDepth > 0 && _options.PreferFuncParameters)
-                    {
-                        v = _rand.ChooseVariable(scope, VariableOptions.ParametersOnly);
-                    }
-                    if (v == null && scope.VariableCounter > 0)
-                    {
-                        v = _rand.ChooseVariable(scope);
-                    }
-                    if (v != null)
+                    if ((v = _varSelector.ChooseVariable(scope)) != null)
                     {
                         return new VariableExpression(v);
                     }
@@ -577,7 +563,7 @@ namespace Tevador.RandomJS
                 oce.Parameters.Add(GenExpression(scope, maxDepth));
             }
             Expression constructor;
-            Variable v = _rand.ChooseVariable(scope);
+            Variable v = _varSelector.ChooseVariable(scope);
             if(v != null)
             {
                 constructor = new VariableExpression(v);

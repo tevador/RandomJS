@@ -116,6 +116,7 @@
     <Compile Include="Statements\VariableDeclaration.cs" />
     <Compile Include="Statements\ExpressionStatement.cs" />
     <Compile Include="VariableOptions.cs" />
+    <Compile Include="VariableSelector.cs" />
     <Compile Include="Xoshiro256Plus.cs" />
   </ItemGroup>
   <ItemGroup>
