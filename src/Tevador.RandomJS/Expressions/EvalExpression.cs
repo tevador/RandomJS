@@ -27,10 +27,10 @@ namespace Tevador.RandomJS.Expressions
 
         public override void WriteTo(TextWriter w)
         {
-            w.Write(GlobalFunction.EVAL);
-            w.Write("(");
+            w.Write(GlobalFunction.TRYC);
+            w.Write("(function(){return eval(");
             w.Write(Code);
-            w.Write(")");
+            w.Write(");})");
         }
     }
 }
