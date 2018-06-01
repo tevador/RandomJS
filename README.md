@@ -71,7 +71,7 @@ The project has 4 executables:
 1. Open the command prompt in the src directory.
 1. Run `npm install`.
 1. Run the javascript sandbox: `node sandbox.js`.
-1. Run `Tevador.RandomJS.exe` or `Tevador.RandomJS.Crypto.exe` in a separate command prompt.
+1. Run `Tevador.RandomJS.exe` or `Tevador.RandomJS.Miner.exe` in a separate command prompt.
 
 ### Linux
 #### Dependencies
@@ -82,4 +82,4 @@ The project has 4 executables:
 1. Build with `make`.
 1. Run `npm install`.
 1. Run the javascript sandbox: `node sandbox.js`.
-1. Run `mono Tevador.RandomJS.exe` or `mono Tevador.RandomJS.Crypto.exe` in a separate terminal window.
+1. Run `mono Tevador.RandomJS.exe` or `mono Tevador.RandomJS.Miner.exe` in a separate terminal window.
