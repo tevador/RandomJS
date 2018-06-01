@@ -66,7 +66,7 @@ namespace Tevador.RandomJS.Expressions
                 w.Write(GlobalFunction.CALC);
                 w.Write("(");
                 w.Write(Variable);
-                w.Write(", function() { return (");
+                w.Write(",()=>(");
                 if (Operator.Has(OperatorRequirement.WithoutRhs))
                 {
                     if (Operator.Has(OperatorRequirement.Prefix))
@@ -86,7 +86,7 @@ namespace Tevador.RandomJS.Expressions
                     w.Write(Operator);
                     Rhs.WriteTo(w);
                 }
-                w.Write("); }, ");
+                w.Write("),");
                 DefaultValue.WriteTo(w);
                 w.Write(")");
             }

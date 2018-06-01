@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9EF4E92A-8F13-4EFE-BC6E-5B8EA52E9842}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Tevador.RandomJS.Crypto</RootNamespace>
-    <AssemblyName>Tevador.RandomJS.Crypto</AssemblyName>
+    <RootNamespace>Tevador.RandomJS.Miner</RootNamespace>
+    <AssemblyName>Tevador.RandomJS.Miner</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -53,18 +53,18 @@
     <Compile Include="Blake\Blake2BHash.cs" />
     <Compile Include="Blake\Blake2BTreeConfig.cs" />
     <Compile Include="Blake\Blake2IvBuilder.cs" />
-    <Compile Include="EntropyCounter.cs" />
-    <Compile Include="ListStats.cs" />
     <Compile Include="Miner.cs" />
-    <Compile Include="ProgramRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuntimeInfo.cs" />
     <Compile Include="Solution.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tevador.RandomJS.Run\Tevador.RandomJS.Run.csproj">
+      <Project>{4734bae4-0d44-4105-b4a0-3c7722e59976}</Project>
+      <Name>Tevador.RandomJS.Run</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tevador.RandomJS\Tevador.RandomJS.csproj">
       <Project>{b6f4601b-317b-4b98-984b-6ecebf77b3de}</Project>
       <Name>Tevador.RandomJS</Name>

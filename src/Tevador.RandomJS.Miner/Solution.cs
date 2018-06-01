@@ -17,7 +17,7 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-namespace Tevador.RandomJS.Crypto
+namespace Tevador.RandomJS.Miner
 {
     class Solution
     {

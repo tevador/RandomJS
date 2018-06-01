@@ -109,7 +109,7 @@ namespace Tevador.RandomJS
             try
             {
                 var random = new Xoshiro256Plus();
-                var factory = new ProgramFactory(random);
+                var factory = new ProgramFactory(ProgramOptions.FromXml(), random);
                 var p = factory.GenProgram(seed);
                 p.WriteTo(Console.Out);
                 Console.WriteLine($"// {random.Counter} random numbers used");

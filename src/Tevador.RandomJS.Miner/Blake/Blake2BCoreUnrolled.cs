@@ -11,7 +11,7 @@
 
 using System;
 
-namespace Tevador.RandomJS.Crypto.Blake
+namespace Tevador.RandomJS.Miner.Blake
 {
 #if true
     public sealed partial class Blake2BCore

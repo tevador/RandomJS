@@ -35,14 +35,20 @@ namespace Tevador.RandomJS
         private VariableSelector _varSelector;
 
         public ProgramFactory()
-            : this(new Xoshiro256Plus())
+            : this(ProgramOptions.FromXml(), new Xoshiro256Plus())
         {
         }
 
-        internal ProgramFactory(Xoshiro256Plus random)
+        public ProgramFactory(ProgramOptions options)
+            : this(options, new Xoshiro256Plus())
+        {
+        }
+
+        internal ProgramFactory(ProgramOptions options, IRandom random)
         {
             _rand = random;
-            _options = ProgramOptions.FromXml();
+            _options = options;
+            _options.Validate();
             if (_options.EnableCallDepthProtection)
                 _depthProtection = new CallDepthProtection();
             if (_options.EnableLoopCyclesProtection)

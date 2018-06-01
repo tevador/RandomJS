@@ -17,26 +17,22 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-namespace Tevador.RandomJS.Crypto.Blake
+using System;
+
+namespace Tevador.RandomJS.Run
 {
-    class Blake2B256 : Blake2BHash
-    {
-        public Blake2B256() : base(new Blake2BConfig { OutputSizeInBits = 256 })
+    public class RuntimeInfo : IComparable<RuntimeInfo>
+    { 
+        public string Seed { get; set; }
+        public string Output { get; set; }
+        public double Runtime { get; set; }
+        public double HalsteadDifficulty { get; set; }
+        public int CyclomaticComplexity { get; set; }
+        public bool Success { get; set; }
+
+        public int CompareTo(RuntimeInfo other)
         {
-
-        }
-
-        public Blake2B256(byte[] key) : base(new Blake2BConfig { OutputSizeInBits = 256, Key = key })
-        {
-
-        }
-
-        public byte[] Key
-        {
-            set
-            {
-                SetKey(value);
-            }
+            return Runtime.CompareTo(other.Runtime);
         }
     }
 }

@@ -43,14 +43,14 @@ namespace Tevador.RandomJS
             }
         }
 
-        public static ProgramOptions FromXml(XmlReader reader)
+        internal static ProgramOptions FromXml(XmlReader reader)
         {
             var options = (ProgramOptions)_serializer.Deserialize(reader);
             options.Validate();
             return options;
         }
 
-        public void Validate()
+        internal void Validate()
         {
             if (AssignmentOperators.Total <= 0) ErrorTable(nameof(AssignmentOperators));
             if (UnaryOperators.Total <= 0) ErrorTable(nameof(UnaryOperators));
@@ -62,7 +62,7 @@ namespace Tevador.RandomJS
             if (AssignmentInForLoop.Total <= 0) ErrorTable(nameof(AssignmentInForLoop));
         }
 
-        public void ErrorTable(string table)
+        internal void ErrorTable(string table)
         {
             throw new ProgramOptionsException($"Sum of weights in table '{table}' must be greater than zero");
         }

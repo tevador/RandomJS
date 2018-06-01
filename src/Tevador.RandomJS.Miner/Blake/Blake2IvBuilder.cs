@@ -11,7 +11,7 @@
 
 using System;
 
-namespace Tevador.RandomJS.Crypto.Blake
+namespace Tevador.RandomJS.Miner.Blake
 {
     internal static class Blake2IvBuilder
     {

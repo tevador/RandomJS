@@ -12,7 +12,7 @@
 using System;
 using System.Text;
 
-namespace Tevador.RandomJS.Crypto.Blake
+namespace Tevador.RandomJS.Miner.Blake
 {
     public sealed class Blake2BConfig : ICloneable
     {

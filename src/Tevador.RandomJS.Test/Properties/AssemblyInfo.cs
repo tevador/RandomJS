@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Tevador.RandomJS.Crypto")]
+[assembly: AssemblyTitle("Tevador.RandomJS.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Tevador.RandomJS.Crypto")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("Tevador.RandomJS.Test")]
 [assembly: AssemblyCopyright("Copyright © tevador 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9ef4e92a-8f13-4efe-bc6e-5b8ea52e9842")]
+[assembly: Guid("bf699b96-6954-458b-b3db-a4b392f01267")]
 
 // Version information for an assembly consists of the following four values:
 //

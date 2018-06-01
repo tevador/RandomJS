@@ -17,41 +17,26 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Linq;
-
-namespace Tevador.RandomJS.Crypto
+namespace Tevador.RandomJS.Miner.Blake
 {
-    class EntropyCounter
+    class Blake2B256 : Blake2BHash
     {
-        static readonly char _max = '\x7F';
-        int[] _counts = new int[_max + 1];
-        int strings = 0;
-        
-        public void Add(string s)
+        public Blake2B256() : base(new Blake2BConfig { OutputSizeInBits = 256 })
         {
-            foreach(char c in s)
-            {
-                _counts[c]++;
-            }
-            strings++;
+
         }
 
-        public double GetEntropy()
+        public Blake2B256(byte[] key) : base(new Blake2BConfig { OutputSizeInBits = 256, Key = key })
         {
-            double count = _counts.Sum();
-            double entropy = 0;
 
-            for (int i = 0; i < _counts.Length; ++i)
+        }
+
+        public byte[] Key
+        {
+            set
             {
-                var p = _counts[i] / count;
-                if (p > 0 && p < 1)
-                {
-                    entropy += - p * Math.Log(p, 2);
-                }
+                SetKey(value);
             }
-
-            return entropy * count / strings;
         }
     }
 }

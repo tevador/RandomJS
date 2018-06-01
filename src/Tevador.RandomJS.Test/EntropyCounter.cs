@@ -18,21 +18,40 @@
 */
 
 using System;
+using System.Linq;
 
-namespace Tevador.RandomJS.Crypto
+namespace Tevador.RandomJS.Test
 {
-    class RuntimeInfo : IComparable<RuntimeInfo>
-    { 
-        public string Seed { get; set; }
-        public string Output { get; set; }
-        public double Runtime { get; set; }
-        public double HalsteadDifficulty { get; set; }
-        public int CyclomaticComplexity { get; set; }
-        public bool Success { get; set; }
-
-        public int CompareTo(RuntimeInfo other)
+    class EntropyCounter
+    {
+        static readonly char _max = '\x7F';
+        int[] _counts = new int[_max + 1];
+        int strings = 0;
+        
+        public void Add(string s)
         {
-            return Runtime.CompareTo(other.Runtime);
+            foreach(char c in s)
+            {
+                _counts[c]++;
+            }
+            strings++;
+        }
+
+        public double GetEntropy()
+        {
+            double count = _counts.Sum();
+            double entropy = 0;
+
+            for (int i = 0; i < _counts.Length; ++i)
+            {
+                var p = _counts[i] / count;
+                if (p > 0 && p < 1)
+                {
+                    entropy += - p * Math.Log(p, 2);
+                }
+            }
+
+            return entropy * count / strings;
         }
     }
 }

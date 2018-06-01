@@ -31,7 +31,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Tevador.RandomJS.Crypto.Blake
+namespace Tevador.RandomJS.Miner.Blake
 {
     internal class Blake2BHash : HashAlgorithm
     {

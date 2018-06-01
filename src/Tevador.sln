@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tevador.RandomJS", "Tevador.RandomJS\Tevador.RandomJS.csproj", "{B6F4601B-317B-4B98-984B-6ECEBF77B3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tevador.RandomJS.Crypto", "Tevador.RandomJS.Crypto\Tevador.RandomJS.Crypto.csproj", "{9EF4E92A-8F13-4EFE-BC6E-5B8EA52E9842}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tevador.RandomJS.Miner", "Tevador.RandomJS.Miner\Tevador.RandomJS.Miner.csproj", "{9EF4E92A-8F13-4EFE-BC6E-5B8EA52E9842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tevador.RandomJS.Run", "Tevador.RandomJS.Run\Tevador.RandomJS.Run.csproj", "{4734BAE4-0D44-4105-B4A0-3C7722E59976}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tevador.RandomJS.Test", "Tevador.RandomJS.Test\Tevador.RandomJS.Test.csproj", "{BF699B96-6954-458B-B3DB-A4B392F01267}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{9EF4E92A-8F13-4EFE-BC6E-5B8EA52E9842}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EF4E92A-8F13-4EFE-BC6E-5B8EA52E9842}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EF4E92A-8F13-4EFE-BC6E-5B8EA52E9842}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4734BAE4-0D44-4105-B4A0-3C7722E59976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4734BAE4-0D44-4105-B4A0-3C7722E59976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4734BAE4-0D44-4105-B4A0-3C7722E59976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4734BAE4-0D44-4105-B4A0-3C7722E59976}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF699B96-6954-458B-B3DB-A4B392F01267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF699B96-6954-458B-B3DB-A4B392F01267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF699B96-6954-458B-B3DB-A4B392F01267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF699B96-6954-458B-B3DB-A4B392F01267}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

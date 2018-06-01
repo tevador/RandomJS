@@ -21,9 +21,9 @@ using System.Net;
 using System.IO;
 using System.Globalization;
 
-namespace Tevador.RandomJS.Crypto
+namespace Tevador.RandomJS.Run
 {
-    class ProgramRunner
+    public class ProgramRunner
     {
         MemoryStream _programStream;
         StreamWriter _programWriter;
@@ -38,6 +38,11 @@ namespace Tevador.RandomJS.Crypto
 
         public RuntimeInfo ExecuteProgram()
         {
+            return ExecuteProgram(new RuntimeInfo());
+        }
+
+        public RuntimeInfo ExecuteProgram(RuntimeInfo ri)
+        {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:" + _port);
             request.KeepAlive = false;
             request.Timeout = 15000;
@@ -46,7 +51,6 @@ namespace Tevador.RandomJS.Crypto
             reqStream.Write(_programStream.GetBuffer(), 0, (int)_programStream.Length);
             reqStream.Close();
             WebResponse response = request.GetResponse();
-            RuntimeInfo ri = new RuntimeInfo();
             ri.Success = bool.Parse(response.Headers.Get("X-Success"));       
             ri.Runtime = double.Parse(response.Headers.Get("X-Execution-Time"), CultureInfo.InvariantCulture);
             if (ri.Success)

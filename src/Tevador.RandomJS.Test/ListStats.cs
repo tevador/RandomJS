@@ -21,15 +21,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tevador.RandomJS.Crypto
+namespace Tevador.RandomJS.Test
 {
     class ListStats<T>
     {
         double[] _sorted;
 
-        public ListStats(List<T> items, Func<T, double> selector)
+        public ListStats(List<T> items, Func<T, double> selector, bool sort = true)
         {
-            _sorted = items.Select(selector).OrderBy(d => d).ToArray();
+            var q = items.Select(selector);
+            if (sort) q = q.OrderBy(d => d);
+            _sorted = q.ToArray();
             var avg = Average = _sorted.Average();
             Min = _sorted[0];
             Max = _sorted[_sorted.Length - 1];

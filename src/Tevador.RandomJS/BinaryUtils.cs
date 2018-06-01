@@ -60,7 +60,7 @@ namespace Tevador.RandomJS
             return (value << count) | (value >> ((sizeof(ulong) * 8) - count));
         }
 
-        public static unsafe byte[] GenerateSeed(int init)
+        public static unsafe byte[] GenerateSeed(long init)
         {
             ulong smallSeed = (ulong)init;
             byte[] bigSeed = new byte[4 * sizeof(ulong)];
