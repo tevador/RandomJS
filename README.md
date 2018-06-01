@@ -7,6 +7,7 @@ This is a concept implementation of a proof-of-work (PoW) algorithm proposal for
 * __DoS resistant__. The algorithm stores an intermediate value in the block header, allowing quick verification whether the PoW meets the difficulty target. This requires just two Blake2b hash calculations (roughly 500 nanoseconds on a modern CPU). This is beneficial both for mining pools and network nodes in case someone wanted to flood them with invalid blocks.
 
 ## Algorithm description
+![diagram](https://raw.githubusercontent.com/tevador/RandomJS/master/doc/diagram.png)
 
 ### Cryptographic hash function
 The primary general-purpose hash function used by RandomJS is Blake2b with output size of 256 bits. This hash function was chosen for 3 primary reasons:
@@ -53,11 +54,12 @@ In case of an DoS attack attempt, just 2 Blake2b hash calculations are required 
 ## Build dependencies and instructions
 The concept of random javascript generator and miner presented here is written in C#. The generated javascript code is run externally in a NodeJS sandbox.
 
-The project has 3 main units:
+The project has 4 executables:
 
-* __Tevador.RandomJS.exe__ - generates a random javascript program and prints it to standard output. Optional parameter is a 256-bit seed (64 hex characters).
-* __Tevador.RandomJS.Crypto.exe__ - runs the miner for about 60 seconds and shows the mining statistics. Optional parameter is a Monero block header template (152 hex characters).
-* __sandbox.js__ - NodeJS sandbox for executing javascript. The sandbox must be running to use Tevador.RandomJS.Crypto.exe.
+* `Tevador.RandomJS.exe` - generates a random javascript program and prints it to standard output. Optional parameter is a 256-bit seed (64 hex characters). The generator reads its settings from the `ProgramOptions.xml` file.
+* `sandbox.js` - NodeJS sandbox for executing javascript. The sandbox must be running to use the 2 executables below.
+* `Tevador.RandomJS.Miner.exe` - runs the miner for about 60 seconds and shows the mining statistics. Optional parameter is a Monero block header template (152 hex characters).
+* `Tevador.RandomJS.Test.exe` - runs 1000 random programs and prints statistics. Optional parameter is the number of programs to be executed (default 1000).
 
 ### Windows
 #### Dependencies
