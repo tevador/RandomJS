@@ -19,64 +19,101 @@
 
 const vm = require('vm');
 const http = require('http');
+const cluster = require('cluster');
+const commandLineArgs = require('command-line-args');
 
-const port = 18111;
-const maxScriptLength = 1024 * 1024; //1 MiB
-const vmOptions = { 
-    displayErrors: true,
-    timeout: 10000
-};
+const optionDefinitions = [
+    { name: 'complexity', alias: 'c', type: Boolean },
+    { name: 'maxlen', alias: 'm', type: Number },
+    { name: 'port', alis: 'p', type: Number },
+    { name: 'threads', alis: 't', type: Number  },
+    { name: 'timeout', alias: 'o', type: Number },
+  ];
 
-function nanotime() {
-    let hrtime = process.hrtime();
-    return hrtime[0] + hrtime[1] / 1e9;
-}
+const options = commandLineArgs(optionDefinitions);
 
-let outputRuntime = process.argv[2] === '--perf';
-
-if(outputRuntime)
-    console.log('Runtime will be appended to the script output');
-
-http.createServer(function (request, response) {
-    if(request.method === "POST") {
-        let source = '';
-        request.on('data', function(data) {
-            source += data;
-            if(source.length > maxScriptLength) {
-                response.writeHead(413, 'Request Entity Too Large', {'Content-Type': 'text/plain'});
-                response.end('Request Entity Too Large');
-            }
-        });
-        request.on('end', function() {
-            const sandbox = { 
-                console: {
-                    output: '',
-                    log: function(x) {
-                        this.output += x + '\n';
-                    }
-                }
-            };
-            vm.createContext(sandbox);
-            let status = 200;
-            let startTime = nanotime();
-            try{
-                vm.runInContext(source, sandbox, vmOptions);
-            } catch (error) {
-                sandbox.console.output += error;
-                status = 500;
-            }
-            let endTime = nanotime();
-            let executionTime = endTime - startTime;
-            console.log('Request script length: ' + source.length + ', Execution time: ' + executionTime);
-            if (outputRuntime)
-                sandbox.console.output += '\nRUNTIME: ' + (endTime - startTime);
-            response.writeHead(status, {'Content-Type': 'text/plain'});
-            response.end(sandbox.console.output);
-        });
-    } else {
-        response.writeHead(405, 'Method Not Supported', {'Content-Type': 'text/plain'});
-        response.end('Method Not Supported');
+if(cluster.isMaster) {
+    console.log('[MASTER] online');
+    console.log('[MASTER] options: ' + JSON.stringify(options));
+    for (let i = 0; i < (options.threads || 1); ++i) {
+        cluster.fork();
     }
-  }).listen(port, 'localhost', function() {
-      console.log("server listening on localhost:" + port);
-  });
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log("[MASTER] worker W%s exited with signal %s", worker.id, signal);
+    });
+
+    cluster.on('online', (worker) => {
+        console.log("[MASTER] Worker %s is online", worker.id);
+    });
+
+    if(options.complexity)
+        console.log('[MASTER] Program complexity measurement is enabled.');
+} else {
+
+    const port = options.port || 18111;
+    const maxScriptLength = options.maxlen || 10 * 1024 * 1024; //10 MiB
+    const vmOptions = {
+        displayErrors: true,
+        timeout: options.timeout || 10000
+    };
+
+    function nanotime() {
+        let hrtime = process.hrtime();
+        return hrtime[0] + hrtime[1] * 1e-9;
+    }
+
+    let complexityEnabled = options.complexity;
+    const escomplex = complexityEnabled ? require('typhonjs-escomplex') : null;
+
+    http.createServer(function (request, response) {
+        let headers = { 'Content-Type': 'text/plain' };
+        if(request.method === "POST") {
+            let source = '';
+            request.on('data', function(data) {
+                source += data;
+                if(source.length > maxScriptLength) {
+                    response.writeHead(413, 'Request Entity Too Large', headers);
+                    response.end('Request Entity Too Large');
+                }
+            });
+            request.on('end', function() {
+                const sandbox = {
+                    console: {
+                        output: '',
+                        log: function(x) {
+                            this.output += x + '\n';
+                        }
+                    }
+                };
+                vm.createContext(sandbox);
+                let success = true;
+                let startTime = nanotime();
+                try{
+                    vm.runInContext(source, sandbox, vmOptions);
+                } catch (error) {
+                    sandbox.console.log('----------ERROR-----------');
+                    sandbox.console.log(error);
+                    success = false;
+                }
+                let endTime = nanotime();
+                let executionTime = endTime - startTime;
+                console.log('Request script length: ' + source.length + ', Execution time: ' + executionTime);
+                headers['X-Execution-Time'] = executionTime;
+                headers['X-Success'] = success;
+                if(complexityEnabled) {
+                    let report = escomplex.analyzeModule(source, { loadDefaultPlugins: false });
+                    headers['X-Complexity-Cyclomatic'] = report.methodAggregate.cyclomatic;
+                    headers['X-Complexity-Halstead'] = report.methodAggregate.halstead.difficulty;
+                }
+                response.writeHead(200, headers);
+                response.end(sandbox.console.output);
+            });
+        } else {
+            response.writeHead(405, 'Method Not Supported', headers);
+            response.end('Method Not Supported');
+        }
+    }).listen(port, 'localhost', function() {
+        console.log("[WORKER] Server listening on localhost:" + port);
+    });
+}

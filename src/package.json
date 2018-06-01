@@ -1,0 +1,12 @@
+{
+  "name": "sandbox",
+  "version": "1.0.0",
+  "description": "VM for executing javascript code",
+  "main": "sandbox.js",
+  "author": "tevador",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "typhonjs-escomplex": "0.0.12"
+  }
+}

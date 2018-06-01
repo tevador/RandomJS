@@ -5,97 +5,97 @@
       Types from the table are selected randomly proportionally to their weight.
   -->
   <AssignmentOperators>
-    <item type="Basic" weight="1" />      <!-- OPERATOR = -->
-    <item type="Add" weight="0.25" />     <!-- OPERATOR += -->
-    <item type="Sub" weight="0.1" />      <!-- OPERATOR -= -->
-    <item type="Mul" weight="0.1" />      <!-- OPERATOR *= -->  
-    <item type="Div" weight="0.1" />      <!-- OPERATOR /= -->
-    <item type="Mod" weight="0.06" />     <!-- OPERATOR %= -->
-    <item type="PreInc" weight="0.3" />   <!-- OPERATOR ++ (prefix) -->
-    <item type="PostDec" weight="0.3" />  <!-- OPERATOR ‐‐ (postfix) -->
-    <item type="PreDec" weight="0.3" />   <!-- OPERATOR ‐‐ (prefix) -->
-    <item type="PostInc" weight="0.3" />  <!-- OPERATOR ++ (postfix) -->
+    <item type="Basic" weight="10" />   <!-- OPERATOR = -->
+    <item type="Add" weight="4" />      <!-- OPERATOR += -->
+    <item type="Sub" weight="1" />      <!-- OPERATOR -= -->
+    <item type="Mul" weight="1" />      <!-- OPERATOR *= -->  
+    <item type="Div" weight="1" />      <!-- OPERATOR /= -->
+    <item type="Mod" weight="1" />      <!-- OPERATOR %= -->
+    <item type="PreInc" weight="3" />   <!-- OPERATOR ++ (prefix) -->
+    <item type="PostDec" weight="3" />  <!-- OPERATOR ‐‐ (postfix) -->
+    <item type="PreDec" weight="3" />   <!-- OPERATOR ‐‐ (prefix) -->
+    <item type="PostInc" weight="3" />  <!-- OPERATOR ++ (postfix) -->
   </AssignmentOperators>
   <UnaryOperators>   
-    <item type="Plus" weight="0.25" />    <!-- OPERATOR + (unary) -->
-    <item type="Typeof" weight="0.5" />   <!-- OPERATOR typeof -->  
-    <item type="Minus" weight="1" />      <!-- OPERATOR - (unary) -->
-    <item type="Not" weight="1" />        <!-- OPERATOR ! -->
-    <item type="Sqrt" weight="0.25" />    <!-- FUNCTION Math.sqrt -->
-    <item type="Exp" weight="0.25" />     <!-- FUNCTION Math.exp -->
-    <item type="Log" weight="0.25" />     <!-- FUNCTION Math.log -->
-    <item type="Sin" weight="0.25" />     <!-- FUNCTION Math.sin -->
-    <item type="Cos" weight="0.25" />     <!-- FUNCTION Math.cos -->
-    <item type="Atan" weight="0.25" />    <!-- FUNCTION Math.atan -->
-    <item type="Floor" weight="0.25" />   <!-- FUNCTION Math.floor -->
-    <item type="Ceil" weight="0.25" />    <!-- FUNCTION Math.ceil -->
-    <item type="Abs" weight="0.25" />     <!-- FUNCTION Math.abs -->
-    <item type="Trunc" weight="0.25" />   <!-- FUNCTION Math.trunc -->
-    <item type="Cbrt" weight="0.25" />    <!-- FUNCTION Math.cbrt -->
+    <item type="Plus" weight="1" />     <!-- OPERATOR + (unary) -->
+    <item type="Typeof" weight="2" />   <!-- OPERATOR typeof -->  
+    <item type="Minus" weight="4" />    <!-- OPERATOR - (unary) -->
+    <item type="Not" weight="4" />      <!-- OPERATOR ! -->
+    <item type="Sqrt" weight="1" />     <!-- FUNCTION Math.sqrt -->
+    <item type="Exp" weight="1" />      <!-- FUNCTION Math.exp -->
+    <item type="Log" weight="1" />      <!-- FUNCTION Math.log -->
+    <item type="Sin" weight="1" />      <!-- FUNCTION Math.sin -->
+    <item type="Cos" weight="1" />      <!-- FUNCTION Math.cos -->
+    <item type="Atan" weight="1" />     <!-- FUNCTION Math.atan -->
+    <item type="Floor" weight="1" />    <!-- FUNCTION Math.floor -->
+    <item type="Ceil" weight="1" />     <!-- FUNCTION Math.ceil -->
+    <item type="Abs" weight="1" />      <!-- FUNCTION Math.abs -->
+    <item type="Trunc" weight="1" />    <!-- FUNCTION Math.trunc -->
+    <item type="Cbrt" weight="1" />     <!-- FUNCTION Math.cbrt -->
   </UnaryOperators>
   <BinaryOperators>
-    <item type="Add" weight="4" />        <!-- OPERATOR + -->
-    <item type="Comma" weight="0.25" />   <!-- OPERATOR , -->
-    <item type="Sub" weight="1" />        <!-- OPERATOR - -->
-    <item type="Mul" weight="1" />        <!-- OPERATOR * -->
-    <item type="Div" weight="1" />        <!-- OPERATOR / -->
-    <item type="Mod" weight="1" />        <!-- OPERATOR % -->
-    <item type="Less" weight="1" />       <!-- OPERATOR < -->
-    <item type="Greater" weight="1" />    <!-- OPERATOR > -->
-    <item type="Equal" weight="1" />      <!-- OPERATOR == -->
-    <item type="NotEqual" weight="1" />   <!-- OPERATOR != -->
-    <item type="Min" weight="0.5" />      <!-- FUNCTION Math.min -->
-    <item type="Max" weight="0.5" />      <!-- FUNCTION Math.max -->
-    <item type="BitAnd" weight="0.5" />   <!-- OPERATOR & -->
-    <item type="BitOr" weight="0.5" />    <!-- OPERATOR | -->
-    <item type="Xor" weight="0.5" />      <!-- OPERATOR ^ -->
+    <item type="Add" weight="8" />      <!-- OPERATOR + -->
+    <item type="Comma" weight="1" />    <!-- OPERATOR , -->
+    <item type="Sub" weight="2" />      <!-- OPERATOR - -->
+    <item type="Mul" weight="2" />      <!-- OPERATOR * -->
+    <item type="Div" weight="2" />      <!-- OPERATOR / -->
+    <item type="Mod" weight="2" />      <!-- OPERATOR % -->
+    <item type="Less" weight="2" />     <!-- OPERATOR < -->
+    <item type="Greater" weight="2" />  <!-- OPERATOR > -->
+    <item type="Equal" weight="2" />    <!-- OPERATOR == -->
+    <item type="NotEqual" weight="2" /> <!-- OPERATOR != -->
+    <item type="Min" weight="1" />      <!-- FUNCTION Math.min -->
+    <item type="Max" weight="1" />      <!-- FUNCTION Math.max -->
+    <item type="BitAnd" weight="1" />   <!-- OPERATOR & -->
+    <item type="BitOr" weight="1" />    <!-- OPERATOR | -->
+    <item type="Xor" weight="1" />      <!-- OPERATOR ^ -->
   </BinaryOperators>
   <Literals>
-    <item type="String" weight="0.2" />
-    <item type="Numeric" weight="0.5" />
-    <item type="Object" weight="0.4" />
+    <item type="String" weight="2" />
+    <item type="Numeric" weight="4" />
+    <item type="Object" weight="2" />
   </Literals>
   <NumericLiterals>
-    <item type="Boolean" weight="1" />
-    <item type="DecimalInteger" weight="1" />
-    <item type="BinaryInteger" weight="0.32" />
-    <item type="OctalInteger" weight="1" />
-    <item type="SmallInteger" weight="1" />
-    <item type="HexInteger" weight="1" />
-    <item type="FixedFloat" weight="1" />
-    <item type="ExpFloat" weight="1" />
+    <item type="Boolean" weight="3" />
+    <item type="DecimalInteger" weight="3" />
+    <item type="BinaryInteger" weight="1" />
+    <item type="OctalInteger" weight="3" />
+    <item type="SmallInteger" weight="3" />
+    <item type="HexInteger" weight="3" />
+    <item type="FixedFloat" weight="3" />
+    <item type="ExpFloat" weight="3" />
   </NumericLiterals>
   <Expressions>
-    <item type="AssignmentExpression" weight="0.65" />
-    <item type="BinaryExpression" weight="0.75" />
-    <item type="FunctionExpression" weight="1" />
-    <item type="Literal" weight="0.3" />
-    <item type="TernaryExpression" weight="0.25" />
-    <item type="UnaryExpression" weight="0.35" />
-    <item type="VariableInvocationExpression" weight="0.5" />
-    <item type="FunctionInvocationExpression" weight="0.15" />
-    <item type="VariableExpression" weight="0.4" />
-    <item type="EvalExpression" weight="0.1" />
-    <item type="ObjectSetExpression" weight="0.2" />
-    <item type="ObjectConstructorExpression" weight="0.15" />
+    <item type="AssignmentExpression" weight="4" />
+    <item type="BinaryExpression" weight="5" />
+    <item type="FunctionExpression" weight="6" />
+    <item type="Literal" weight="2" />
+    <item type="TernaryExpression" weight="1" />
+    <item type="UnaryExpression" weight="2" />
+    <item type="VariableInvocationExpression" weight="3" />
+    <item type="FunctionInvocationExpression" weight="1" />
+    <item type="VariableExpression" weight="2" />
+    <item type="EvalExpression" weight="1" />
+    <item type="ObjectSetExpression" weight="1" />
+    <item type="ObjectConstructorExpression" weight="1" />
   </Expressions>
   <Statements>
-    <item type="ReturnStatement" weight="0.2" />
-    <item type="BreakStatement" weight="0.15" />
-    <item type="AssignmentStatement" weight="1.5" />
-    <item type="IfElseStatement" weight="1" />
-    <item type="ForLoopStatement" weight="0.3" />
-    <item type="BlockStatement" weight="1" />
-    <item type="VariableInvocationStatement" weight="0.6" />
-    <item type="ObjectSetStatement" weight="0.3" />
+    <item type="ReturnStatement" weight="2" />
+    <item type="BreakStatement" weight="1" />
+    <item type="AssignmentStatement" weight="9" />
+    <item type="IfElseStatement" weight="6" />
+    <item type="ForLoopStatement" weight="2" />
+    <item type="BlockStatement" weight="6" />
+    <item type="VariableInvocationStatement" weight="4" />
+    <item type="ObjectSetStatement" weight="2" />
   </Statements>
   <AssignmentInForLoop>
-    <item type="Add" weight="1" />          <!-- for(expr; expr; var += expr) -->
-    <item type="Sub" weight="1" />          <!-- for(expr; expr; var -= expr) -->
-    <item type="Mul" weight="1" />          <!-- for(expr; expr; var *= expr) -->
-    <item type="Div" weight="1" />          <!-- for(expr; expr; var /= expr) -->
-    <item type="PostInc" weight="0.75" />   <!-- for(expr; expr; var++) -->
-    <item type="PostDec" weight="0.75" />   <!-- for(expr; expr; var‐‐) -->
+    <item type="Add" weight="3" />          <!-- for(expr; expr; var += expr) -->
+    <item type="Sub" weight="3" />          <!-- for(expr; expr; var -= expr) -->
+    <item type="Mul" weight="3" />          <!-- for(expr; expr; var *= expr) -->
+    <item type="Div" weight="3" />          <!-- for(expr; expr; var /= expr) -->
+    <item type="PostInc" weight="2" />   <!-- for(expr; expr; var++) -->
+    <item type="PostDec" weight="2" />   <!-- for(expr; expr; var‐‐) -->
   </AssignmentInForLoop>
   
   <!-- 
@@ -131,8 +131,6 @@
   <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
   <AllowFunctionOverwriting>false</AllowFunctionOverwriting> <!-- Determines whether a function variable can be assigned to. -->
   <VariableSelectorScopeFactor>2</VariableSelectorScopeFactor> <!-- Variables from the enclosing function scope are selected preferentially with this factor. 0 disables this function. -->
-  <MaxExpressionAttempts>3</MaxExpressionAttempts>  <!-- When this is exceeded, a literal expression is generated. -->
-  <MaxStatementAttempts>3</MaxStatementAttempts> <!-- When this is exceeded, an empty statement is generated. -->
   <ForLoopVariableBoundsChance>0.35</ForLoopVariableBoundsChance> <!-- for(expr; var1 < var2; expr) instead of for(expr; var1 < literal; expr) -->
   <AllowFunctionInvocationInLoop>false</AllowFunctionInvocationInLoop>
 </ProgramOptions>

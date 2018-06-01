@@ -38,60 +38,11 @@ namespace Tevador.RandomJS.Crypto
         Blake2B256 _blakeKeyed;
         ProgramFactory _factory = new ProgramFactory();
         byte[] _blockTemplate;
-        MemoryStream _programStream = new MemoryStream(256 * 1024);
-        StreamWriter _programWriter;
-
-        public Miner()
-        {
-            _programWriter = new StreamWriter(_programStream) { NewLine = "\n" };
-        }
+        ProgramRunner _runner = new ProgramRunner();
 
         public void Reset(byte[] blockTemplate)
         {
             _blockTemplate = blockTemplate;
-        }
-
-        private int ExecuteProgram(out string output, out string error)
-        {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:18111");
-                request.KeepAlive = false;
-                request.Timeout = 10000;
-                request.Method = "POST";
-                Stream reqStream = request.GetRequestStream();
-                reqStream.Write(_programStream.GetBuffer(), 0, (int)_programStream.Length);
-                reqStream.Close();
-                WebResponse response = request.GetResponse();
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    output = reader.ReadToEnd();
-                }
-                error = null;
-                return 0;
-            }
-            catch (WebException e)
-            {
-                output = null;
-                var response = e.Response as HttpWebResponse;
-                if (response != null)
-                {
-                    error = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                    return (int)response.StatusCode;
-                }
-                else
-                {
-                    error = e.Message;
-                    return e.HResult;
-                }
-            }
-        }
-
-        private void WriteProgram(IProgram program)
-        {
-            _programStream.SetLength(0);
-            program.WriteTo(_programWriter);
-            _programWriter.Flush();
         }
 
         public unsafe Solution Solve()
@@ -101,24 +52,26 @@ namespace Tevador.RandomJS.Crypto
             uint nonce;
             fixed (byte* block = _blockTemplate)
             {
+                Console.WriteLine(BinaryUtils.ByteArrayToString(_blake.ComputeHash(_blockTemplate)));
                 uint* noncePtr = (uint*)(block + _nonceOffset);
                 do
                 {
                     (*noncePtr)++;
                     byte[] key = _blake.ComputeHash(_blockTemplate);
                     var program = _factory.GenProgram(key);
-                    WriteProgram(program);
+                    _runner.WriteProgram(program);
                     _blakeKeyed = new Blake2B256(key);
-                    auxiliary = _blakeKeyed.ComputeHash(_programStream.GetBuffer(), 0, (int)_programStream.Length);
-                    int exitCode;
-                    string output, error;
-                    if(0 != (exitCode = ExecuteProgram(out output, out error)))
+                    auxiliary = _blakeKeyed.ComputeHash(_runner.Buffer, 0, _runner.ProgramLength);
+                    var ri = _runner.ExecuteProgram();
+                    if(!ri.Success)
                     {
-                        throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {(*noncePtr)}. Seed: {BinaryUtils.ByteArrayToString(key)}, {error}"));
+                        throw new Exception(string.Format($"Program execution failed. Nonce value: {(*noncePtr)}. Seed: {BinaryUtils.ByteArrayToString(key)}, {ri.Output}"));
                     }
-                    result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(output));
+                    result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(ri.Output));
                 }
                 while ((result[0] ^ auxiliary[0]) >= _bound);
+                Console.WriteLine("A={0}", BinaryUtils.ByteArrayToString(auxiliary));
+                Console.WriteLine("B={0}", BinaryUtils.ByteArrayToString(result));
                 nonce = *noncePtr;
             }
             result[0] &= _clearMask;
@@ -126,6 +79,7 @@ namespace Tevador.RandomJS.Crypto
             {
                 result[i] ^= auxiliary[i];
             }
+            Console.WriteLine("R={0}", BinaryUtils.ByteArrayToString(result));
             return new Solution()
             {
                 Nonce = nonce,
@@ -149,21 +103,20 @@ namespace Tevador.RandomJS.Crypto
                 return false;
             }
             var program = _factory.GenProgram(key);
-            WriteProgram(program);
-            var auxiliary = _blakeKeyed.ComputeHash(_programStream.GetBuffer(), 0, (int)_programStream.Length);
+            _runner.WriteProgram(program);
+            var auxiliary = _blakeKeyed.ComputeHash(_runner.Buffer, 0, _runner.ProgramLength);
             if ((auxiliary[0] ^ sol.Result[0]) >= _bound)
             {
                 Console.WriteLine("Invalid Auxiliary");
                 return false;
             }
             auxiliary[0] &= _clearMask;
-            int exitCode;
-            string output, error;
-            if (0 != (exitCode = ExecuteProgram(out output, out error)))
+            var ri = _runner.ExecuteProgram();
+            if (!ri.Success)
             {
-                throw new Exception(string.Format($"Program execution failed (Exit code {exitCode}). Nonce value: {sol.Nonce}. Seed: {BinaryUtils.ByteArrayToString(key)}, {error}"));
+                throw new Exception(string.Format($"Program execution failed. Nonce value: {(sol.Nonce)}. Seed: {BinaryUtils.ByteArrayToString(key)}, {ri.Output}"));
             }
-            var result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(output));
+            var result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(ri.Output));
             for (int i = 0; i < result.Length; ++i)
             {
                 result[i] ^= auxiliary[i];
@@ -176,119 +129,83 @@ namespace Tevador.RandomJS.Crypto
             return true;
         }
 
-        class RuntimeInfo : IComparable<RuntimeInfo>
-        {
-            public RuntimeInfo(string seed, double runtime)
-            {
-                Seed = seed;
-                Runtime = runtime;
-            }
-
-            public string Seed { get; private set; }
-            public double Runtime { get; private set; }
-
-            public int CompareTo(RuntimeInfo other)
-            {
-                return Runtime.CompareTo(other.Runtime);
-            }
-        }
-
         private void MakeStats(int count)
         {
             var runtimes = new List<RuntimeInfo>(count);
             var factory = new ProgramFactory();
-            string output, error;
-            int exitCode = 0;
             IProgram p;
+            RuntimeInfo ri;
+            EntropyCounter ec = new EntropyCounter();
             //warm up
             p = factory.GenProgram(BinaryUtils.GenerateSeed(Environment.TickCount));
-            WriteProgram(p);
-            ExecuteProgram(out output, out error);
-            Console.WriteLine("Warmed up");
+            _runner.WriteProgram(p);
+            ri = _runner.ExecuteProgram();
+            Console.WriteLine($"Collecting statistics from {count} random program executions");
+            double step = count / 20.0;
+            double next = step;
+            double dcount = count;
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < count; ++i)
             {
                 var seed = Environment.TickCount + i;
                 var gs = BinaryUtils.GenerateSeed(seed);
                 var ss = BinaryUtils.ByteArrayToString(gs);
-                if ((i & 127) == 0)
-                    Console.WriteLine("Seed = {0}", ss);
+                if (i >= next)
+                {
+                    Console.Write($"{i / dcount:P0}, ");
+                    next += step;
+                }
                 p = factory.GenProgram(gs);
-                WriteProgram(p);
-                exitCode = ExecuteProgram(out output, out error);
-                if (exitCode != 0)
+                _runner.WriteProgram(p);
+                ri = _runner.ExecuteProgram();
+                if (!ri.Success)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Error Seed = {0}", ss);
-                    Console.WriteLine($"// ExitCode = {exitCode}");
-                    Console.WriteLine(output);
-                    Console.WriteLine(error);
+                    Console.WriteLine(ri.Output);
                     break;
                 }
-                const string prefix = "RUNTIME: ";
-                int runtimeIndex = output.IndexOf(prefix);
-                if (runtimeIndex < 0)
-                {
-                    Console.WriteLine("Runtime info not found");
-                    break;
-                }
-                string runtimeStr = output.Substring(runtimeIndex + prefix.Length);
-                double runtime;
-                if (!double.TryParse(runtimeStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out runtime))
-                {
-                    Console.WriteLine($"Invalid Runtime info {runtimeStr}");
-                    break;
-                }
-                runtimes.Add(new RuntimeInfo(ss, 1000 * runtime));
+                ri.Seed = ss;
+                runtimes.Add(ri);
+                ec.Add(ri.Output);
             }
             sw.Stop();
+            Console.WriteLine();
 
-            Console.WriteLine($"// {runtimes.Count} seeds processed in {sw.Elapsed.TotalSeconds} seconds");
+            Console.WriteLine($"Completed in {sw.Elapsed.TotalSeconds} seconds");
 
-            if (exitCode != 0) return;
+            if (!ri.Success) return;
 
             runtimes.Sort();
-            //runtimes.RemoveAt(0);
-            //runtimes.RemoveAt(runtimes.Count - 1);
-            var avg = runtimes.Average(r => r.Runtime);
-            var min = runtimes[0].Runtime;
-            var max = runtimes[runtimes.Count - 1].Runtime;
             Console.WriteLine($"Longest runtimes:");
             for (int i = 1; i <= 10; ++i)
             {
                 var r = runtimes[runtimes.Count - i];
-                Console.WriteLine($"Seed = {r.Seed}, Runtime = {r.Runtime} ms");
+                Console.WriteLine($"Seed = {r.Seed}, Runtime = {r.Runtime:0.00000} s");
             }
-            var sqsum = runtimes.Sum(d => (d.Runtime - avg) * (d.Runtime - avg));
-            var stdev = Math.Sqrt(sqsum / runtimes.Count);
-            Console.WriteLine($"Runtime: Min: {min}; Max: {max}; Avg: {avg}; Stdev: {stdev};");
-            int[] histogram = new int[(int)Math.Ceiling((max - min) / stdev * 10)];
+            var runtimeStats = new ListStats<RuntimeInfo>(runtimes, r => r.Runtime);
+            Console.WriteLine($"Runtime [s] Min: {runtimeStats.Min:0.00000}; Max: {runtimeStats.Max:0.00000}; Avg: {runtimeStats.Average:0.00000}; Stdev: {runtimeStats.StdDev:0.00000};");
+            Console.WriteLine($"Runtime [s] 99.99th percentile: {runtimeStats.GetPercentile(0.9999)}");
+            Console.WriteLine($"Average entropy of program output (est.): {ec.GetEntropy()} bits");
+            var ccStats = new ListStats<RuntimeInfo>(runtimes, r => r.CyclomaticComplexity);
+            Console.WriteLine($"Cyclomatic complexity Min: {ccStats.Min}; Max: {ccStats.Max}; Avg: {ccStats.Average}; Stdev: {ccStats.StdDev};");
+            var hdStats = new ListStats<RuntimeInfo>(runtimes, r => r.HalsteadDifficulty);
+            Console.WriteLine($"Halstead difficulty Min: {hdStats.Min}; Max: {hdStats.Max}; Avg: {hdStats.Average}; Stdev: {hdStats.StdDev};");
+            int[] histogram = new int[(int)Math.Ceiling((runtimeStats.Max - runtimeStats.Min) / runtimeStats.StdDev * 10)];
             foreach (var run in runtimes)
             {
-                histogram[(int)(((run.Runtime - min) / stdev * 10))]++;
+                var index = (int)(((run.Runtime - runtimeStats.Min) / runtimeStats.StdDev * 10));
+                histogram[index]++;
             }
-            Console.WriteLine("Histogram:");
+            Console.WriteLine("Runtime histogram:");
             for (int j = 0; j < histogram.Length; ++j)
             {
-                Console.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0} {1}", j * stdev / 10 + min, histogram[j]));
+                Console.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.00000} {1}", j * runtimeStats.StdDev / 10 + runtimeStats.Min, histogram[j]));
             }
         }
 
         static void Main(string[] args)
         {
-#if PERF
-            var miner = new Miner();
-            var count = 10000;
-            var sw = Stopwatch.StartNew();
-            for(int i = 0; i < count; ++i)
-            {
-                var seed = BinaryUtils.GenerateSeed(Environment.TickCount + i);
-                var p = miner._factory.GenProgram(seed);
-                miner.WriteProgram(p);
-            }
-            sw.Stop();
-            Console.WriteLine($"{count} seeds processed in {sw.Elapsed.TotalSeconds} s");
-#endif
-#if !PERF
             if (args.Length > 0 && args[0] == "--stats")
             {
                 var miner = new Miner();
@@ -346,7 +263,6 @@ namespace Tevador.RandomJS.Crypto
                     Console.WriteLine($"ERROR: {e}");
                 }
             }
-#endif
         }
     }
 }

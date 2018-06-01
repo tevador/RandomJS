@@ -53,8 +53,12 @@
     <Compile Include="Blake\Blake2BHash.cs" />
     <Compile Include="Blake\Blake2BTreeConfig.cs" />
     <Compile Include="Blake\Blake2IvBuilder.cs" />
+    <Compile Include="EntropyCounter.cs" />
+    <Compile Include="ListStats.cs" />
     <Compile Include="Miner.cs" />
+    <Compile Include="ProgramRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RuntimeInfo.cs" />
     <Compile Include="Solution.cs" />
   </ItemGroup>
   <ItemGroup>

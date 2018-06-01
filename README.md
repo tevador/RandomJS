@@ -66,7 +66,9 @@ The project has 3 main units:
 
 #### Instructions
 1. Build the solution in Visual studio.
-1. Run the javascript sandbox in the command prompt: `node sandbox.js`.
+1. Open the command prompt in the src directory.
+1. Run `npm install`.
+1. Run the javascript sandbox: `node sandbox.js`.
 1. Run `Tevador.RandomJS.exe` or `Tevador.RandomJS.Crypto.exe` in a separate command prompt.
 
 ### Linux
@@ -76,5 +78,6 @@ The project has 3 main units:
 
 #### Instructions
 1. Build with `make`.
+1. Run `npm install`.
 1. Run the javascript sandbox: `node sandbox.js`.
 1. Run `mono Tevador.RandomJS.exe` or `mono Tevador.RandomJS.Crypto.exe` in a separate terminal window.

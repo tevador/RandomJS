@@ -3,4 +3,6 @@ obj/
 *.user
 *.suo
 .vs
+node_modules/
+package-lock.json
 
