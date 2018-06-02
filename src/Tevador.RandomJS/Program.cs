@@ -49,6 +49,7 @@ namespace Tevador.RandomJS
         {
             if (!_globalNames.ContainsKey(gl.Name))
             {
+                gl = gl.Clone();
                 _globalNames.Add(gl.Name, gl);
                 if (gl.References != null)
                 {

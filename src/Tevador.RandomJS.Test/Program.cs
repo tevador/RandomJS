@@ -20,17 +20,18 @@
 using System;
 using System.Linq;
 using System.Diagnostics;
+using Mono.Options;
 
 namespace Tevador.RandomJS.Test
 {
     class Program
     {
-        private static void MakeStats(int threads, int count)
+        private static void MakeStats(int threads, int count, long seed)
         {
-            Console.WriteLine($"Collecting statistics from {count} random program executions");
+            Console.WriteLine($"Collecting statistics from {count} random program executions (seed = {seed})");
             double step = 0.05;
             double next = step;
-            var runner = new ParallelRunner();
+            var runner = new ParallelRunner(seed);
             runner.Progress += (s, e) =>
             {
                 if(runner.Percent > next)
@@ -60,10 +61,18 @@ namespace Tevador.RandomJS.Test
 
         static void Main(string[] args)
         {
-            int count;
-            if (args.Length == 0 || !int.TryParse(args[0], out count))
-                    count = 1000;
-            MakeStats(1, count);
+            int threads = 1;
+            int count = 1000;
+            long seed = DateTime.UtcNow.Ticks;
+
+            OptionSet p = new OptionSet()
+                .Add("threads=", (int i) => threads = i)
+                .Add("count=", (int i) => count = i)
+                .Add("seed=", (long i) => seed = i);
+
+            p.Parse(args);
+
+            MakeStats(threads, count, seed);
         }
     }
 }

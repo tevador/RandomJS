@@ -21,6 +21,7 @@ using System;
 using Tevador.RandomJS.Run;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Tevador.RandomJS.Test
 {
@@ -30,13 +31,17 @@ namespace Tevador.RandomJS.Test
         ProgramOptions _options;
         long _seed;
 
+        public ParallelRunner(long seed)
+        {
+            _seed = seed;
+        }
+
         public event EventHandler Progress;
 
         public RuntimeStats Run(int threadCount, int programCount, ProgramOptions options = null)
         {
             _stats = new RuntimeStats(programCount);
             _options = options ?? ProgramOptions.FromXml();
-            _seed = DateTime.UtcNow.Ticks;
             Task[] runners = new Task[threadCount];
             for(int i = 0; i < threadCount; ++i)
             {

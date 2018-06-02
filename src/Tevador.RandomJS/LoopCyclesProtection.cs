@@ -27,7 +27,7 @@ namespace Tevador.RandomJS
         static readonly string _cyclesVaribleName = "__cycles";
         public static readonly string MaxCyclesConstantName = "__maxCycles";
 
-        readonly static GlobalVariable _cycles = new GlobalVariable(_cyclesVaribleName) { Initializer = new Literal("0") };
+        readonly static GlobalVariable _cycles = new GlobalVariable(_cyclesVaribleName, false, new Literal("0"));
         readonly static GlobalVariable _maxCycles = new GlobalVariable(MaxCyclesConstantName, true);
 
         public void AttachTo(IScope scope)

@@ -19,10 +19,12 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Tevador.RandomJS.Run;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace Tevador.RandomJS.Test
 {
@@ -85,6 +87,19 @@ namespace Tevador.RandomJS.Test
                 for (int j = 0; j < histogram.Length; ++j)
                 {
                     writer.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.00000} {1}", j * Runtime.StdDev / 10 + Runtime.Min, histogram[j]));
+                }
+                using (var sha256 = new SHA256Managed())
+                {
+                    byte[] cumulative = new byte[sha256.HashSize / 8];
+                    foreach (var ri in _list)
+                    {
+                        var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(ri.Output));
+                        for(int i = 0; i < hash.Length; ++i)
+                        {
+                            cumulative[i] ^= hash[i];
+                        }
+                    }
+                    writer.WriteLine($"Cumulative output hash: {BinaryUtils.ByteArrayToString(cumulative)}");
                 }
             }
             return sb.ToString();

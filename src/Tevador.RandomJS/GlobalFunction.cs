@@ -56,5 +56,10 @@ namespace Tevador.RandomJS
                 w.Write(Declaration);
             }
         }
+
+        public override Global Clone()
+        {
+            return this;
+        }
     }
 }

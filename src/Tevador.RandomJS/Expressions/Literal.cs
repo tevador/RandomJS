@@ -35,5 +35,10 @@ namespace Tevador.RandomJS.Expressions
         {
             w.Write(Value);
         }
+
+        public override string ToString()
+        {
+            return Value;
+        }
     }
 }

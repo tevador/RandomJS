@@ -30,5 +30,7 @@ namespace Tevador.RandomJS
         {
             return Name;
         }
+
+        public abstract Global Clone();
     }
 }

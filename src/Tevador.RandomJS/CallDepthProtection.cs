@@ -26,7 +26,7 @@ namespace Tevador.RandomJS
         static readonly string _depthVaribleName = "__depth";
         public static readonly string MaxDepthConstantName = "__maxDepth";
 
-        readonly GlobalVariable _depthVarible = new GlobalVariable(_depthVaribleName) { Initializer = new Expressions.Literal("0") };
+        readonly GlobalVariable _depthVarible = new GlobalVariable(_depthVaribleName, false, new Expressions.Literal("0"));
         readonly GlobalVariable _maxDepthConstant = new GlobalVariable(MaxDepthConstantName, true);
 
         public CallDepthProtection()

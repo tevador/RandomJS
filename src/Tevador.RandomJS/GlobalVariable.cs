@@ -30,16 +30,22 @@ namespace Tevador.RandomJS
         public bool IsConstant { get; private set; }
         public Expression Initializer { get; set; }
 
-        public GlobalVariable(string name, bool isConstant = false)
+        public GlobalVariable(string name, bool isConstant = false, Expression initializer = null)
         {
             Name = name;
             IsConstant = isConstant;
+            Initializer = initializer;
             _declaration = new VariableDeclaration(this);
         }
 
         public override void WriteTo(TextWriter w)
         {
             _declaration.WriteTo(w);
+        }
+
+        public override Global Clone()
+        {
+            return new GlobalVariable(Name, IsConstant, Initializer);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Tevador.RandomJS.Miner
 {
     class Miner
     {
-        const int N = 8; //asymmetry: solving requires 2^N times more effort than verifying
+        const int N = 6; //asymmetry: solving requires 2^N times more effort than verifying
         const int _bound = (1 << (8 - N));
         const byte _clearMask = (_bound - 1);
         const int _nonceOffset = 39;
@@ -51,7 +51,6 @@ namespace Tevador.RandomJS.Miner
             uint nonce;
             fixed (byte* block = _blockTemplate)
             {
-                Console.WriteLine(BinaryUtils.ByteArrayToString(_blake.ComputeHash(_blockTemplate)));
                 uint* noncePtr = (uint*)(block + _nonceOffset);
                 do
                 {
@@ -69,8 +68,6 @@ namespace Tevador.RandomJS.Miner
                     result = _blakeKeyed.ComputeHash(Encoding.ASCII.GetBytes(ri.Output));
                 }
                 while ((result[0] ^ auxiliary[0]) >= _bound);
-                Console.WriteLine("A={0}", BinaryUtils.ByteArrayToString(auxiliary));
-                Console.WriteLine("B={0}", BinaryUtils.ByteArrayToString(result));
                 nonce = *noncePtr;
             }
             result[0] &= _clearMask;
@@ -78,7 +75,6 @@ namespace Tevador.RandomJS.Miner
             {
                 result[i] ^= auxiliary[i];
             }
-            Console.WriteLine("R={0}", BinaryUtils.ByteArrayToString(result));
             return new Solution()
             {
                 Nonce = nonce,

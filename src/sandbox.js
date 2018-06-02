@@ -18,6 +18,7 @@
 */
 
 const vm = require('vm');
+const os = require('os');
 const http = require('http');
 const cluster = require('cluster');
 const commandLineArgs = require('command-line-args');
@@ -35,7 +36,7 @@ const options = commandLineArgs(optionDefinitions);
 if(cluster.isMaster) {
     console.log('[MASTER] online');
     console.log('[MASTER] options: ' + JSON.stringify(options));
-    for (let i = 0; i < (options.threads || 1); ++i) {
+    for (let i = 0; i < (options.threads || os.cpus().length); ++i) {
         cluster.fork();
     }
 
