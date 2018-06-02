@@ -1753,7 +1753,8 @@ namespace Mono.Options
 			if (!AlreadyAdded (nestedCommands)) {
 				NestedCommandSets.Add (nestedCommands);
 				foreach (var o in nestedCommands.options) {
-					if (o is CommandOption c) {
+                    CommandOption c;
+					if ((c = o as CommandOption) != null) {
 						options.Add (new CommandOption (c.Command, $"{nestedCommands.Suite} {c.CommandName}"));
 					}
 					else {
