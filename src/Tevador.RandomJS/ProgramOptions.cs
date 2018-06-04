@@ -43,6 +43,30 @@ namespace Tevador.RandomJS
             }
         }
 
+        public void Initialize()
+        {
+            AssignmentOperators = new OperatorTable<AssignmentOperator>();
+            UnaryOperators = new OperatorTable<UnaryOperator>();
+            BinaryOperators = new OperatorTable<BinaryOperator>();
+            Literals = new EnumTable<LiteralType>();
+            NumericLiterals = new EnumTable<NumericLiteralType>();
+            Expressions = new EnumTable<ExpressionType>();
+            Statements = new EnumTable<StatementType>();
+            AssignmentInForLoop = new OperatorTable<AssignmentOperator>();
+            BlockStatementsRange = new Interval();
+            FunctionParametersCountRange = new Interval();
+            StringLiteralLengthRange = new Interval();
+            GlobalVariablesCountRange = new Interval();
+            LocalVariablesCountRange = new Interval();
+            SwitchLabelsCountRange = new Interval();
+            MaxCallDepthRange = new Interval();
+            MaxLoopCyclesRange = new Interval();
+            MaxStringLengthRange = new Interval();
+            MathPrecisionRange = new Interval();
+            ObjectLiteralSizeRange = new Interval();
+            EvalStringLength = new Interval();
+        }
+
         internal static ProgramOptions FromXml(XmlReader reader)
         {
             var options = (ProgramOptions)_serializer.Deserialize(reader);

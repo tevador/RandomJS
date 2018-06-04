@@ -59,6 +59,8 @@ namespace Tevador.RandomJS.Run
                 if(xcc != null) ri.CyclomaticComplexity = int.Parse(xcc);
                 var xch = response.Headers.Get("X-Complexity-Halstead");
                 if(xch != null) ri.HalsteadDifficulty = double.Parse(xch, CultureInfo.InvariantCulture);
+                var loc = response.Headers.Get("X-Logical-Lines");
+                if (loc != null) ri.LinesOfCode = int.Parse(loc);
             }
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {

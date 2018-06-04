@@ -45,6 +45,7 @@ namespace Tevador.RandomJS.Test
         public ListStats<RuntimeInfo> Runtime { get; set; }
         public ListStats<RuntimeInfo> CyclomaticComplexity { get; set; }
         public ListStats<RuntimeInfo> HalsteadDifficulty { get; set; }
+        public ListStats<RuntimeInfo> LinesOfCode { get; set; }
         public double OutputEntropy { get; set; }
 
         public void Calculate()
@@ -54,6 +55,7 @@ namespace Tevador.RandomJS.Test
             Runtime = new ListStats<RuntimeInfo>(_list, r => r.Runtime, false);
             CyclomaticComplexity = new ListStats<RuntimeInfo>(_list, r => r.CyclomaticComplexity);
             HalsteadDifficulty = new ListStats<RuntimeInfo>(_list, r => r.HalsteadDifficulty);
+            LinesOfCode = new ListStats<RuntimeInfo>(_list, r => r.LinesOfCode);
             foreach (var ri in _list)
             {
                 _ec.Add(ri.Output);
@@ -62,6 +64,11 @@ namespace Tevador.RandomJS.Test
         }
 
         public override string ToString()
+        {
+            return ToString(false);
+        }
+
+        public string ToString(bool withHistogram)
         {
             var sb = new StringBuilder();
             using (var writer = new StringWriter(sb))
@@ -76,17 +83,21 @@ namespace Tevador.RandomJS.Test
                 writer.WriteLine($"Runtime [s] 99.99th percentile: {Runtime.GetPercentile(0.9999)}");
                 writer.WriteLine($"Average entropy of program output (est.): {OutputEntropy:0.00} bits");
                 writer.WriteLine($"Cyclomatic complexity Min: {CyclomaticComplexity.Min}; Max: {CyclomaticComplexity.Max}; Avg: {CyclomaticComplexity.Average}; Stdev: {CyclomaticComplexity.StdDev};");
+                writer.WriteLine($"Lines of code Min: {LinesOfCode.Min}; Max: {LinesOfCode.Max}; Avg: {LinesOfCode.Average}; Stdev: {LinesOfCode.StdDev};");
                 writer.WriteLine($"Halstead difficulty Min: {HalsteadDifficulty.Min}; Max: {HalsteadDifficulty.Max}; Avg: {HalsteadDifficulty.Average}; Stdev: {HalsteadDifficulty.StdDev};");
-                int[] histogram = new int[(int)Math.Ceiling((Runtime.Max - Runtime.Min) / Runtime.StdDev * 10)];
-                foreach (var run in _list)
+                if (withHistogram)
                 {
-                    var index = (int)(((run.Runtime - Runtime.Min) / Runtime.StdDev * 10));
-                    histogram[index]++;
-                }
-                Console.WriteLine("Runtime histogram:");
-                for (int j = 0; j < histogram.Length; ++j)
-                {
-                    writer.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.00000} {1}", j * Runtime.StdDev / 10 + Runtime.Min, histogram[j]));
+                    int[] histogram = new int[(int)Math.Ceiling((Runtime.Max - Runtime.Min) / Runtime.StdDev * 10)];
+                    foreach (var run in _list)
+                    {
+                        var index = (int)(((run.Runtime - Runtime.Min) / Runtime.StdDev * 10));
+                        histogram[index]++;
+                    }
+                    writer.WriteLine("Runtime histogram:");
+                    for (int j = 0; j < histogram.Length; ++j)
+                    {
+                        writer.WriteLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.00000} {1}", j * Runtime.StdDev / 10 + Runtime.Min, histogram[j]));
+                    }
                 }
                 using (var sha256 = new SHA256Managed())
                 {

@@ -31,9 +31,10 @@ namespace Tevador.RandomJS.Test
         ProgramOptions _options;
         long _seed;
 
-        public ParallelRunner(long seed)
+        public ParallelRunner(long seed, ProgramOptions options)
         {
             _seed = seed;
+            _options = options;
         }
 
         public event EventHandler Progress;
@@ -41,7 +42,6 @@ namespace Tevador.RandomJS.Test
         public RuntimeStats Run(int threadCount, int programCount, ProgramOptions options = null)
         {
             _stats = new RuntimeStats(programCount);
-            _options = options ?? ProgramOptions.FromXml();
             Task[] runners = new Task[threadCount];
             for(int i = 0; i < threadCount; ++i)
             {

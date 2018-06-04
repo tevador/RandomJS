@@ -36,6 +36,7 @@ const options = commandLineArgs(optionDefinitions);
 if(cluster.isMaster) {
     console.log('[MASTER] online');
     console.log('[MASTER] options: ' + JSON.stringify(options));
+    cluster.schedulingPolicy = cluster.SCHED_RR;
     for (let i = 0; i < (options.threads || os.cpus().length); ++i) {
         cluster.fork();
     }
@@ -106,6 +107,7 @@ if(cluster.isMaster) {
                     let report = escomplex.analyzeModule(source, { loadDefaultPlugins: false });
                     headers['X-Complexity-Cyclomatic'] = report.methodAggregate.cyclomatic;
                     headers['X-Complexity-Halstead'] = report.methodAggregate.halstead.difficulty;
+                    headers['X-Logical-Lines'] = report.methodAggregate.sloc.logical;
                 }
                 response.writeHead(200, headers);
                 response.end(sandbox.console.output);

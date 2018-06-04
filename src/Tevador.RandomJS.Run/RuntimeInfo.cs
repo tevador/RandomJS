@@ -28,6 +28,7 @@ namespace Tevador.RandomJS.Run
         public double Runtime { get; set; }
         public double HalsteadDifficulty { get; set; }
         public int CyclomaticComplexity { get; set; }
+        public int LinesOfCode { get; set; }
         public bool Success { get; set; }
 
         public int CompareTo(RuntimeInfo other)

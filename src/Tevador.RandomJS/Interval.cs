@@ -26,8 +26,19 @@ namespace Tevador.RandomJS
 {
     public class Interval : IXmlSerializable
     {
-        public int Min { get; private set; }
+        public int Min { get; set; }
         public int Max { get; private set; }
+
+        private int _span;
+        public int Span
+        {
+            get { return _span; }
+            set
+            {
+                _span = value;
+                Max = Min + _span;
+            }
+        }
 
         public XmlSchema GetSchema()
         {
