@@ -103,7 +103,7 @@ namespace Tevador.RandomJS
 
         internal Statement GenStatement(IScope scope, Statement parent, int maxDepth, StatementType list = StatementType.All)
         {
-            if (maxDepth == 0)
+            if (maxDepth <= 0)
             {
                 list &= StatementType.Flat;
             }

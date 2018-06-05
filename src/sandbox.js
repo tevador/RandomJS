@@ -43,6 +43,7 @@ if(cluster.isMaster) {
 
     cluster.on('exit', (worker, code, signal) => {
         console.log("[MASTER] worker W%s exited with signal %s", worker.id, signal);
+        cluster.fork();
     });
 
     cluster.on('online', (worker) => {
@@ -96,6 +97,7 @@ if(cluster.isMaster) {
                 } catch (error) {
                     sandbox.console.log('----------ERROR-----------');
                     sandbox.console.log(error);
+                    console.log(error);
                     success = false;
                 }
                 let endTime = nanotime();

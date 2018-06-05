@@ -21,7 +21,7 @@ using System;
 using Tevador.RandomJS.Run;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
+using System.Linq;
 
 namespace Tevador.RandomJS.Test
 {
@@ -42,12 +42,27 @@ namespace Tevador.RandomJS.Test
         public RuntimeStats Run(int threadCount, int programCount, ProgramOptions options = null)
         {
             _stats = new RuntimeStats(programCount);
-            Task[] runners = new Task[threadCount];
-            for(int i = 0; i < threadCount; ++i)
+            using (CancellationTokenSource source = new CancellationTokenSource())
             {
-                runners[i] = Task.Factory.StartNew(() => _run());
+                CancellationToken token = source.Token;
+                Task[] runners = new Task[threadCount];
+                for (int i = 0; i < threadCount; ++i)
+                {
+                    runners[i] = Task.Factory.StartNew(() => _run(token), token);
+                }
+                while (runners.Any(r => !r.IsCompleted))
+                {
+                    var id = Task.WaitAny(runners);
+                    if (runners[id].IsFaulted)
+                    {
+                        try
+                        {
+                            source.Cancel();
+                        }
+                        catch { }
+                    }
+                }
             }
-            Task.WaitAll(runners);
             return _stats;
         }
 
@@ -56,7 +71,7 @@ namespace Tevador.RandomJS.Test
             get { return _stats.Percent; }
         }
 
-        private void _run()
+        private void _run(CancellationToken token)
         {
             var factory = new ProgramFactory(_options);
             var runner = new ProgramRunner();
@@ -64,12 +79,17 @@ namespace Tevador.RandomJS.Test
 
             while ((ri = _stats.Add()) != null)
             {
+                if (token.IsCancellationRequested) throw new OperationCanceledException();
                 var smallSeed = Interlocked.Increment(ref _seed);
                 var bigSeed = BinaryUtils.GenerateSeed(smallSeed);
+                ri.Seed = BinaryUtils.ByteArrayToString(bigSeed);
                 var p = factory.GenProgram(bigSeed);
                 runner.WriteProgram(p);
                 runner.ExecuteProgram(ri);
-                ri.Seed = BinaryUtils.ByteArrayToString(bigSeed);
+                if (!ri.Success)
+                {
+                    throw new InvalidProgramException();
+                }
                 Progress?.Invoke(this, EventArgs.Empty);
             }            
         }

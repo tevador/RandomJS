@@ -86,10 +86,10 @@ namespace Tevador.RandomJS.Test
             bool useCustomOptions = false;
             double runtimeTarget = 0.008; //8 ms
             double runtimeWeight = 3e+7;
-            double percentileWeight = 100.0;
+            double percentileWeight = 500.0;
             double entropyWeight = 1000.0;
-            double linesOfCodeWeight = 0.1;
-            double halsteadDifficultyWeight = 1.0;
+            double linesOfCodeWeight = 0.05;
+            double halsteadDifficultyWeight = 0.5;
             double percentile = 0.999;
             double entropyLimit = 256;
             bool verbose = false;
@@ -185,33 +185,35 @@ namespace Tevador.RandomJS.Test
 
             var unknown = p.Parse(args);
 
-            if (unknown.Any())
+            /*if (unknown.Any())
             {
                 Console.WriteLine($"Unknown option '{unknown.First()}'");
                 return 1;
-            }
+            }*/
 
             var stats = MakeStats(threads, count, seed, useCustomOptions ? customOptions : ProgramOptions.FromXml(), objective);
 
             if (objective)
             {
-                var runtime1 = runtimeWeight * (stats.Runtime.Average - runtimeTarget) * (stats.Runtime.Average - runtimeTarget);
-                var runtime2 = percentileWeight * stats.Runtime.GetPercentile(percentile);
-                var entropy = entropyWeight / Math.Max(1, stats.OutputEntropy - entropyLimit);
-                var loc = -linesOfCodeWeight * stats.LinesOfCode.Average;
-                var halstead = -halsteadDifficultyWeight * stats.HalsteadDifficulty.Average;
-
-                if (verbose)
-                {
-                    Console.WriteLine($"Runtime: {runtime1:0.000}");
-                    Console.WriteLine($"Percentile: {runtime2:0.000}");
-                    Console.WriteLine($"Entropy: {entropy:0.000}");
-                    Console.WriteLine($"Lines of code: {loc:0.000}");
-                    Console.WriteLine($"Halstead: {halstead:0.000}");
-                }
-
                 if (stats != null)
+                {
+                    var runtime1 = runtimeWeight * (stats.Runtime.Average - runtimeTarget) * (stats.Runtime.Average - runtimeTarget);
+                    var runtime2 = percentileWeight * stats.Runtime.GetPercentile(percentile);
+                    var entropy = entropyWeight / Math.Max(1, stats.OutputEntropy - entropyLimit);
+                    var loc = -linesOfCodeWeight * stats.LinesOfCode.Average;
+                    var halstead = -halsteadDifficultyWeight * stats.HalsteadDifficulty.Average;
+
+                    if (verbose)
+                    {
+                        Console.WriteLine($"Runtime: {runtime1:0.000}");
+                        Console.WriteLine($"Percentile: {runtime2:0.000}");
+                        Console.WriteLine($"Entropy: {entropy:0.000}");
+                        Console.WriteLine($"Lines of code: {loc:0.000}");
+                        Console.WriteLine($"Halstead: {halstead:0.000}");
+                    }
+
                     Console.WriteLine(runtime1 + runtime2 + entropy + loc + halstead);
+                }
                 else
                     Console.WriteLine(int.MaxValue);
                 return 0;
