@@ -1,0 +1,141 @@
+## Template for parameter description file for Iterated Race.
+##
+## The format is one parameter per line. Each line contains:
+##
+## 1: Name of the parameter. An unquoted alphanumeric string,
+##    example: ants
+
+## 2: Switch to pass the parameter. A quoted (possibly empty) string, 
+##    if the value and the switch must be separated, add a space at
+##    the end of the string. Example : "--version1 --ants "
+
+## 3: Type. An unquoted single letter, among 
+##     i: Integer, c: categorical, o: ordinal, r: real.
+
+## 4: For c and o: All possible values, that is, a variable number of
+##    quoted or unquoted strings separated by commas within
+##    parenthesis. Empty strings and strings containing commas or
+##    spaces must be quoted.
+##    For i,r: a pair of unquoted numbers representing minimum and
+##    maximum values. 
+
+## 5: A conditional parameter can be defined according to the values of
+##    one or several other parameters.  This is done by adding a
+##    character '|' followed by an R expression involving the names of
+##    other parameters. This expression must return TRUE if the 
+##    condition is satisfied, FALSE otherwise.
+
+# 1:            					2:                   						3: 4:      5:
+AssignmentOperators_Basic			"--XML_AssignmentOperators_Basic "			i  (4,11)
+AssignmentOperators_Add				"--XML_AssignmentOperators_Add "			i  (3,6)
+AssignmentOperators_Sub				"--XML_AssignmentOperators_Sub "			i  (1,4)
+AssignmentOperators_Mul				"--XML_AssignmentOperators_Mul "			i  (1,4)
+AssignmentOperators_Div				"--XML_AssignmentOperators_Div "			i  (1,4)
+AssignmentOperators_Mod				"--XML_AssignmentOperators_Mod "			i  (1,4)
+AssignmentOperators_PreInc			"--XML_AssignmentOperators_PreInc "			i  (1,4)
+AssignmentOperators_PostDec			"--XML_AssignmentOperators_PostDec "		i  (1,4)
+AssignmentOperators_PreDec			"--XML_AssignmentOperators_PreDec "			i  (1,4)
+AssignmentOperators_PostInc			"--XML_AssignmentOperators_PostInc "		i  (1,4)
+UnaryOperators_Plus					"--XML_UnaryOperators_Plus "				i  (1,4)
+UnaryOperators_Typeof				"--XML_UnaryOperators_Typeof "				i  (1,4)
+UnaryOperators_Minus				"--XML_UnaryOperators_Minus "				i  (1,4)
+UnaryOperators_Not					"--XML_UnaryOperators_Not "					i  (1,4)
+UnaryOperators_Sqrt					"--XML_UnaryOperators_Sqrt "				i  (1,4)
+UnaryOperators_Exp					"--XML_UnaryOperators_Exp "					i  (1,4)
+UnaryOperators_Log					"--XML_UnaryOperators_Log "					i  (1,4)
+UnaryOperators_Sin					"--XML_UnaryOperators_Sin "					i  (1,4)
+UnaryOperators_Cos					"--XML_UnaryOperators_Cos "					i  (1,4)
+UnaryOperators_Atan					"--XML_UnaryOperators_Atan "				i  (1,4)
+UnaryOperators_Floor				"--XML_UnaryOperators_Floor "				i  (1,4)
+UnaryOperators_Ceil					"--XML_UnaryOperators_Ceil "				i  (1,4)
+UnaryOperators_Abs					"--XML_UnaryOperators_Abs "					i  (1,4)
+UnaryOperators_Trunc				"--XML_UnaryOperators_Trunc "				i  (1,4)
+UnaryOperators_Cbrt					"--XML_UnaryOperators_Cbrt "				i  (1,4)
+BinaryOperators_Add					"--XML_BinaryOperators_Add "				i  (4,11)
+BinaryOperators_Comma				"--XML_BinaryOperators_Comma "				i  (1,4)
+BinaryOperators_Sub					"--XML_BinaryOperators_Sub "				i  (1,4)
+BinaryOperators_Mul					"--XML_BinaryOperators_Mul "				i  (1,4)
+BinaryOperators_Div					"--XML_BinaryOperators_Div "				i  (1,4)
+BinaryOperators_Mod					"--XML_BinaryOperators_Mod "				i  (1,4)
+BinaryOperators_Less				"--XML_BinaryOperators_Less "				i  (1,4)
+BinaryOperators_Greater				"--XML_BinaryOperators_Greater "			i  (1,4)
+BinaryOperators_Equal				"--XML_BinaryOperators_Equal "				i  (1,4)
+BinaryOperators_NotEqual			"--XML_BinaryOperators_NotEqual "			i  (1,4)
+BinaryOperators_Min					"--XML_BinaryOperators_Min "				i  (1,4)
+BinaryOperators_Max					"--XML_BinaryOperators_Max "				i  (1,4)
+BinaryOperators_BitAnd				"--XML_BinaryOperators_BitAnd "				i  (1,4)
+BinaryOperators_BitOr				"--XML_BinaryOperators_BitOr "				i  (1,4)
+BinaryOperators_Xor					"--XML_BinaryOperators_Xor "				i  (1,4)
+Literals_String						"--XML_Literals_String "					i  (1,4)
+Literals_Numeric					"--XML_Literals_Numeric "					i  (3,6)
+Literals_Object						"--XML_Literals_Object "					i  (1,4)
+NumericLiterals_Boolean				"--XML_NumericLiterals_Boolean "			i  (1,4)
+NumericLiterals_DecimalInteger		"--XML_NumericLiterals_DecimalInteger "		i  (1,4)
+NumericLiterals_BinaryInteger		"--XML_NumericLiterals_BinaryInteger "		i  (1,4)
+NumericLiterals_OctalInteger		"--XML_NumericLiterals_OctalInteger "		i  (1,4)
+NumericLiterals_SmallInteger		"--XML_NumericLiterals_SmallInteger "		i  (1,4)
+NumericLiterals_HexInteger			"--XML_NumericLiterals_HexInteger "			i  (1,4)
+NumericLiterals_FixedFloat			"--XML_NumericLiterals_FixedFloat "			i  (1,4)
+NumericLiterals_ExpFloat			"--XML_NumericLiterals_ExpFloat "			i  (1,4)
+Expressions_AssignmentExpression			"--XML_Expressions_AssignmentExpression "			i  (2,5)
+Expressions_BinaryExpression				"--XML_Expressions_BinaryExpression "				i  (3,6)
+Expressions_FunctionExpression				"--XML_Expressions_FunctionExpression "				i  (4,8)
+Expressions_Literal							"--XML_Expressions_Literal "						i  (1,4)
+Expressions_TernaryExpression				"--XML_Expressions_TernaryExpression "				i  (1,4)
+Expressions_UnaryExpression					"--XML_Expressions_UnaryExpression "				i  (1,4)
+Expressions_VariableInvocationExpression	"--XML_Expressions_VariableInvocationExpression "	i  (1,4)
+Expressions_FunctionInvocationExpression	"--XML_Expressions_FunctionInvocationExpression "	i  (1,4)
+Expressions_VariableExpression				"--XML_Expressions_VariableExpression "				i  (1,4)
+Expressions_EvalExpression					"--XML_Expressions_EvalExpression "					i  (1,4)
+Expressions_ObjectSetExpression				"--XML_Expressions_ObjectSetExpression "			i  (1,4)
+Expressions_ObjectConstructorExpression		"--XML_Expressions_ObjectConstructorExpression "	i  (1,4)
+Statements_ReturnStatement					"--XML_Statements_ReturnStatement "					i  (1,4)
+Statements_BreakStatement					"--XML_Statements_BreakStatement "					i  (1,4)
+Statements_AssignmentStatement				"--XML_Statements_AssignmentStatement "				i  (5,12)
+Statements_IfElseStatement					"--XML_Statements_IfElseStatement "					i  (3,10)
+Statements_ForLoopStatement					"--XML_Statements_ForLoopStatement "				i  (1,4)
+Statements_BlockStatement					"--XML_Statements_BlockStatement "					i  (3,6)
+Statements_VariableInvocationStatement		"--XML_Statements_VariableInvocationStatement "		i  (2,5)
+Statements_ObjectSetStatement				"--XML_Statements_ObjectSetStatement "				i  (1,4)
+AssignmentInForLoop_Add				"--XML_AssignmentInForLoop_Add "				i  (1,4)
+AssignmentInForLoop_Sub				"--XML_AssignmentInForLoop_Sub "				i  (1,4)
+AssignmentInForLoop_Mul				"--XML_AssignmentInForLoop_Mul "				i  (1,4)
+AssignmentInForLoop_Div				"--XML_AssignmentInForLoop_Div "				i  (1,4)
+AssignmentInForLoop_PostInc			"--XML_AssignmentInForLoop_PostInc "			i  (1,4)
+AssignmentInForLoop_PostDec			"--XML_AssignmentOperators_Div "				i  (1,4)
+GlobalVariablesCountRange_Min		"--XML_GlobalVariablesCountRange_Min "			i  (4,19)
+GlobalVariablesCountRange_Span		"--XML_GlobalVariablesCountRange_Span "			i  (0,7)
+LocalVariablesCountRange_Min		"--XML_LocalVariablesCountRange_Min "			i  (0,3)
+LocalVariablesCountRange_Span		"--XML_LocalVariablesCountRange_Span "			i  (1,4)
+BlockStatementsRange_Min			"--XML_BlockStatementsRange_Min "				i  (3,18)
+BlockStatementsRange_Span			"--XML_BlockStatementsRange_Span "				i  (1,8)
+FunctionParametersCountRange_Min	"--XML_FunctionParametersCountRange_Min "		i  (0,3)
+FunctionParametersCountRange_Span	"--XML_FunctionParametersCountRange_Span "		i  (0,3)
+#StringLiteralLengthRange_Min		"--XML_StringLiteralLengthRange_Min "			i  (0,0)
+StringLiteralLengthRange_Span		"--XML_StringLiteralLengthRange_Span "			i  (8,23)
+MaxCallDepthRange_Min				"--XML_MaxCallDepthRange_Min "					i  (2,5)
+MaxCallDepthRange_Span				"--XML_MaxCallDepthRange_Span "					i  (0,3)
+MaxLoopCyclesRange_Min				"--XML_MaxLoopCyclesRange_Min "					c  (1000,2000,3000,4000,5000,6000,7000)
+MaxLoopCyclesRange_Span				"--XML_MaxLoopCyclesRange_Span "				c  (1000,2000,3000,4000,5000,6000,7000)
+MaxStringLengthRange_Min			"--XML_MaxStringLengthRange_Min "				c  (30,35,40,45,50)
+MaxStringLengthRange_Span			"--XML_MaxStringLengthRange_Span "				c  (10,15,20,25,30)
+ObjectLiteralSizeRange_Min			"--XML_ObjectLiteralSizeRange_Min "				i  (0,1)
+ObjectLiteralSizeRange_Span			"--XML_ObjectLiteralSizeRange_Span "			i  (2,5)
+EvalStringLength_Min				"--XML_EvalStringLength_Min "					i  (4,11)
+EvalStringLength_Span				"--XML_EvalStringLength_Span "					i  (0,3)
+#MathPrecisionRange_Min				"--XML_MathPrecisionRange_Min 					i  (8,10) 
+#MathPrecisionRange_Span			"--XML_MathPrecisionRange_Span					i  (0,4)
+ObjectSetPropertyCount				"--XML_ObjectSetPropertyCount "					i  (4,11)
+VariableInitializerDepth			"--XML_VariableInitializerDepth "				i  (0,3)
+MaxFunctionDepth					"--XML_MaxFunctionDepth "						i  (1,2)
+MaxObjectLiteralDepth				"--XML_MaxObjectLiteralDepth "					i  (0,2)
+MaxExpressionDepth					"--XML_MaxExpressionDepth "						i  (2,5)
+MaxStatementDepth					"--XML_MaxStatementDepth "						i  (1,4)
+ConstVariableChance					"--XML_ConstVariableChance "					r  (0,0.2)
+ElseChance							"--XML_ElseChance "								r  (0,1.0)
+AllowFunctionOverwriting			"--XML_AllowFunctionOverwriting "				c  ("true", "false")
+VariableSelectorScopeFactor			"--XML_VariableSelectorScopeFactor "			i  (0,3)
+ForLoopVariableBoundsChance			"--XML_ForLoopVariableBoundsChance "			r  (0,1.0)
+AllowFunctionInvocationInLoop		"--XML_AllowFunctionInvocationInLoop "			c  ("true", "false") 
+#EnableCallDepthProtection			"--XML_EnableCallDepthProtection 				c  ("true", "false") 
+#EnableLoopCyclesProtection			"--XML_EnableLoopCyclesProtection 				c  ("true", "false") 

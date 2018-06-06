@@ -1,0 +1,35 @@
+#!/bin/bash
+###############################################################################
+# This script is the command that is executed every run.
+# Check the examples in examples/
+#
+# This script is run in the execution directory (execDir, --exec-dir).
+#
+# PARAMETERS:
+# $1 is the candidate configuration number
+# $2 is the instance ID
+# $3 is the seed
+# $4 is the instance name
+# The rest ($* after `shift 4') are parameters to the run
+#
+# RETURN VALUE:
+# This script should print one numerical value: the cost that must be minimized.
+# Exit with 0 if no error, with 1 in case of error
+###############################################################################
+EXE=~/RandomJS/src/bin/Tevador.RandomJS.Test.exe
+FIXED_PARAMS="--threads 32 --count 1000 --objective --customOptions --XML_EnableCallDepthProtection true --XML_EnableLoopCyclesProtection true --XML_MathPrecisionRange_Min 10 --XML_MathPrecisionRange_Span 4"
+
+CONFIG_ID=$1
+INSTANCE_ID=$2
+SEED=$3
+INSTANCE=$4
+shift 4 || exit 1
+CONFIG_PARAMS=$*
+
+if [ ! -x "${EXE}" ]; then
+    error "${EXE}: not found or not executable (pwd: $(pwd))"
+fi
+
+# If the program just prints a number, we can use 'exec' to avoid
+# creating another process, but there can be no other commands after exec.
+exec $EXE ${FIXED_PARAMS} ${INSTANCE} ${CONFIG_PARAMS}
