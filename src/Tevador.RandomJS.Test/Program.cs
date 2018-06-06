@@ -79,12 +79,14 @@ namespace Tevador.RandomJS.Test
 
         static int Main(string[] args)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
             int threads = 1;
             int count = 1000;
             long seed = DateTime.UtcNow.Ticks;
             bool objective = false;
             bool useCustomOptions = false;
-            double runtimeTarget = 0.008; //8 ms
+            double runtimeTarget = 0.01; //10 ms
             double runtimeWeight = 3e+7;
             double percentileWeight = 500.0;
             double entropyWeight = 1000.0;
