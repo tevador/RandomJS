@@ -16,8 +16,9 @@
 # This script should print one numerical value: the cost that must be minimized.
 # Exit with 0 if no error, with 1 in case of error
 ###############################################################################
-EXE=~/RandomJS/src/bin/Tevador.RandomJS.Test.exe
-FIXED_PARAMS="--threads 32 --count 1000 --objective --customOptions --XML_EnableCallDepthProtection true --XML_EnableLoopCyclesProtection true --XML_MathPrecisionRange_Min 10 --XML_MathPrecisionRange_Span 4"
+EXE=../src/bin/Tevador.RandomJS.Test.exe
+NB_THREADS_TO_USE=3
+FIXED_PARAMS="--threads ${NB_THREADS_TO_USE} --count 1000 --objective --customOptions --XML_EnableCallDepthProtection true --XML_EnableLoopCyclesProtection true --XML_MathPrecisionRange_Min 10 --XML_MathPrecisionRange_Span 4"
 
 CONFIG_ID=$1
 INSTANCE_ID=$2
