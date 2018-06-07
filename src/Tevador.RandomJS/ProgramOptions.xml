@@ -113,7 +113,7 @@
   <MaxStringLengthRange>35-50</MaxStringLengthRange>
   <MathPrecisionRange>10-14</MathPrecisionRange>  <!-- Functions with inexact results (such as Math.exp or Math.sqrt) are rounded to MathPrecision significant digits. -->
   <ObjectLiteralSizeRange>0-4</ObjectLiteralSizeRange>
-  <EvalStringLength>8-8</EvalStringLength>
+  <EvalStringLength>10-10</EvalStringLength>
   
   <!--
       SCALAR OPTIONS.

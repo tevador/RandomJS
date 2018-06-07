@@ -31,7 +31,7 @@ namespace Tevador.RandomJS
         public static readonly string DecimalChars = "0123456789";
         public static readonly string OctalChars = "01234567";
         public static readonly string BinaryChars = "01";
-        public static readonly string EvalChars = ":abx!01249/=,{}+";
+        public static readonly string EvalChars = "/cb1/|=`+-a2+e84";
 
         public static int GenInt(this IRandom rand, int max)
         {

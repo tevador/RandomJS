@@ -464,7 +464,7 @@ namespace Tevador.RandomJS
 
         internal EvalExpression GenEvalExpression(IScope scope)
         {
-            scope.Require(GlobalFunction.TRYC);
+            scope.Require(GlobalFunction.EVAL);
             var ee = new EvalExpression();
             ee.Code = _rand.GenEvalString(_options.EvalStringLength.RandomValue(_rand));
             return ee;
