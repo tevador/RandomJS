@@ -35,14 +35,7 @@ __prnt(__invk(a, Expression, ...));
 * The program begins with definitions of helper functions, constants and variables. The order of these helper definitions is pseudo-random (a helper function is attached to the scope upon being first referenced from the main code).
 * The number of global variables is generated at random from a specified interval.
 * Each program prints its global variables in random order.
-* The global scope has no statements apart variable definitions and output. Other statements are restricted inside functions.
-
-## Variables
-All variables in the program are block scoped using the [let or const declaration](http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations) (unlike [var declarations](http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement) which are function scoped). Constant variables are generated with specified probability. 
-
-The names of variables follow simple alphabetical order: first variable in a given scope is *a*, second is *b*, third *c*, etc. After *z*, the sequence continues with *aa*, *ab*, *ac*, etc. Function arguments and variables declared in a for-loop follow the same naming rules. Because all variables are block scoped, the program can have many variables with the same name in different lexical scopes.
-
-Constants and loop counters are never assigned to. Additionally, assignment is forbidden for variables that are initialized with a FunctionExpression. This is done to limit the amount of dead code (functions that can never be called because the reference has been lost). 
+* The global scope has no statements apart variable definitions and output. Other statements are restricted inside functions. 
 
 ## Helper functions and variables
 
@@ -199,6 +192,13 @@ function __prnt(_) {
 }
 ```
 This function is used to output global variables at the end of the program.
+
+## Variables
+All variables in the program are block scoped using the [let or const declaration](http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations) (unlike [var declarations](http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement) which are function scoped). Constant variables are generated with specified probability. 
+
+The names of variables follow simple alphabetical order: first variable in a given scope is *a*, second is *b*, third *c*, etc. After *z*, the sequence continues with *aa*, *ab*, *ac*, etc. Function arguments and variables declared in a for-loop follow the same naming rules. Because all variables are block scoped, the program can have many variables with the same name in different lexical scopes.
+
+Constants and loop counters are never assigned to. Additionally, assignment is forbidden for variables that are initialized with a FunctionExpression. This is done to limit the amount of dead code (functions that can never be called because the reference has been lost).
 
 ## Expressions
 
