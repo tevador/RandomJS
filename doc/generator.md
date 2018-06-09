@@ -9,12 +9,11 @@ The general outline of the generated program is following:
 //2. Definition of global helper functions, constants and variables
 let __depth = 0;
 const __maxDepth = 3;
-function __tryc(_, __) {
-    try {
-        return _();
-    } catch (_e) {
-        return _e.name + __;
-    }
+function __tstr(_) {
+    return _ != null ? __strl(_.toString()) : _;
+}
+function __prnt(_) {
+    console.log(__tstr(_));
 }
 //etc.
 
@@ -46,7 +45,7 @@ These are represented by the `Global` abstract class. The names of all these glo
 let __depth = 0;
 const __maxDepth = 3;
 ```
-These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval). `__depth` is icremented each time a function is entered and decremented just before each `return` statement.
+These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval). `__depth` is incremented each time a function is entered and decremented just before each `return` statement.
 
 #### Loop cycles variables
 ```javascript
