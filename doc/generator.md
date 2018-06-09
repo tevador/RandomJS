@@ -19,15 +19,15 @@ function __tryc(_, __) {
 //etc.
 
 //3. Definition of randomly generated global variables
-let a = ...
-let b = ...
-let c = ...
+let a = Expression;
+let b = Expression;
+let c = Expression;
 //etc.
 
 //4. Output statements
-__prnt(__invk(b, ...));
-__prnt(__invk(c, ...));
-__prnt(__invk(a, ...));
+__prnt(__invk(b, Expression, ...));
+__prnt(__invk(c, Expression, ...));
+__prnt(__invk(a, Expression, ...));
 //etc.
 ```
 
@@ -53,7 +53,7 @@ These are represented by the `Global` abstract class. The names of all these glo
 let __depth = 0;
 const __maxDepth = 3;
 ```
-These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval).
+These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval). `__depth` is icremented each time a function is entered and decremented just before each `return` statement.
 
 #### Loop cycles variables
 ```javascript
@@ -306,7 +306,7 @@ This defines a new function. The function takes a random number of arguments. Ea
 
 First statement is to capture `this` object (for constructor calls), the second statement is for the call depth protection.
 
-After these two statements, a random number of local variables can be defined and a random number of statements is executed. Each function ends with a return statement (there can be multiple return statements if the function contains conditional statements).
+After these two statements, a random number of local variables can be defined and a random number of statements is executed (the body of a function is basically a `BlockStatement` as described below). Each function ends with a return statement (there can be multiple return statements if the function contains conditional statements).
 
 The generator will not generate a `FunctionExpression` if the maximum function depth has been reached (to limit function nesting).
 
@@ -364,7 +364,7 @@ The generator uses the following binary operators:
 |Div|`/`|NumericOnly, NonzeroRHS|
 |Mod|`%`|NumericOnly, NonzeroRHS|
 |Less|`<`||
-|Greater|`<`||
+|Greater|`>`||
 |Equal|`==`||
 |NotEqual|`!=`||
 |And|`&&`||
@@ -400,3 +400,70 @@ This expression uses the OBJC helper function in the form `__objc(Constructor, A
 
 ### ObjectSetExpression
 This expression uses the OBJS helper function in the form `__objs(Target, Property, Expression)`. The *Target* can be either a `VariableExpression` or an `ObjectLiteral`. The *Property* is a random string label, which follows the same rules as variable names (`'a'`, `'b'`, `'c'`, ..., `'z'`, `'aa'`, `'ab'`, ...). 
+
+## Statements
+
+The following statements can be generated:
+
+* AssignmentStatement
+* BlockStatement
+* BreakStatement
+* ForLoopStatement
+* IfElseStatement
+* ObjectSetStatement
+* ReturnStatement
+* VariableInvocationStatement
+
+Each statement has a specified probability of being generated. Statements can be nested up to the specified depth.
+
+### AssignmentStatement
+The statement has the form of `AssignmentExpression;`.
+
+### BlockStatement
+BlockStatement is a code block with the following structure:
+```javascript
+{
+    //1. Declaration of local variables
+    let e = Expression;
+    let f = Expression;
+    const g = Expression;
+    //etc.
+    
+    //2. Sequence of random statements
+    Statement
+    Statement
+    ///etc.
+}
+```
+`BlockStatement` cannot contain another `BlockStatement` directly.
+
+### BreakStatement
+`break;`
+This is statement can be generated only inside a `ForLoopStatement`.
+
+### ForLoopStatement
+The statement has the form of:
+```javascript
+for(let loopCounter = SmallInteger; Condition && (__cycles++<__maxCycles); IteratorExpression) 
+    Statement
+```
+The *Condition* has the form of `loopCounter < BoundExpression` or `loopCounter > BoundExpression` (chosen at random). *BoundExpression* is either a `NumericLiteral` or a `VariableExpression`. *IteratorExpression* is a random `AssignmentExpression` involving the `loopCounter`. 'NumericOnly' assignment operators are used.
+
+### IfElseStatement
+The statement has the form of: `if(Expression) Statement` or `if(Expression) Statement else Statement` (the version with `else` has a specified probability).
+
+### ObjectSetStatement
+The statement has the form of `ObjectSetExpression;`.
+
+### ReturnStatement
+The statement has the form of two statements:
+```javascript
+{
+    --__depth;
+    return Expression;
+}
+```
+Only expressions with zero depth can be returned: `Literal`, `VariableExpression` or `EvalExpression`. If the expression is not a  literal, then it has a form of `Expression || Literal` to prevent returning an empty value.
+
+### VariableInvocationStatement
+The statement has the form of `VariableInvocationExpression;`.
