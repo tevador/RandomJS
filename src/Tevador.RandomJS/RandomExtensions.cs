@@ -26,10 +26,10 @@ namespace Tevador.RandomJS
 {
     static class RandomExtensions
     {
-        public static readonly string PrintableChars = "\t\n !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        public static readonly string HexChars = "0123456789abcdef";
-        public static readonly string DecimalChars = "0123456789";
-        public static readonly string OctalChars = "01234567";
+        public static readonly string PrintableChars = "STsqQ$jM`@yZ2wav(794)N,{iGW0[Ot_K/me3.nLHrf]=-!b~g<pcV&k%1o+;YB':h^dCP86}IDE?5*\tA#X\\F\"RzJx\nulU>| ";
+        public static readonly string HexChars = "5b2de387f419ac60";
+        public static readonly string DecimalChars = "4651320978";
+        public static readonly string OctalChars = "37652014";
         public static readonly string BinaryChars = "01";
         public static readonly string EvalChars = "/cb1/|=`+-a2+e84";
 

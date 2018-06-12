@@ -545,6 +545,7 @@ namespace Tevador.RandomJS
 
         internal FunctionExpression GenFunctionExpression(IScope scope)
         {
+            scope.Require(GlobalOverride.FTST);
             var func = new FunctionExpression(scope);
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             for (int i = 0; i < paramCount; ++i)

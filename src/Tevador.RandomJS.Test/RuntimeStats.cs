@@ -47,6 +47,8 @@ namespace Tevador.RandomJS.Test
         public ListStats<RuntimeInfo> HalsteadDifficulty { get; set; }
         public ListStats<RuntimeInfo> LinesOfCode { get; set; }
         public double OutputEntropy { get; set; }
+        public double SyntaxErrorValidity { get; set; }
+        public double SyntaxErrorRuntime { get; set; }
 
         public void Calculate()
         {
@@ -61,6 +63,8 @@ namespace Tevador.RandomJS.Test
                 _ec.Add(ri.Output);
             }
             OutputEntropy = _ec.GetEntropy();
+            SyntaxErrorValidity = _list.Count(ri => ri.MatchSyntaxError) / (double)_list.Count;
+            SyntaxErrorRuntime = _list.Average(ri => ri.SyntaxErrorRuntime);
         }
 
         public override string ToString()
@@ -85,6 +89,8 @@ namespace Tevador.RandomJS.Test
                 writer.WriteLine($"Cyclomatic complexity Min: {CyclomaticComplexity.Min}; Max: {CyclomaticComplexity.Max}; Avg: {CyclomaticComplexity.Average}; Stdev: {CyclomaticComplexity.StdDev};");
                 writer.WriteLine($"Lines of code Min: {LinesOfCode.Min}; Max: {LinesOfCode.Max}; Avg: {LinesOfCode.Average}; Stdev: {LinesOfCode.StdDev};");
                 writer.WriteLine($"Halstead difficulty Min: {HalsteadDifficulty.Min}; Max: {HalsteadDifficulty.Max}; Avg: {HalsteadDifficulty.Average}; Stdev: {HalsteadDifficulty.StdDev};");
+                writer.WriteLine($"Matches 'SyntaxError' optimization: {SyntaxErrorValidity:P2}");
+                writer.WriteLine($"'SyntaxError' optimization runtime: {SyntaxErrorRuntime:P2}");
                 if (withHistogram)
                 {
                     int[] histogram = new int[(int)Math.Ceiling((Runtime.Max - Runtime.Min) / Runtime.StdDev * 10)];
@@ -105,7 +111,7 @@ namespace Tevador.RandomJS.Test
                     foreach (var ri in _list)
                     {
                         var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(ri.Output));
-                        for(int i = 0; i < hash.Length; ++i)
+                        for (int i = 0; i < hash.Length; ++i)
                         {
                             cumulative[i] ^= hash[i];
                         }
@@ -129,6 +135,11 @@ namespace Tevador.RandomJS.Test
                 }
             }
             return ri;
+        }
+
+        public bool IsComplete
+        {
+            get { return _list.Count == _target; }
         }
 
         public double Percent

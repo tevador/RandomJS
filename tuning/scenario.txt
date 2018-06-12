@@ -103,7 +103,7 @@ digits = 2
 # sampleInstances = 1
 
 ## Specifies the statistical test type: F-test or t-test.
-# testType = "F-test"
+testType = "t-test"
 
 ## Specifies how many instances are seen before the first elimination
 ## test. It must be a multiple of eachTest.

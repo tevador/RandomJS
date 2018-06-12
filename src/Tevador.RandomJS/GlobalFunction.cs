@@ -26,7 +26,7 @@ namespace Tevador.RandomJS
         public readonly static GlobalFunction STRL = new GlobalFunction("__strl", "(_) {{ if(typeof _ === 'string' && _.length > {0}) return _.substring(0, {0}); return _; }}", new GlobalVariable("__maxStrlen", true));
         public readonly static GlobalFunction TSTR = new GlobalFunction("__tstr", "(_){{return _!=null?{0}(_.toString()):_;}}", STRL);
         public readonly static GlobalFunction INVK = new GlobalFunction("__invk", "(_,...__) {{ if(typeof _ === 'function') return {0}(_(...__)); else return {0}(_); }}", STRL);
-        public readonly static GlobalFunction PRNT = new GlobalFunction("__prnt", "(_){{console.log({0}(_));}}", TSTR);
+        public readonly static GlobalFunction PRNT = new GlobalFunction("__prnt", "(_){{print({0}(_));}}", TSTR);
         public readonly static GlobalFunction NUMB = new GlobalFunction("__numb", "(_,__) { _=+_; if(!isNaN(_)) return _; else return __; }");
         public readonly static GlobalFunction PREC = new GlobalFunction("__prec", "(_) {{ return +_.toPrecision({0}); }}", new GlobalVariable("__fpMathPrec", true));
         public readonly static GlobalFunction NNEG = new GlobalFunction("__nneg", "(_) { return _ < 0 ? -_ : _; }");

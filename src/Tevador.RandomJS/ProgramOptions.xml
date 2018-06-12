@@ -125,7 +125,7 @@
   <MaxObjectLiteralDepth>1</MaxObjectLiteralDepth>
   <EnableCallDepthProtection>true</EnableCallDepthProtection>
   <EnableLoopCyclesProtection>true</EnableLoopCyclesProtection>
-  <MaxExpressionDepth>4</MaxExpressionDepth>
+  <MaxExpressionDepth>3</MaxExpressionDepth>
   <MaxStatementDepth>3</MaxStatementDepth>
   <ConstVariableChance>0.1</ConstVariableChance>
   <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->

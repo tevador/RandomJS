@@ -81,12 +81,10 @@ if(cluster.isMaster) {
                 }
             });
             request.on('end', function() {
+                let output = '';
                 const sandbox = {
-                    console: {
-                        output: '',
-                        log: function(x) {
-                            this.output += x + '\n';
-                        }
+                    print: function(x) {
+                        output += x + '\n';
                     }
                 };
                 vm.createContext(sandbox);
@@ -95,8 +93,8 @@ if(cluster.isMaster) {
                 try{
                     vm.runInContext(source, sandbox, vmOptions);
                 } catch (error) {
-                    sandbox.console.log('----------ERROR-----------');
-                    sandbox.console.log(error);
+                    sandbox.print('----------ERROR-----------');
+                    sandbox.print(error);
                     console.log(error);
                     success = false;
                 }
@@ -112,7 +110,7 @@ if(cluster.isMaster) {
                     headers['X-Logical-Lines'] = report.methodAggregate.sloc.logical;
                 }
                 response.writeHead(200, headers);
-                response.end(sandbox.console.output);
+                response.end(output);
             });
         } else {
             response.writeHead(405, 'Method Not Supported', headers);

@@ -17,25 +17,16 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System;
-
 namespace Tevador.RandomJS.Run
 {
-    public class RuntimeInfo : IComparable<RuntimeInfo>
-    { 
-        public string Seed { get; set; }
-        public string Output { get; set; }
-        public double Runtime { get; set; }
-        public double HalsteadDifficulty { get; set; }
-        public int CyclomaticComplexity { get; set; }
-        public int LinesOfCode { get; set; }
-        public bool Success { get; set; }
-        public bool MatchSyntaxError { get; set; }
-        public double SyntaxErrorRuntime { get; set; }
+    public abstract class ProgramRunnerBase
+    {
+        public abstract void WriteProgram(IProgram program);
+        public abstract RuntimeInfo ExecuteProgram(RuntimeInfo ri);
 
-        public int CompareTo(RuntimeInfo other)
+        public RuntimeInfo ExecuteProgram()
         {
-            return Runtime.CompareTo(other.Runtime);
+            return ExecuteProgram(new RuntimeInfo());
         }
     }
 }

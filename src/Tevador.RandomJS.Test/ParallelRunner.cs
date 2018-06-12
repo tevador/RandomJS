@@ -22,6 +22,7 @@ using Tevador.RandomJS.Run;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using System.IO;
 
 namespace Tevador.RandomJS.Test
 {
@@ -30,36 +31,41 @@ namespace Tevador.RandomJS.Test
         RuntimeStats _stats;
         ProgramOptions _options;
         long _seed;
+        bool _evalTest;
 
-        public ParallelRunner(long seed, ProgramOptions options)
+        public ParallelRunner(long seed, ProgramOptions options, bool evalTest)
         {
             _seed = seed;
             _options = options;
+            _evalTest = evalTest;
         }
 
         public event EventHandler Progress;
 
-        public RuntimeStats Run(int threadCount, int programCount, ProgramOptions options = null)
+        public RuntimeStats Run(int threadCount, int programCount, int timeout)
         {
             _stats = new RuntimeStats(programCount);
             using (CancellationTokenSource source = new CancellationTokenSource())
             {
                 CancellationToken token = source.Token;
-                Task[] runners = new Task[threadCount];
-                for (int i = 0; i < threadCount; ++i)
+                Task[] runners = new Task[threadCount + 1];
+                runners[0] = Task.Delay(timeout);
+                for (int i = 1; i <= threadCount; ++i)
                 {
                     runners[i] = Task.Factory.StartNew(() => _run(token), token);
                 }
-                while (runners.Any(r => !r.IsCompleted))
+                while (runners.Skip(1).Any(r => !r.IsCompleted))
                 {
                     var id = Task.WaitAny(runners);
-                    if (runners[id].IsFaulted)
+                    if (id == 0 || runners[id].IsFaulted)
                     {
                         try
                         {
                             source.Cancel();
                         }
                         catch { }
+                        //Console.WriteLine(runners[id].Exception);
+                        break;
                     }
                 }
             }
@@ -74,7 +80,8 @@ namespace Tevador.RandomJS.Test
         private void _run(CancellationToken token)
         {
             var factory = new ProgramFactory(_options);
-            var runner = new ProgramRunner();
+            var runnerNode = new ProgramRunner();
+            //var runnerXS = new EvalProgramRunner(@"..\moddable\build\bin\win\release\xst_x64.exe", "-s");
             RuntimeInfo ri;
 
             while ((ri = _stats.Add()) != null)
@@ -84,14 +91,56 @@ namespace Tevador.RandomJS.Test
                 var bigSeed = BinaryUtils.GenerateSeed(smallSeed);
                 ri.Seed = BinaryUtils.ByteArrayToString(bigSeed);
                 var p = factory.GenProgram(bigSeed);
-                runner.WriteProgram(p);
-                runner.ExecuteProgram(ri);
+                runnerNode.WriteProgram(p);
+                runnerNode.ExecuteProgram(ri);
                 if (!ri.Success)
                 {
                     throw new InvalidProgramException();
                 }
+                /*runnerXS.WriteProgram(p);
+                var xs = runnerXS.ExecuteProgram();
+                xs.Output = xs.Output.Replace("\r", "");
+                if(ri.Output != xs.Output)
+                {
+                    Console.WriteLine("NODE:");
+                    Console.WriteLine(ri.Output);
+                    Console.WriteLine("---------------------");
+                    Console.WriteLine("XS:");
+                    Console.WriteLine(xs.Output);
+                    Console.WriteLine("---------------------");
+                    Console.WriteLine($"Outputs differ with seed {ri.Seed}");
+                    throw new InvalidOperationException();
+                }*/
+                if (_evalTest)
+                {
+                    runnerNode.WriteProgram(new SyntaxErrorProgram(p));
+                    var se = runnerNode.ExecuteProgram();
+                    ri.MatchSyntaxError = (se.Output == ri.Output);
+                    ri.SyntaxErrorRuntime = se.Runtime / ri.Runtime;
+                }
                 Progress?.Invoke(this, EventArgs.Empty);
             }            
+        }
+
+        class SyntaxErrorProgram : IProgram
+        {
+            static readonly System.Text.RegularExpressions.Regex _eval = new System.Text.RegularExpressions.Regex("__eval\\(_=>eval\\(_\\),['\"]([/cb1/\\|=`\\+-a2\\+e84]{10})['\"]\\)");
+            string _source;
+
+            public SyntaxErrorProgram(IProgram parent)
+            {
+                using (var writer = new StringWriter())
+                {
+                    parent.WriteTo(writer);
+                    writer.Flush();
+                    _source = _eval.Replace(writer.ToString(), (System.Text.RegularExpressions.Match m) => $"('SyntaxError{m.Groups[1].Value}')");
+                }
+            }
+
+            public void WriteTo(TextWriter w)
+            {
+                w.Write(_source);
+            }
         }
     }
 }

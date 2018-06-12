@@ -27,13 +27,13 @@ namespace Tevador.RandomJS.Test
 {
     class Program
     {
-        private static RuntimeStats MakeStats(int threads, int count, long seed, ProgramOptions options, bool silent)
+        private static RuntimeStats MakeStats(int threads, int count, int timeout, long seed, ProgramOptions options, bool silent, bool evalTest)
         {
             if (!silent)
                 Console.WriteLine($"Collecting statistics from {count} random program executions (seed = {seed})");
             double step = 0.05;
             double next = step;
-            var runner = new ParallelRunner(seed, options);
+            var runner = new ParallelRunner(seed, options, evalTest);
             if (!silent)
                 runner.Progress += (s, e) =>
                 {
@@ -47,7 +47,7 @@ namespace Tevador.RandomJS.Test
             RuntimeStats stats = null;
             try
             {
-                stats = runner.Run(threads, count);
+                stats = runner.Run(threads, count, timeout);
             }
             catch(Exception e)
             {
@@ -70,7 +70,7 @@ namespace Tevador.RandomJS.Test
                 }
                 stats = null;
             }
-            else if(stats != null)
+            else if(stats != null && stats.IsComplete)
             {
                 stats.Calculate();
             }
@@ -93,8 +93,12 @@ namespace Tevador.RandomJS.Test
             double linesOfCodeWeight = 0.05;
             double halsteadDifficultyWeight = 0.5;
             double percentile = 0.999;
-            double entropyLimit = 256;
+            double entropyLimit = 512;
+            double evalTestWeightValidity = 20.0;
+            double evalTestWeightRuntime = 40.0;
             bool verbose = false;
+            int timeout = -1;
+            bool evalTest = false;
 
             ProgramOptions customOptions = new ProgramOptions();
             customOptions.Initialize();
@@ -108,6 +112,7 @@ namespace Tevador.RandomJS.Test
                 .Add("threads=", (int i) => threads = i)
                 .Add("count=", (int i) => count = i)
                 .Add("seed=", (long i) => seed = i)
+                .Add("timeout=", (int i) => timeout = 1000 * i)
                 .Add("objective", s => objective = true)
                 .Add("customOptions", s => useCustomOptions = true)
                 .Add("verbose", s => verbose = true)
@@ -118,7 +123,10 @@ namespace Tevador.RandomJS.Test
                 .Add("entropyWeight=", (double d) => entropyWeight = d)
                 .Add("entropyLimit=", (double d) => entropyLimit = d)
                 .Add("linesOfCodeWeight=", (double d) => linesOfCodeWeight = d)
-                .Add("halsteadDifficultyWeight=", (double d) => halsteadDifficultyWeight = d);
+                .Add("halsteadDifficultyWeight=", (double d) => halsteadDifficultyWeight = d)
+                .Add("evalTest", s => evalTest = true)
+                .Add("evalTestWeightValidity=", (double d) => evalTestWeightValidity = d)
+                .Add("evalTestWeightRuntime=", (double d) => evalTestWeightRuntime = d);
 
 
             foreach (var prop in typeof(ProgramOptions).GetProperties())
@@ -193,17 +201,23 @@ namespace Tevador.RandomJS.Test
                 return 1;
             }*/
 
-            var stats = MakeStats(threads, count, seed, useCustomOptions ? customOptions : ProgramOptions.FromXml(), objective);
+            var stats = MakeStats(threads, count, timeout, seed, useCustomOptions ? customOptions : ProgramOptions.FromXml(), objective, evalTest);
 
             if (objective)
             {
-                if (stats != null)
+                if (stats != null && stats.IsComplete)
                 {
                     var runtime1 = runtimeWeight * (stats.Runtime.Average - runtimeTarget) * (stats.Runtime.Average - runtimeTarget);
                     var runtime2 = percentileWeight * stats.Runtime.GetPercentile(percentile);
                     var entropy = entropyWeight / Math.Max(1, stats.OutputEntropy - entropyLimit);
                     var loc = -linesOfCodeWeight * stats.LinesOfCode.Average;
                     var halstead = -halsteadDifficultyWeight * stats.HalsteadDifficulty.Average;
+                    var evalWeakness = 0.0;
+
+                    if (evalTest)
+                    {
+                        evalWeakness = evalTestWeightValidity / Math.Max(0.05, 1.0 - stats.SyntaxErrorValidity) - evalTestWeightRuntime * stats.SyntaxErrorRuntime;
+                    }
 
                     if (verbose)
                     {
@@ -212,15 +226,16 @@ namespace Tevador.RandomJS.Test
                         Console.WriteLine($"Entropy: {entropy:0.000}");
                         Console.WriteLine($"Lines of code: {loc:0.000}");
                         Console.WriteLine($"Halstead: {halstead:0.000}");
+                        if (evalTest) Console.WriteLine($"EvalWeakness: {evalWeakness:0.000}");
                     }
 
-                    Console.WriteLine(runtime1 + runtime2 + entropy + loc + halstead);
+                    Console.WriteLine(runtime1 + runtime2 + entropy + loc + halstead + evalWeakness);
                 }
                 else
                     Console.WriteLine(int.MaxValue);
                 return 0;
             }
-            else if (stats != null)
+            else if (stats != null && stats.IsComplete)
             {
                 Console.WriteLine(stats.ToString(verbose));
                 return 0;

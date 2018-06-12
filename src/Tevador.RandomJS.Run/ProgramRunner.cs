@@ -23,7 +23,7 @@ using System.Globalization;
 
 namespace Tevador.RandomJS.Run
 {
-    public class ProgramRunner
+    public class ProgramRunner : ProgramRunnerBase
     {
         MemoryStream _programStream;
         StreamWriter _programWriter;
@@ -36,12 +36,7 @@ namespace Tevador.RandomJS.Run
             _port = port;
         }
 
-        public RuntimeInfo ExecuteProgram()
-        {
-            return ExecuteProgram(new RuntimeInfo());
-        }
-
-        public RuntimeInfo ExecuteProgram(RuntimeInfo ri)
+        public override RuntimeInfo ExecuteProgram(RuntimeInfo ri)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:" + _port);
             request.KeepAlive = false;
@@ -69,7 +64,7 @@ namespace Tevador.RandomJS.Run
             return ri;
         }
 
-        public void WriteProgram(IProgram program)
+        public override void WriteProgram(IProgram program)
         {
             _programStream.SetLength(0);
             program.WriteTo(_programWriter);
