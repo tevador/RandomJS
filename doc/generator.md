@@ -9,25 +9,24 @@ The general outline of the generated program is following:
 //2. Definition of global helper functions, constants and variables
 let __depth = 0;
 const __maxDepth = 3;
-function __tryc(_, __) {
-    try {
-        return _();
-    } catch (_e) {
-        return _e.name + __;
-    }
+function __tstr(_) {
+    return _ != null ? __strl(_.toString()) : _;
+}
+function __prnt(_) {
+    console.log(__tstr(_));
 }
 //etc.
 
 //3. Definition of randomly generated global variables
-let a = ...
-let b = ...
-let c = ...
+let a = Expression;
+let b = Expression;
+let c = Expression;
 //etc.
 
 //4. Output statements
-__prnt(__invk(b, ...));
-__prnt(__invk(c, ...));
-__prnt(__invk(a, ...));
+__prnt(__invk(b, Expression, ...));
+__prnt(__invk(c, Expression, ...));
+__prnt(__invk(a, Expression, ...));
 //etc.
 ```
 
@@ -35,14 +34,7 @@ __prnt(__invk(a, ...));
 * The program begins with definitions of helper functions, constants and variables. The order of these helper definitions is pseudo-random (a helper function is attached to the scope upon being first referenced from the main code).
 * The number of global variables is generated at random from a specified interval.
 * Each program prints its global variables in random order.
-* The global scope has no statements apart variable definitions and output. Other statements are restricted inside functions.
-
-## Variables
-All variables in the program are block scoped using the [let or const declaration](http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations) (unlike [var declarations](http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement) which are function scoped). Constant variables are generated with specified probability. 
-
-The names of variables follow simple alphabetical order: first variable in a given scope is *a*, second is *b*, third *c*, etc. After *z*, the sequence continues with *aa*, *ab*, *ac*, etc. Function arguments and variables declared in a for-loop follow the same naming rules. Because all variables are block scoped, the program can have many variables with the same name in different lexical scopes.
-
-Constants and loop counters are never assigned to. Additionally, assignment is forbidden for variables that are initialized with a FunctionExpression. This is done to limit the amount of dead code (functions that can never be called because the reference has been lost). 
+* The global scope has no statements apart variable definitions and output. Other statements are restricted inside functions. 
 
 ## Helper functions and variables
 
@@ -53,7 +45,7 @@ These are represented by the `Global` abstract class. The names of all these glo
 let __depth = 0;
 const __maxDepth = 3;
 ```
-These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval).
+These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval). `__depth` is incremented each time a function is entered and decremented just before each `return` statement.
 
 #### Loop cycles variables
 ```javascript
@@ -200,6 +192,13 @@ function __prnt(_) {
 ```
 This function is used to output global variables at the end of the program.
 
+## Variables
+All variables in the program are block scoped using the [let or const declaration](http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations) (unlike [var declarations](http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement) which are function scoped). Constant variables are generated with specified probability. 
+
+The names of variables follow simple alphabetical order: first variable in a given scope is *a*, second is *b*, third *c*, etc. After *z*, the sequence continues with *aa*, *ab*, *ac*, etc. Function arguments and variables declared in a for-loop follow the same naming rules. Because all variables are block scoped, the program can have many variables with the same name in different lexical scopes.
+
+Constants and loop counters are never assigned to. Additionally, assignment is forbidden for variables that are initialized with a FunctionExpression. This is done to limit the amount of dead code (functions that can never be called because the reference has been lost).
+
 ## Expressions
 
 Expressions in the program are generated at random from the following list:
@@ -242,7 +241,7 @@ There are 8 types of numeric literals. Each numeric literal is generated as a st
 Object literals are generated in the form `{ a: literal, b: literal, c: literal, ... }`. The number of properties is generated at random from the specified interval. Object literals can be nested up to the specified depth (e.g. `{ a: { a: true } }`).
 
 ### EvalExpression
-One of the features of the javascript language is the possiblity of evaluating code at runtime. The `EvalExpression` evaluates a random string literal in the current scope using the EVAL helper function (see above). The evaluated string contains 10 random characters from the following character set: ``/cb1/|=\`+-a2+e84``. It has been empirically determined that this character set produces relatively low number of syntax errors, while exploring many features of the language. Two characters are included twice (`/` and `+`) so they have a double chance of occuring. Thus, there are 14 unique characters, giving 14<sup>10</sup> total possibilities (~290 billion). This is sufficiently high to prevent dictionary lookup and forces all implementations to include a javascript parser.
+One of the features of the javascript language is the possiblity of evaluating code at runtime. The `EvalExpression` evaluates a random string literal in the current scope using the EVAL helper function (see above). The evaluated string contains 10 random characters from the following character set: ``/cb1/|=`+-a2+e84``. It has been empirically determined that this character set produces relatively low number of syntax errors, while exploring many features of the language. Two characters are included twice (`/` and `+`) so they have a double chance of occuring. Thus, there are 14 unique characters, giving 14<sup>10</sup> total possibilities (~290 billion). This is sufficiently high to prevent dictionary lookup and forces all implementations to include a javascript parser.
 
 The result of `EvalExpression` has approximately the following distribution:
 * Slightly over 5% chance of being a valid javascript expression.
@@ -306,7 +305,7 @@ This defines a new function. The function takes a random number of arguments. Ea
 
 First statement is to capture `this` object (for constructor calls), the second statement is for the call depth protection.
 
-After these two statements, a random number of local variables can be defined and a random number of statements is executed. Each function ends with a return statement (there can be multiple return statements if the function contains conditional statements).
+After these two statements, a random number of local variables can be defined and a random number of statements is executed (the body of a function is basically a `BlockStatement` as described below). Each function ends with a return statement (there can be multiple return statements if the function contains conditional statements).
 
 The generator will not generate a `FunctionExpression` if the maximum function depth has been reached (to limit function nesting).
 
@@ -364,7 +363,7 @@ The generator uses the following binary operators:
 |Div|`/`|NumericOnly, NonzeroRHS|
 |Mod|`%`|NumericOnly, NonzeroRHS|
 |Less|`<`||
-|Greater|`<`||
+|Greater|`>`||
 |Equal|`==`||
 |NotEqual|`!=`||
 |And|`&&`||
@@ -400,3 +399,70 @@ This expression uses the OBJC helper function in the form `__objc(Constructor, A
 
 ### ObjectSetExpression
 This expression uses the OBJS helper function in the form `__objs(Target, Property, Expression)`. The *Target* can be either a `VariableExpression` or an `ObjectLiteral`. The *Property* is a random string label, which follows the same rules as variable names (`'a'`, `'b'`, `'c'`, ..., `'z'`, `'aa'`, `'ab'`, ...). 
+
+## Statements
+
+The following statements can be generated:
+
+* AssignmentStatement
+* BlockStatement
+* BreakStatement
+* ForLoopStatement
+* IfElseStatement
+* ObjectSetStatement
+* ReturnStatement
+* VariableInvocationStatement
+
+Each statement has a specified probability of being generated. Statements can be nested up to the specified depth.
+
+### AssignmentStatement
+The statement has the form of `AssignmentExpression;`.
+
+### BlockStatement
+BlockStatement is a code block with the following structure:
+```javascript
+{
+    //1. Declaration of local variables
+    let e = Expression;
+    let f = Expression;
+    const g = Expression;
+    //etc.
+    
+    //2. Sequence of random statements
+    Statement
+    Statement
+    ///etc.
+}
+```
+`BlockStatement` cannot contain another `BlockStatement` directly.
+
+### BreakStatement
+`break;`
+This is statement can be generated only inside a `ForLoopStatement`.
+
+### ForLoopStatement
+The statement has the form of:
+```javascript
+for(let loopCounter = SmallInteger; Condition && (__cycles++<__maxCycles); IteratorExpression) 
+    Statement
+```
+The *Condition* has the form of `loopCounter < BoundExpression` or `loopCounter > BoundExpression` (chosen at random). *BoundExpression* is either a `NumericLiteral` or a `VariableExpression`. *IteratorExpression* is a random `AssignmentExpression` involving the `loopCounter`. 'NumericOnly' assignment operators are used.
+
+### IfElseStatement
+The statement has the form of: `if(Expression) Statement` or `if(Expression) Statement else Statement` (the version with `else` has a specified probability).
+
+### ObjectSetStatement
+The statement has the form of `ObjectSetExpression;`.
+
+### ReturnStatement
+The statement has the form of two statements:
+```javascript
+{
+    --__depth;
+    return Expression;
+}
+```
+Only expressions with zero depth can be returned: `Literal`, `VariableExpression` or `EvalExpression`. If the expression is not a  literal, then it has a form of `Expression || Literal` to prevent returning an empty value.
+
+### VariableInvocationStatement
+The statement has the form of `VariableInvocationExpression;`.
