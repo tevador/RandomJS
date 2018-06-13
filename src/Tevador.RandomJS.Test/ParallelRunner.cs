@@ -84,9 +84,8 @@ namespace Tevador.RandomJS.Test
             //var runnerXS = new EvalProgramRunner(@"..\moddable\build\bin\win\release\xst_x64.exe", "-s");
             RuntimeInfo ri;
 
-            while ((ri = _stats.Add()) != null)
+            while (!token.IsCancellationRequested && (ri = _stats.Add()) != null)
             {
-                if (token.IsCancellationRequested) throw new OperationCanceledException();
                 var smallSeed = Interlocked.Increment(ref _seed);
                 var bigSeed = BinaryUtils.GenerateSeed(smallSeed);
                 ri.Seed = BinaryUtils.ByteArrayToString(bigSeed);
