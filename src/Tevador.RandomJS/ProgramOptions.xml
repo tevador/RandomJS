@@ -129,8 +129,9 @@
   <MaxStatementDepth>3</MaxStatementDepth>
   <ConstVariableChance>0.1</ConstVariableChance>
   <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
-  <AllowFunctionOverwriting>false</AllowFunctionOverwriting> <!-- Determines whether a function variable can be assigned to. -->
+  <FunctionsAreConstants>true</FunctionsAreConstants> <!-- Determines whether a function variable can be assigned to. -->
   <VariableSelectorScopeFactor>2</VariableSelectorScopeFactor> <!-- Variables from the enclosing function scope are selected preferentially with this factor. 0 disables this function. -->
   <ForLoopVariableBoundsChance>0.35</ForLoopVariableBoundsChance> <!-- for(expr; var1 < var2; expr) instead of for(expr; var1 < literal; expr) -->
   <AllowFunctionInvocationInLoop>false</AllowFunctionInvocationInLoop>
+  <FunctionValueOfOverride>false</FunctionValueOfOverride>
 </ProgramOptions>

@@ -103,7 +103,7 @@ if(cluster.isMaster) {
                 console.log('Request script length: ' + source.length + ', Execution time: ' + executionTime);
                 headers['X-Execution-Time'] = executionTime;
                 headers['X-Success'] = success;
-                if(complexityEnabled) {
+                if(complexityEnabled && request.url !== '/nc') {
                     let report = escomplex.analyzeModule(source, { loadDefaultPlugins: false });
                     headers['X-Complexity-Cyclomatic'] = report.methodAggregate.cyclomatic;
                     headers['X-Complexity-Halstead'] = report.methodAggregate.halstead.difficulty;

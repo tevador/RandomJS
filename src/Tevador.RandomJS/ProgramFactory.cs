@@ -129,7 +129,7 @@ namespace Tevador.RandomJS
                 switch (type)
                 {
                     case StatementType.AssignmentStatement:
-                        if ((v = _varSelector.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
+                        if ((v = _varSelector.ChooseVariable(scope, VariableOptions.ForWriting)) != null)
                         {
                             return new AssignmentStatement(GenAssignmentExpression(scope, v, _options.MaxExpressionDepth));
                         }
@@ -204,7 +204,7 @@ namespace Tevador.RandomJS
                 Variable = i,
                 Rhs = rhs
             };
-            fl.Body = GenStatement(fl, fl, maxDepth - 1);
+            fl.Body = GenStatement(fl, fl, maxDepth - 1, StatementType.All & ~StatementType.ReturnStatement);
             return fl;
         }
 
@@ -246,7 +246,7 @@ namespace Tevador.RandomJS
                     return GenLiteral(scope);
 
                 case ExpressionType.AssignmentExpression:
-                    if ((v = _varSelector.ChooseVariable(scope, _options.VariableOptions | VariableOptions.ForWriting)) != null)
+                    if ((v = _varSelector.ChooseVariable(scope, VariableOptions.ForWriting)) != null)
                     {
                         return GenAssignmentExpression(scope, v, maxDepth - 1);
                     }
@@ -546,6 +546,8 @@ namespace Tevador.RandomJS
         internal FunctionExpression GenFunctionExpression(IScope scope)
         {
             scope.Require(GlobalOverride.FTST);
+            if (_options.FunctionValueOfOverride)
+                scope.Require(GlobalOverride.FVOF);
             var func = new FunctionExpression(scope);
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             for (int i = 0; i < paramCount; ++i)
@@ -601,6 +603,10 @@ namespace Tevador.RandomJS
             if (initialize && !v.IsParameter && !v.IsLoopCounter)
             {
                 v.Initializer = GenExpression(scope, _options.VariableInitializerDepth);
+                if(!v.IsConstant && _options.FunctionsAreConstants && v.Initializer is FunctionExpression)
+                {
+                    v.IsConstant = true;
+                }
             }
             return v;
         }

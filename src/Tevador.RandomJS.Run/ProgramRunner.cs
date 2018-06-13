@@ -38,7 +38,7 @@ namespace Tevador.RandomJS.Run
 
         public override RuntimeInfo ExecuteProgram(RuntimeInfo ri)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:" + _port);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:" + _port + (ri.CyclomaticComplexity != 0 ? "/nc" : "/"));
             request.KeepAlive = false;
             request.Timeout = 15000;
             request.Method = "POST";

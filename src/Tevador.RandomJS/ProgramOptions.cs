@@ -124,14 +124,9 @@ namespace Tevador.RandomJS
         public bool EnableLoopCyclesProtection { get; set; }
         public double ConstVariableChance { get; set; }
         public double ElseChance { get; set; }
-        public bool AllowFunctionOverwriting { get; set; }
+        public bool FunctionsAreConstants { get; set; }
         public double ForLoopVariableBoundsChance { get; set; }
         public bool AllowFunctionInvocationInLoop { get; set; }
-
-        [XmlIgnore]
-        internal VariableOptions VariableOptions
-        {
-            get { return AllowFunctionOverwriting ? VariableOptions.NonFunctionInitializer : 0; }
-        }
+        public bool FunctionValueOfOverride { get; set; }
     }
 }

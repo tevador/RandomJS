@@ -18,7 +18,7 @@
 ###############################################################################
 EXE=../src/bin/Tevador.RandomJS.Test.exe
 NB_THREADS_TO_USE=3
-FIXED_PARAMS="--threads ${NB_THREADS_TO_USE} --count 1000 --timeout 120 --evalTest --objective --customOptions --XML_EnableCallDepthProtection true --XML_EnableLoopCyclesProtection true --XML_MathPrecisionRange_Min 10 --XML_MathPrecisionRange_Span 4"
+FIXED_PARAMS="--threads ${NB_THREADS_TO_USE} --count 1000 --timeout 90 --evalTest --objective --customOptions --XML_EnableCallDepthProtection true --XML_EnableLoopCyclesProtection true --XML_MathPrecisionRange_Min 10 --XML_MathPrecisionRange_Span 4"
 
 CONFIG_ID=$1
 INSTANCE_ID=$2

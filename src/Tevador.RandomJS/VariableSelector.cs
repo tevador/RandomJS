@@ -40,8 +40,6 @@ namespace Tevador.RandomJS
             {
                 if (v.IsLoopCounter || v.IsConstant)
                     continue;
-                if (options.Has(VariableOptions.NonFunctionInitializer) && (v.Initializer is FunctionExpression))
-                    continue;
                 for (int i = 0; i <= _scopeFactor * v.Parent.FunctionDepth; ++i)
                     _candidates.Add(v);
             }

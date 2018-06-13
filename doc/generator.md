@@ -77,7 +77,7 @@ This overrides the default `Object.toString` function by converting the object t
 #### FTST override
 ```javascript
 Function.prototype.toString = function() {
-    return 'Function ' + this.name;
+    return '[Function]' + this.name;
 };
 ```
 This overrides the default `Function.toString` function, which has implementation-specific output.

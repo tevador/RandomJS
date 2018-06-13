@@ -113,7 +113,8 @@ namespace Tevador.RandomJS.Test
                 if (_evalTest)
                 {
                     runnerNode.WriteProgram(new SyntaxErrorProgram(p));
-                    var se = runnerNode.ExecuteProgram();
+                    var se = new RuntimeInfo() { CyclomaticComplexity = -1 };
+                    runnerNode.ExecuteProgram(se);
                     ri.MatchSyntaxError = (se.Output == ri.Output);
                     ri.SyntaxErrorRuntime = se.Runtime / ri.Runtime;
                 }
