@@ -122,7 +122,7 @@ MaxStringLengthRange_Span			"--XML_MaxStringLengthRange_Span "				o  (10,15,20,2
 ObjectLiteralSizeRange_Min			"--XML_ObjectLiteralSizeRange_Min "				i  (0,1)
 ObjectLiteralSizeRange_Span			"--XML_ObjectLiteralSizeRange_Span "			i  (2,5)
 EvalStringLength_Min				"--XML_EvalStringLength_Min "					i  (6,13)
-EvalStringLength_Span				"--XML_EvalStringLength_Span "					i  (0-7)
+EvalStringLength_Span				"--XML_EvalStringLength_Span "					i  (0,7)
 #MathPrecisionRange_Min				"--XML_MathPrecisionRange_Min 					i  (8,10) 
 #MathPrecisionRange_Span			"--XML_MathPrecisionRange_Span					i  (0,4)
 ObjectSetPropertyCount				"--XML_ObjectSetPropertyCount "					i  (4,11)
