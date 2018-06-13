@@ -74,6 +74,14 @@ Object.prototype.toString = function() {
 ```
 This overrides the default `Object.toString` function by converting the object to its JSON representation (the default `toString` function just returns `[object o]`). The JSON conversion will throw a TypeError if the object is circular (that's why the `__tryc` function is used).
 
+#### FTST override
+```javascript
+Function.prototype.toString = function() {
+    return 'Function ' + this.name;
+};
+```
+This overrides the default `Function.toString` function, which has implementation-specific output.
+
 #### OVOF override
 ```javascript
 Object.prototype.valueOf = function() {
@@ -182,7 +190,7 @@ function __tstr(_) {
     return _ != null ? __strl(_.toString()) : _;
 }
 ```
-This function is used to get the string representation of a variable for printing. It calls the object's `toString` function which behaves differently depending on the type of the argument (for example `function.prototype.toString` returns the source code of the function).
+This function is used to get the string representation of a variable for printing. It calls the argument's `toString` function which behaves differently depending on the prototype of the argument.
 
 #### PRNT function
 ```javascript
