@@ -99,6 +99,7 @@ namespace Tevador.RandomJS.Test
             bool verbose = false;
             int timeout = -1;
             bool evalTest = false;
+            bool help = false;
 
             ProgramOptions customOptions = new ProgramOptions();
             customOptions.Initialize();
@@ -126,7 +127,8 @@ namespace Tevador.RandomJS.Test
                 .Add("halsteadDifficultyWeight=", (double d) => halsteadDifficultyWeight = d)
                 .Add("evalTest", s => evalTest = true)
                 .Add("evalTestWeightValidity=", (double d) => evalTestWeightValidity = d)
-                .Add("evalTestWeightRuntime=", (double d) => evalTestWeightRuntime = d);
+                .Add("evalTestWeightRuntime=", (double d) => evalTestWeightRuntime = d)
+                .Add("help|h", s => help = true);
 
 
             foreach (var prop in typeof(ProgramOptions).GetProperties())
@@ -194,6 +196,12 @@ namespace Tevador.RandomJS.Test
             }
 
             var unknown = p.Parse(args);
+
+            if (help)
+            {
+                p.WriteOptionDescriptions(Console.Out);
+                return 0;
+            }
 
             /*if (unknown.Any())
             {
