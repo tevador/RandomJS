@@ -91,6 +91,7 @@ namespace Tevador.RandomJS.Test
                 writer.WriteLine($"Halstead difficulty Min: {HalsteadDifficulty.Min}; Max: {HalsteadDifficulty.Max}; Avg: {HalsteadDifficulty.Average}; Stdev: {HalsteadDifficulty.StdDev};");
                 writer.WriteLine($"Matches 'SyntaxError' optimization: {SyntaxErrorValidity:P2}");
                 writer.WriteLine($"'SyntaxError' optimization runtime: {SyntaxErrorRuntime:P2}");
+                writer.WriteLine($"Matches 'XS': {_list.Count(ri => ri.MatchXS) / (double)_list.Count:P2}");
                 if (withHistogram)
                 {
                     int[] histogram = new int[(int)Math.Ceiling((Runtime.Max - Runtime.Min) / Runtime.StdDev * 10)];

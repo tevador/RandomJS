@@ -1,4 +1,4 @@
-﻿/*
+/*
     (c) 2018 tevador <tevador@gmail.com>
 
     This file is part of Tevador.RandomJS.
@@ -17,26 +17,33 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System;
+process.stdin.setEncoding('ascii');
+process.stdout.setEncoding('ascii');
 
-namespace Tevador.RandomJS.Run
-{
-    public class RuntimeInfo : IComparable<RuntimeInfo>
-    { 
-        public string Seed { get; set; }
-        public string Output { get; set; }
-        public double Runtime { get; set; }
-        public double HalsteadDifficulty { get; set; }
-        public int CyclomaticComplexity { get; set; }
-        public int LinesOfCode { get; set; }
-        public bool Success { get; set; }
-        public bool MatchSyntaxError { get; set; }
-        public double SyntaxErrorRuntime { get; set; }
-        public bool MatchXS { get; set; }
+let __source = '';
 
-        public int CompareTo(RuntimeInfo other)
-        {
-            return Runtime.CompareTo(other.Runtime);
-        }
-    }
+function print(x) {
+  process.stdout.write(x + "\n");
 }
+
+function runScript() {
+  eval(__source);
+  process.stdout.write("\0");
+  __source = '';
+}
+
+process.stdin.on('readable', () => {
+  const chunk = process.stdin.read();
+  if (chunk !== null) {
+    __source += chunk;
+    if(__source.slice(-1) === "\0") {
+      __source = __source.substr(0, __source.length - 1);
+      runScript();
+    }
+  }
+});
+
+process.stdin.on('end', () => {
+  runScript();
+  process.exit();
+});

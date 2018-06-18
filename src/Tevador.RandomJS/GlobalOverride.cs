@@ -27,7 +27,7 @@ namespace Tevador.RandomJS
         public readonly static GlobalOverride OTST = new GlobalOverride("Object.prototype.toString", "function() {{return {0}(()=>JSON.stringify(this),'[Object]');}}", TRYC);
         public readonly static GlobalOverride OVOF = new GlobalOverride("Object.prototype.valueOf", "function() { for(let _ in this) if (typeof this[_] === 'number') return this[_]; return this; }");
         public readonly static GlobalOverride FTST = new GlobalOverride("Function.prototype.toString", "function(){return '[Function]'+this.name;}");
-        public readonly static GlobalOverride FVOF = new GlobalOverride("Function.prototype.valueOf", "function() {if(!this.name){const _='_fvof';(_ in this)||(this[_]=this());if(typeof this[_]!=='function'){return this[_];}}return this.toString();}");
+        public readonly static GlobalOverride FVOF = new GlobalOverride("Function.prototype.valueOf", "function() {{if(!this.name){{({0} in this)||(this[{0}]=this());if(typeof this[{0}]!=='function')return this[{0}];}}return this.toString();}}", new GlobalVariable("__fvof", true, new Expressions.Literal("'__fvof'")));
 
         public GlobalOverride(string name, string declaration, Global references = null)
             : base(name, declaration, references)

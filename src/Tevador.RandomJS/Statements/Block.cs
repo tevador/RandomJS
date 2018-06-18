@@ -57,6 +57,11 @@ namespace Tevador.RandomJS.Statements
             }
         }
 
+        protected virtual IEnumerable<Statement> OrderedStatements()
+        {
+            return Statements;
+        }
+
         public IScope Parent
         {
             get;
@@ -67,25 +72,12 @@ namespace Tevador.RandomJS.Statements
 
         public override void WriteTo(System.IO.TextWriter w)
         {
-            bool hasBrackets = false;
-            if (Parent != null && (Parent is FunctionExpression || Statements.Count > 1 || DeclaredVariables.Count > 0))
+            w.Write("{");
+            foreach (var s in OrderedStatements())
             {
-                w.Write("{");
-                hasBrackets = true;
+                s.WriteTo(w);
             }
-            if (!hasBrackets && Statements.Count == 0)
-            {
-                w.Write(";");
-            }
-            else
-            {
-                foreach (var s in Statements)
-                {
-                    s.WriteTo(w);
-                }
-            }
-            if (hasBrackets)
-                w.Write("}");
+            w.Write("}");
         }
 
 

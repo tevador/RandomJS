@@ -30,7 +30,7 @@ namespace Tevador.RandomJS.Statements
             w.Write(GlobalFunction.PRNT);
             w.Write("(");
             Value.WriteTo(w);
-            w.WriteLine(");");
+            w.Write(");");
         }
 
         

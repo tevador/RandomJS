@@ -59,6 +59,18 @@ namespace Tevador.RandomJS
             }
         }
 
+        protected override IEnumerable<Statement> OrderedStatements()
+        {
+            foreach(var gl in _globals)
+            {
+                yield return gl;
+            }
+            foreach(var st in Statements)
+            {
+                yield return st;
+            }
+        }
+
         internal void SetGlobalVariable<T>(string name, T value)
         {
             Global g;
@@ -78,10 +90,6 @@ namespace Tevador.RandomJS
             w.WriteLine("/* Seed: {0} */", BinaryUtils.ByteArrayToString(Seed));
             w.WriteLine("/* Print order: {0} */", string.Join(", ", PrintOrder));
             w.WriteLine("'use strict';");
-            foreach (var gf in _globals)
-            {
-                gf.WriteTo(w);
-            }
             base.WriteTo(w);
         }
 
@@ -112,6 +120,7 @@ namespace Tevador.RandomJS
                 var random = new Xoshiro256Plus();
                 var factory = new ProgramFactory(ProgramOptions.FromXml(), random);
                 var p = factory.GenProgram(seed);
+                Console.OutputEncoding = Encoding.ASCII;
                 p.WriteTo(Console.Out);
                 Console.WriteLine($"// {random.Counter} random numbers used");
             }

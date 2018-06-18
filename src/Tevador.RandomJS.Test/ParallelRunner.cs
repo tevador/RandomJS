@@ -64,7 +64,8 @@ namespace Tevador.RandomJS.Test
                             source.Cancel();
                         }
                         catch { }
-                        //Console.WriteLine(runners[id].Exception);
+                        Console.WriteLine(runners[id].Exception);
+                        Console.WriteLine($"Completed: {_stats.Percent}");
                         break;
                     }
                 }
@@ -80,8 +81,10 @@ namespace Tevador.RandomJS.Test
         private void _run(CancellationToken token)
         {
             var factory = new ProgramFactory(_options);
-            var runnerNode = new ProgramRunner();
-            //var runnerXS = new EvalProgramRunner(@"..\moddable\build\bin\win\release\xst_x64.exe", "-s");
+            var defaultRunner = new ProgramRunner();
+            //var runnerNode = new ExternalProgramRunner("node", @"..\fast-eval.js");
+            //var runnerXS = new ExternalProgramRunner(@"..\moddable\build\bin\win\release\xst.exe");
+            var runner = defaultRunner;
             RuntimeInfo ri;
 
             while (!token.IsCancellationRequested && (ri = _stats.Add()) != null)
@@ -90,31 +93,60 @@ namespace Tevador.RandomJS.Test
                 var bigSeed = BinaryUtils.GenerateSeed(smallSeed);
                 ri.Seed = BinaryUtils.ByteArrayToString(bigSeed);
                 var p = factory.GenProgram(bigSeed);
-                runnerNode.WriteProgram(p);
-                runnerNode.ExecuteProgram(ri);
+                runner.WriteProgram(p);
+                runner.ExecuteProgram(ri);
                 if (!ri.Success)
                 {
                     throw new InvalidProgramException();
                 }
+                /*bool retry = true;
+                while (!ri.Success && retry)
+                {
+                    Console.WriteLine($"Error with seed {ri.Seed}");
+                    retry = false;
+                    runner.WriteProgram(p);
+                    runner.ExecuteProgram(ri);
+                }
+                if (ri.Success)
+                {
+                    Console.WriteLine($"Success with seed {ri.Seed}");
+                }
+                else
+                {
+                    Console.WriteLine(ri.Output);
+                }*/
                 /*runnerXS.WriteProgram(p);
                 var xs = runnerXS.ExecuteProgram();
                 xs.Output = xs.Output.Replace("\r", "");
-                if(ri.Output != xs.Output)
+                if(!(ri.MatchXS = ri.Output == xs.Output))
                 {
-                    Console.WriteLine("NODE:");
-                    Console.WriteLine(ri.Output);
-                    Console.WriteLine("---------------------");
-                    Console.WriteLine("XS:");
-                    Console.WriteLine(xs.Output);
-                    Console.WriteLine("---------------------");
                     Console.WriteLine($"Outputs differ with seed {ri.Seed}");
-                    throw new InvalidOperationException();
+                    var xsLines = xs.Output.Split('\n');
+                    var riLines = ri.Output.Split('\n');
+                    if(xsLines.Length != riLines.Length)
+                    {
+                        Console.WriteLine("NODE:");
+                        Console.WriteLine(ri.Output);
+                        Console.WriteLine("--------------------");
+                        Console.WriteLine("XS:");
+                        Console.WriteLine(xs.Output);
+                        Console.WriteLine("--------------------");
+                        throw new InvalidProgramException("Number of lines differ");
+                    }
+                    for(int i = 0; i < xsLines.Length; ++i)
+                    {
+                        if(xsLines[i] != riLines[i])
+                        {
+                            Console.WriteLine($"NODE: {riLines[i]}");
+                            Console.WriteLine($"XS: {xsLines[i]}");
+                        }
+                    }
                 }*/
                 if (_evalTest)
                 {
-                    runnerNode.WriteProgram(new SyntaxErrorProgram(p));
+                    runner.WriteProgram(new SyntaxErrorProgram(p));
                     var se = new RuntimeInfo() { CyclomaticComplexity = -1 };
-                    runnerNode.ExecuteProgram(se);
+                    runner.ExecuteProgram(se);
                     ri.MatchSyntaxError = (se.Output == ri.Output);
                     ri.SyntaxErrorRuntime = se.Runtime / ri.Runtime;
                 }
