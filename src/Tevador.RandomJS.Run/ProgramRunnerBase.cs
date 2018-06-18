@@ -40,9 +40,13 @@ namespace Tevador.RandomJS.Run
                     return new ProgramRunner(uri.ToString());
 
                 case "file":
-                    if (uri.IsUnc)
+                    if (!string.IsNullOrEmpty(uri.Host))
                     {
-                        return new ExternalProgramRunner(uri.Host, uri.LocalPath.Substring(3 + uri.Host.Length));
+                        if (uri.LocalPath.StartsWith("\\\\"))
+                        {
+                            return new ExternalProgramRunner(uri.Host, uri.LocalPath.Substring(3 + uri.Host.Length));
+                        }
+                        return new ExternalProgramRunner(uri.Host, uri.LocalPath);
                     }
                     else
                     {
