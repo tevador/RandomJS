@@ -6,31 +6,35 @@ The general outline of the generated program is following:
 //1. Strict mode declaration
 'use strict';
 
-//2. Definition of global helper functions, constants and variables
-let __depth = 0;
-const __maxDepth = 3;
-function __tstr(_) {
-    return _ != null ? __strl(_.toString()) : _;
-}
-function __prnt(_) {
-    console.log(__tstr(_));
-}
-//etc.
+//private scope
+{
+    //2. Definition of global helper functions, constants and variables
+    let __depth = 0;
+    const __maxDepth = 3;
+    function __tstr(_) {
+        return _ != null ? __strl(_.toString()) : _;
+    }
+    function __prnt(_) {
+        print(__tstr(_));
+    }
+    //etc.
 
-//3. Definition of randomly generated global variables
-let a = Expression;
-let b = Expression;
-let c = Expression;
-//etc.
+    //3. Definition of randomly generated global variables
+    let a = Expression;
+    let b = Expression;
+    let c = Expression;
+    //etc.
 
-//4. Output statements
-__prnt(__invk(b, Expression, ...));
-__prnt(__invk(c, Expression, ...));
-__prnt(__invk(a, Expression, ...));
-//etc.
+    //4. Output statements
+    __prnt(__invk(b, Expression, ...));
+    __prnt(__invk(c, Expression, ...));
+    __prnt(__invk(a, Expression, ...));
+    //etc.
+}
 ```
 
 * The program runs in [strict mode](http://www.ecma-international.org/ecma-262/6.0/#sec-strict-mode-code) to prevent some problematic behavior of javascript.
+* The code is wrapped in a private code block so that the declarations in the program don't pollute the global scope. This enables a single engine to execute many programs in sequence.
 * The program begins with definitions of helper functions, constants and variables. The order of these helper definitions is pseudo-random (a helper function is attached to the scope upon being first referenced from the main code).
 * The number of global variables is generated at random from a specified interval.
 * Each program prints its global variables in random order.
@@ -91,6 +95,20 @@ Object.prototype.valueOf = function() {
 };
 ```
 This overrides the default `Object.valueOf` function. The function is called whenever an object has to be converted to a primitive value. In this case, we return the first numeric value among the object's properties. This increases the output variability because an object can be represented either by a JSON string or as a number (if a numeric operation was attempted on the object).
+
+#### FVOF override
+```javascript
+const __fvof = '__fvof';
+
+Function.prototype.valueOf = function() {
+    if (!this.name) {
+        (__fvof in this) || (this[__fvof] = this());
+        if (typeof this[__fvof] !== 'function') return this[__fvof];
+    }
+    return this.toString();
+};
+```
+This overrides the default `Object.valueOf` for the `Function` type. For an anonymous function, it returns the result of calling that function without parameters (except if the call returns a function to prevent excessive recursion). The result of the call is cached, so each function is called just once to obtain its 'value' (this is needed for performance reasons). The main reason for this override is to force a call for anonymous functions in expressions such as `(123456 + function() { ... })`. For named functions, this override simply calls `Function.toString`.
 
 #### OBJC function
 ```javascript
@@ -195,10 +213,10 @@ This function is used to get the string representation of a variable for printin
 #### PRNT function
 ```javascript
 function __prnt(_) {
-    console.log(__tstr(_));
+    print(__tstr(_));
 }
 ```
-This function is used to output global variables at the end of the program.
+This function is used to output global variables at the end of the program. The underlying javascript engine should implement a `print` function that prints its argument followed by a newline character to the standard output.
 
 ## Variables
 All variables in the program are block scoped using the [let or const declaration](http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations) (unlike [var declarations](http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement) which are function scoped). Constant variables are generated with specified probability. 
