@@ -32,12 +32,14 @@ namespace Tevador.RandomJS.Test
         ProgramOptions _options;
         long _seed;
         bool _evalTest;
+        Uri _runnerUri;
 
-        public ParallelRunner(long seed, ProgramOptions options, bool evalTest)
+        public ParallelRunner(long seed, ProgramOptions options, bool evalTest, Uri runnerUri)
         {
             _seed = seed;
             _options = options;
             _evalTest = evalTest;
+            _runnerUri = runnerUri;
         }
 
         public event EventHandler Progress;
@@ -81,10 +83,10 @@ namespace Tevador.RandomJS.Test
         private void _run(CancellationToken token)
         {
             var factory = new ProgramFactory(_options);
-            var defaultRunner = new ProgramRunner();
+            //var defaultRunner = new ProgramRunner();
             //var runnerNode = new ExternalProgramRunner("node", @"..\fast-eval.js");
             //var runnerXS = new ExternalProgramRunner(@"..\moddable\build\bin\win\release\xst.exe");
-            var runner = defaultRunner;
+            var runner = ProgramRunnerBase.FromUri(_runnerUri);
             RuntimeInfo ri;
 
             while (!token.IsCancellationRequested && (ri = _stats.Add()) != null)

@@ -37,7 +37,7 @@ namespace Tevador.RandomJS.Miner
         Blake2B256 _blakeKeyed;
         ProgramFactory _factory = new ProgramFactory();
         byte[] _blockTemplate;
-        ProgramRunner _runner = new ProgramRunner();
+        ProgramRunner _runner = new ProgramRunner("http://localhost:18111");
 
         public void Reset(byte[] blockTemplate)
         {

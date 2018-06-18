@@ -27,13 +27,13 @@ namespace Tevador.RandomJS.Test
 {
     class Program
     {
-        private static RuntimeStats MakeStats(int threads, int count, int timeout, long seed, ProgramOptions options, bool silent, bool evalTest)
+        private static RuntimeStats MakeStats(int threads, int count, int timeout, long seed, ProgramOptions options, bool silent, bool evalTest, Uri runnerUri)
         {
             if (!silent)
                 Console.WriteLine($"Collecting statistics from {count} random program executions (seed = {seed})");
             double step = 0.05;
             double next = step;
-            var runner = new ParallelRunner(seed, options, evalTest);
+            var runner = new ParallelRunner(seed, options, evalTest, runnerUri);
             if (!silent)
                 runner.Progress += (s, e) =>
                 {
@@ -100,6 +100,7 @@ namespace Tevador.RandomJS.Test
             int timeout = -1;
             bool evalTest = false;
             bool help = false;
+            Uri runnerUri = new Uri("http://localhost:18111");
 
             ProgramOptions customOptions = new ProgramOptions();
             customOptions.Initialize();
@@ -128,7 +129,8 @@ namespace Tevador.RandomJS.Test
                 .Add("evalTest", s => evalTest = true)
                 .Add("evalTestWeightValidity=", (double d) => evalTestWeightValidity = d)
                 .Add("evalTestWeightRuntime=", (double d) => evalTestWeightRuntime = d)
-                .Add("help|h", s => help = true);
+                .Add("help|h", s => help = true)
+                .Add("runnerUri=", s => runnerUri = new Uri(s));
 
 
             foreach (var prop in typeof(ProgramOptions).GetProperties())
@@ -209,7 +211,7 @@ namespace Tevador.RandomJS.Test
                 return 1;
             }*/
 
-            var stats = MakeStats(threads, count, timeout, seed, useCustomOptions ? customOptions : ProgramOptions.FromXml(), objective, evalTest);
+            var stats = MakeStats(threads, count, timeout, seed, useCustomOptions ? customOptions : ProgramOptions.FromXml(), objective, evalTest, runnerUri);
 
             if (objective)
             {

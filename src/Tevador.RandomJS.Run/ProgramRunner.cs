@@ -27,18 +27,18 @@ namespace Tevador.RandomJS.Run
     {
         MemoryStream _programStream;
         StreamWriter _programWriter;
-        int _port;
+        string _uri;
 
-        public ProgramRunner(int port = 18111, int bufferSize = 256 * 1024)
+        public ProgramRunner(string uri, int bufferSize = 256 * 1024)
         {
             _programStream = new MemoryStream(bufferSize);
             _programWriter = new StreamWriter(_programStream) { NewLine = "\n" };
-            _port = port;
+            _uri = uri;
         }
 
         public override RuntimeInfo ExecuteProgram(RuntimeInfo ri)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:" + _port + (ri.CyclomaticComplexity != 0 ? "/nc" : "/"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_uri + (ri.CyclomaticComplexity != 0 ? "/nc" : "/"));
             request.KeepAlive = false;
             request.Timeout = 15000;
             request.Method = "POST";

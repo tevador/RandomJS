@@ -17,6 +17,8 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace Tevador.RandomJS.Run
 {
     public abstract class ProgramRunnerBase
@@ -27,6 +29,29 @@ namespace Tevador.RandomJS.Run
         public RuntimeInfo ExecuteProgram()
         {
             return ExecuteProgram(new RuntimeInfo());
+        }
+
+        public static ProgramRunnerBase FromUri(Uri uri)
+        {
+            switch (uri.Scheme)
+            {
+                case "http":
+                case "https":
+                    return new ProgramRunner(uri.ToString());
+
+                case "file":
+                    if (uri.IsUnc)
+                    {
+                        return new ExternalProgramRunner(uri.Host, uri.LocalPath.Substring(3 + uri.Host.Length));
+                    }
+                    else
+                    {
+                        return new ExternalProgramRunner(uri.LocalPath);
+                    }
+
+                default:
+                    throw new UriFormatException("Unsupported runnerUri");
+            }
         }
     }
 }
