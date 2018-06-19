@@ -69,10 +69,10 @@ namespace Tevador.RandomJS.Test
 
         public override string ToString()
         {
-            return ToString(false);
+            return ToString(false, false);
         }
 
-        public string ToString(bool withHistogram)
+        public string ToString(bool withHistogram, bool showHashes)
         {
             var sb = new StringBuilder();
             using (var writer = new StringWriter(sb))
@@ -112,6 +112,10 @@ namespace Tevador.RandomJS.Test
                     foreach (var ri in _list)
                     {
                         var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(ri.Output));
+                        if (showHashes)
+                        {
+                            Console.WriteLine($"{ri.Seed}: {BinaryUtils.ByteArrayToString(hash)}");
+                        }
                         for (int i = 0; i < hash.Length; ++i)
                         {
                             cumulative[i] ^= hash[i];

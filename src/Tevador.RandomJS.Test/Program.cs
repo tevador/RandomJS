@@ -101,6 +101,7 @@ namespace Tevador.RandomJS.Test
             bool evalTest = false;
             bool help = false;
             Uri runnerUri = new Uri("http://localhost:18111");
+            bool debug = false;
 
             ProgramOptions customOptions = new ProgramOptions();
             customOptions.Initialize();
@@ -130,7 +131,8 @@ namespace Tevador.RandomJS.Test
                 .Add("evalTestWeightValidity=", (double d) => evalTestWeightValidity = d)
                 .Add("evalTestWeightRuntime=", (double d) => evalTestWeightRuntime = d)
                 .Add("help|h", s => help = true)
-                .Add("runnerUri=", s => runnerUri = new Uri(s));
+                .Add("runnerUri=", s => runnerUri = new Uri(s))
+                .Add("debug", s => debug = true);
 
 
             foreach (var prop in typeof(ProgramOptions).GetProperties())
@@ -247,7 +249,7 @@ namespace Tevador.RandomJS.Test
             }
             else if (stats != null && stats.IsComplete)
             {
-                Console.WriteLine(stats.ToString(verbose));
+                Console.WriteLine(stats.ToString(verbose, debug));
                 return 0;
             }
             else
