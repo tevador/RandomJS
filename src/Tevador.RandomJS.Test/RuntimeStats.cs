@@ -53,8 +53,8 @@ namespace Tevador.RandomJS.Test
         public void Calculate()
         {
             if (_list.Count < _target || Runtime != null) return;
-            _list.Sort();
-            Runtime = new ListStats<RuntimeInfo>(_list, r => r.Runtime, false);
+            //_list.Sort();
+            Runtime = new ListStats<RuntimeInfo>(_list, r => r.Runtime);
             CyclomaticComplexity = new ListStats<RuntimeInfo>(_list, r => r.CyclomaticComplexity);
             HalsteadDifficulty = new ListStats<RuntimeInfo>(_list, r => r.HalsteadDifficulty);
             LinesOfCode = new ListStats<RuntimeInfo>(_list, r => r.LinesOfCode);
@@ -78,9 +78,8 @@ namespace Tevador.RandomJS.Test
             using (var writer = new StringWriter(sb))
             {
                 writer.WriteLine($"Longest runtimes:");
-                for (int i = 1; i <= 10; ++i)
+                foreach(var r in _list.OrderByDescending(i => i.Runtime).Take(10))
                 {
-                    var r = _list[_list.Count - i];
                     writer.WriteLine($"Seed = {r.Seed}, Runtime = {r.Runtime:0.00000} s");
                 }
                 writer.WriteLine($"Runtime [s] Min: {Runtime.Min:0.00000}; Max: {Runtime.Max:0.00000}; Avg: {Runtime.Average:0.00000}; Stdev: {Runtime.StdDev:0.00000};");
