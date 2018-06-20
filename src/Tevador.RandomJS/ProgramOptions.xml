@@ -21,17 +21,17 @@
     <item type="Typeof" weight="2" />   <!-- OPERATOR typeof -->  
     <item type="Minus" weight="4" />    <!-- OPERATOR - (unary) -->
     <item type="Not" weight="4" />      <!-- OPERATOR ! -->
-    <item type="Sqrt" weight="1" />     <!-- FUNCTION Math.sqrt -->
-    <item type="Exp" weight="1" />      <!-- FUNCTION Math.exp -->
-    <item type="Log" weight="1" />      <!-- FUNCTION Math.log -->
-    <item type="Sin" weight="1" />      <!-- FUNCTION Math.sin -->
-    <item type="Cos" weight="1" />      <!-- FUNCTION Math.cos -->
-    <item type="Atan" weight="1" />     <!-- FUNCTION Math.atan -->
+    <item type="Sqrt" weight="3" />     <!-- FUNCTION Math.sqrt -->
+    <item type="Exp" weight="0" />      <!-- FUNCTION Math.exp -->
+    <item type="Log" weight="0" />      <!-- FUNCTION Math.log -->
+    <item type="Sin" weight="0" />      <!-- FUNCTION Math.sin -->
+    <item type="Cos" weight="0" />      <!-- FUNCTION Math.cos -->
+    <item type="Atan" weight="0" />     <!-- FUNCTION Math.atan -->
     <item type="Floor" weight="1" />    <!-- FUNCTION Math.floor -->
     <item type="Ceil" weight="1" />     <!-- FUNCTION Math.ceil -->
     <item type="Abs" weight="1" />      <!-- FUNCTION Math.abs -->
     <item type="Trunc" weight="1" />    <!-- FUNCTION Math.trunc -->
-    <item type="Cbrt" weight="1" />     <!-- FUNCTION Math.cbrt -->
+    <item type="Cbrt" weight="0" />     <!-- FUNCTION Math.cbrt -->
   </UnaryOperators>
   <BinaryOperators>
     <item type="Add" weight="8" />      <!-- OPERATOR + -->

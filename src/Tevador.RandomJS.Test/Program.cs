@@ -102,6 +102,7 @@ namespace Tevador.RandomJS.Test
             bool help = false;
             Uri runnerUri = new Uri("http://localhost:18111");
             bool debug = false;
+            string outfile = null;
 
             ProgramOptions customOptions = new ProgramOptions();
             customOptions.Initialize();
@@ -132,7 +133,8 @@ namespace Tevador.RandomJS.Test
                 .Add("evalTestWeightRuntime=", (double d) => evalTestWeightRuntime = d)
                 .Add("help|h", s => help = true)
                 .Add("runnerUri=", s => runnerUri = new Uri(s))
-                .Add("debug", s => debug = true);
+                .Add("debug", s => debug = true)
+                .Add("outfile=", s => outfile = s);
 
 
             foreach (var prop in typeof(ProgramOptions).GetProperties())
@@ -213,7 +215,24 @@ namespace Tevador.RandomJS.Test
                 return 1;
             }*/
 
-            var stats = MakeStats(threads, count, timeout, seed, useCustomOptions ? customOptions : ProgramOptions.FromXml(), objective, evalTest, runnerUri);
+            var options = useCustomOptions ? customOptions : ProgramOptions.FromXml();
+
+            if (count == 1 && outfile != null && outfile.Length == 64 && outfile.All(c => "0123456789abcdef".Contains(c)))
+            {
+                var factory = new ProgramFactory(options);
+                var pr = factory.GenProgram(BinaryUtils.StringToByteArray(outfile));
+                using (var file = System.IO.File.CreateText(outfile + ".js"))
+                    pr.WriteTo(file);
+
+                var runner = Run.ProgramRunnerBase.FromUri(runnerUri);
+                runner.WriteProgram(pr);
+                var ri = runner.ExecuteProgram();
+                Console.WriteLine(ri.Output);
+                Console.WriteLine($"Success = {ri.Success}");
+                return 0;
+            }
+
+            var stats = MakeStats(threads, count, timeout, seed, options, objective, evalTest, runnerUri);
 
             if (objective)
             {
