@@ -192,7 +192,9 @@ function __prec(_) {
     return +_.toPrecision(__fpMathPrec);
 }
 ```
-This function is used whenever a mathematical operation with inexact result is performed (for example `Math.exp` or other trancendental math functions). The function rounds off the number to a specific number of decimal significant digits given by the `__fpMathPrec` constant. The value of this constant is generated at random from interval 10-14. It has been determined empirically that the first 14 significant digits match across different platforms (see [Issue 3](https://github.com/tevador/RandomJS/issues/3)). 
+~~This function is used whenever a mathematical operation with inexact result is performed (for example `Math.exp` or other trancendental math functions). The function rounds off the number to a specific number of decimal significant digits given by the `__fpMathPrec` constant. The value of this constant is generated at random from interval 10-14. It has been determined empirically that the first 14 significant digits match across different platforms (see [Issue 3](https://github.com/tevador/RandomJS/issues/3)).~~
+
+This function is currently unused.
 
 #### NNEG function
 ```javascript
@@ -355,25 +357,25 @@ Additionally, the following mathematical function calls can be generated as a `U
 
 |Operator|Function|Attributes|
 |--------|------|----------|
-|Sqrt|`Math.sqrt`|NumericOnly, LimitedPrecision, NonnegativeRHS|
+|Sqrt|`Math.sqrt`|NumericOnly, NonnegativeRHS|
 |Abs|`Math.abs`|NumericOnly|
 |Ceil|`Math.ceil`|NumericOnly|
 |Trunc|`Math.trunc`|NumericOnly|
 |Floor|`Math.floor`|NumericOnly|
-|Sin|`Math.sin`|NumericOnly, LimitedPrecision|
-|Cos|`Math.cos`|NumericOnly, LimitedPrecision|
-|Exp|`Math.exp`|NumericOnly, LimitedPrecision|
-|Log|`Math.log`|NumericOnly, LimitedPrecision, NonnegativeRHS|
-|Atan|`Math.atan`|NumericOnly, LimitedPrecision|
+|~~Sin~~|~~`Math.sin`~~|~~NumericOnly, LimitedPrecision~~|
+|~~Cos~~|~~`Math.cos`~~|~~NumericOnly, LimitedPrecision~~|
+|~~Exp~~|~~`Math.exp`~~|~~NumericOnly, LimitedPrecision~~|
+|~~Log~~|~~`Math.log`~~|~~NumericOnly, LimitedPrecision, NonnegativeRHS~~|
+|~~Atan~~|~~`Math.atan`~~|~~NumericOnly, LimitedPrecision~~|
 
 Explanation of operator attributes:
 
 * **NumericOnly** - the right-hand side expression (argument) must be wrapped in a call to the NUMB helper function to ensure numeric input
 * **NonnegativeRHS** - the right-hand side must be wrapped in a call to the NNEG helper function
-* **LimitedPrecision** - the result of the operation must be wrapped in the PREC helper function to ensure consistency across platforms
+* ~~**LimitedPrecision** - the result of the operation must be wrapped in the PREC helper function to ensure consistency across platforms~~
 
 Examples:
-* `__prec(Math.log(__nneg(__numb((a=(-10)), 81711.92057))))`
+* `__prec(Math.sqrt(__nneg(__numb((a=(-10)), 81711.92057))))`
 * `(typeof __invk(d,{a:(-200362066),b:"r75",}))`
 * `Math.floor(__numb(b, 76952.72820))`
 
