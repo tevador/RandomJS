@@ -2,12 +2,12 @@
 This is a concept implementation of a proof-of-work (PoW) algorithm proposal for Monero (but it's usable for any PoW cryptocurrency). Credits to @hyc for the original idea to use random javascript execution to achieve ASIC resistance.
 
 ### Key features
-* __ASIC resistant__. This is important for a decentralized cryptocurrency and allows anyone with an ordinary computer to participate in securing the network. The algorithm internally uses the Google V8 Javascript engine, which is a large software package consisting of almost 2 million lines of code. Full hardware implementation would require an enormous investment.
+* __ASIC resistant__. This is important for a decentralized cryptocurrency and allows anyone with an ordinary computer to participate in securing the network. The algorithm internally uses a Javascript engine, which is a large software package that can take advantage of CPU features such as branch prediction, caching and out-of-order execution. Full hardware implementation would require an enormous investment.
 * __Asymmetrical__. The algorithm supports configurable asymmetry. Finding a single solution takes 2<sup>N</sup> times more effort than verifying a valid solution. This is beneficial for mining pools by reducing their hardware requirements.
 * __DoS resistant__. The algorithm stores an intermediate value in the block header, allowing quick verification whether the PoW meets the difficulty target. This requires just two Blake2b hash calculations (roughly 500 nanoseconds on a modern CPU). This is beneficial both for mining pools and network nodes in case someone wanted to flood them with invalid blocks.
 
 ## Algorithm description
-![diagram](https://raw.githubusercontent.com/tevador/RandomJS/master/doc/diagram.png)
+![diagram](doc/diagram.png)
 
 ### Cryptographic hash function
 The primary general-purpose hash function used by RandomJS is Blake2b with output size of 256 bits. This hash function was chosen for 3 primary reasons:
@@ -51,6 +51,9 @@ Verifying a valid solution requires 4 Blake2b hash calculations, one random prog
 
 In case of an DoS attack attempt, just 2 Blake2b hash calculations are required to discard the block. Otherwise an attacker needs to calculate substantial number of Blake2b hashes (equal to the current block difficulty) to force the verifying party to run the relatively costly (~few milliseconds) javascript generation and execution procedure.
 
+### RandomJS generator
+The generator is documented in [generator.md](doc/generator.md).
+
 ## Build dependencies and instructions
 The concept of random javascript generator and miner presented here is written in C#. The generated javascript code is run externally in a NodeJS sandbox.
 
@@ -59,7 +62,7 @@ The project has 4 executables:
 * `Tevador.RandomJS.exe` - generates a random javascript program and prints it to standard output. Optional parameter is a 256-bit seed (64 hex characters). The generator reads its settings from the `ProgramOptions.xml` file.
 * `sandbox.js` - NodeJS sandbox for executing javascript. The sandbox must be running to use the 2 executables below.
 * `Tevador.RandomJS.Miner.exe` - runs the miner for about 60 seconds and shows the mining statistics. Optional parameter is a Monero block header template (152 hex characters).
-* `Tevador.RandomJS.Test.exe` - runs 1000 random programs and prints statistics. Optional parameter is the number of programs to be executed (default 1000).
+* `Tevador.RandomJS.Test.exe` - runs 1000 random programs and prints statistics. Run `Tevador.RandomJS.Test.exe -h` for a list of supported parameters.
 
 ### Windows
 #### Dependencies
