@@ -50,6 +50,7 @@
     <Compile Include="Expressions\ObjectConstructorExpression.cs" />
     <Compile Include="Expressions\ObjectLiteral.cs" />
     <Compile Include="Expressions\ObjectSetExpression.cs" />
+    <Compile Include="GlobalClass.cs" />
     <Compile Include="GlobalOverride.cs" />
     <Compile Include="Statements\BreakableStatement.cs" />
     <Compile Include="Statements\BreakStatement.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Expressions\FunctionInvocationExpression.cs" />
     <Compile Include="GlobalFunction.cs" />
     <Compile Include="Expressions\GlobalFunctionExpression.cs" />
+    <Compile Include="Statements\FunctionBody.cs" />
     <Compile Include="Statements\IfElseStatement.cs" />
     <Compile Include="IRandom.cs" />
     <Compile Include="IScope.cs" />
@@ -102,9 +104,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomExtensions.cs" />
     <Compile Include="RandomTable.cs" />
+    <Compile Include="Statements\CodeStatement.cs" />
     <Compile Include="Statements\ReturnStatement.cs" />
     <Compile Include="Expressions\RoundedExpression.cs" />
     <Compile Include="Statements\Statement.cs" />
+    <Compile Include="Statements\ThrowStatement.cs" />
+    <Compile Include="Statements\TryCatchStatement.cs" />
     <Compile Include="StatementType.cs" />
     <Compile Include="TableEntry.cs" />
     <Compile Include="Expressions\TernaryExpression.cs" />

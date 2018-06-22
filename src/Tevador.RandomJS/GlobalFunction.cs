@@ -23,15 +23,16 @@ namespace Tevador.RandomJS
     {
         public readonly static GlobalFunction NONZ = new GlobalFunction("__nonz", "(_) { return _ == 0 ? 1 : _; }");
         public readonly static GlobalFunction CALC = new GlobalFunction("__calc", "(_,_f,_d) { if(typeof _ === 'number') return _f(_); return _d; }");
-        public readonly static GlobalFunction STRL = new GlobalFunction("__strl", "(_) {{ if(typeof _ === 'string' && _.length > {0}) return _.substring(0, {0}); return _; }}", new GlobalVariable("__maxStrlen", true));
+        public readonly static GlobalFunction STRL = new GlobalFunction("__strl", "(_) {{ if(typeof _ === 'string' && _.length > {0}) return _.substring(0, {0}); return _; }}", GlobalVariable.STRL);
         public readonly static GlobalFunction TSTR = new GlobalFunction("__tstr", "(_){{return _!=null?{0}(_.toString()):_;}}", STRL);
-        public readonly static GlobalFunction INVK = new GlobalFunction("__invk", "(_,...__) {{ if(typeof _ === 'function') return {0}(_(...__)); else return {0}(_); }}", STRL);
+        public readonly static GlobalFunction INVK = new GlobalFunction("__invk", "(_,...__) { if(typeof _ === 'function')return _(...__);return _; }");
+        public readonly static GlobalFunction TRYC = new GlobalFunction("__tryc", "(_,__){{try {{return _();}}catch(_e){{if(!(_e instanceof SyntaxError)){0}++;return _e.name+__;}}}}", GlobalVariable.ESUM);
+        public readonly static GlobalFunction INVC = new GlobalFunction("__invc", "(_,...__) {{ if(typeof _ === 'function')return {0}(()=>_(...__),_.toString());return _; }}", TRYC);
         public readonly static GlobalFunction PRNT = new GlobalFunction("__prnt", "(_){{print({0}(_));}}", TSTR);
-        public readonly static GlobalFunction NUMB = new GlobalFunction("__numb", "(_,__) { _=+_; if(!isNaN(_)) return _; else return __; }");
-        public readonly static GlobalFunction PREC = new GlobalFunction("__prec", "(_) {{ return +_.toPrecision({0}); }}", new GlobalVariable("__fpMathPrec", true));
+        public readonly static GlobalFunction NUMB = new GlobalFunction("__numb", "(_,__) { _=+_; if(!isNaN(_)) return _; return __; }");
+        public readonly static GlobalFunction PREC = new GlobalFunction("__prec", "(_) {{ return +_.toPrecision({0}); }}", GlobalVariable.PREC);
         public readonly static GlobalFunction NNEG = new GlobalFunction("__nneg", "(_) { return _ < 0 ? -_ : _; }");
-        public readonly static GlobalFunction TRYC = new GlobalFunction("__tryc", "(_,__){try {return _();}catch(_e){return _e.name+__;}}");
-        public readonly static GlobalFunction OBJC = new GlobalFunction("__objc", "(_,...__){ if(typeof _ === 'function') return new _(...__); if(typeof _ === 'object') return _; return { a: _ }; }");
+        public readonly static GlobalFunction OBJC = new GlobalFunction("__objc", "(_,...__){{if(typeof _ === 'function') return {0}(()=>new _(...__),_.toString()); if(typeof _ === 'object') return _; return {{ a: _ }}; }}", TRYC);
         public readonly static GlobalFunction OBJS = new GlobalFunction("__objs", "(_,_k,_v){ if(Object.isExtensible(_)) _[_k]=_v; return _||_v; }");
         public readonly static GlobalFunction EVAL = new GlobalFunction("__eval", "(_f,_s){{return {0}(()=>_f(_s),_s);}}", TRYC);
 

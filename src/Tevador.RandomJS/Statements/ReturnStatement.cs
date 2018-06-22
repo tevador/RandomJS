@@ -22,36 +22,24 @@ using Tevador.RandomJS.Expressions;
 
 namespace Tevador.RandomJS.Statements
 {
-    class ReturnStatement : Block
+    class ReturnStatement : Statement
     {
-        public ReturnStatement(IScope scope, Expression value, CallDepthProtection depthProtection)
-            : base(scope)
+        Expression _value;
+
+        public ReturnStatement(Expression value)
         {
-            if (scope.FunctionDepth == 0) throw new InvalidOperationException("Return statement must be inside a function");
-            if (depthProtection != null)
-                Statements.Add(depthProtection.Cleanup);
-            Statements.Add(new _Return(value));
+            _value = value;
         }
 
-        class _Return : Statement
+        public override void WriteTo(System.IO.TextWriter w)
         {
-            Expression _value;
-
-            public _Return(Expression value)
+            w.Write("return");
+            if (_value != null)
             {
-                _value = value;
+                w.Write(" ");
+                _value.WriteTo(w);
             }
-
-            public override void WriteTo(System.IO.TextWriter w)
-            {
-                w.Write("return");
-                if (_value != null)
-                {
-                    w.Write(" ");
-                    _value.WriteTo(w);
-                }
-                w.Write(";");
-            }
+            w.Write(";");
         }
 
         public override bool IsTerminating

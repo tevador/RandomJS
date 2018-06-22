@@ -32,8 +32,9 @@ namespace Tevador.RandomJS
         //DoWhileLoop, TODO
         BlockStatement = 1 << 6,
         VariableInvocationStatement = 1 << 7,
+        ThrowStatement = 1 << 8,
 
-        Flat = ReturnStatement | BreakStatement | AssignmentStatement | ObjectSetStatement | VariableInvocationStatement,
+        Flat = ReturnStatement | BreakStatement | AssignmentStatement | ObjectSetStatement | VariableInvocationStatement | ThrowStatement,
         NoCall = All & ~VariableInvocationStatement,
     }
 }

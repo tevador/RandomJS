@@ -29,7 +29,6 @@ namespace Tevador.RandomJS.Statements
             if (Parent != null)
             {
                 VariableCounter = Parent.VariableCounter;
-                StatementDepth = Parent.StatementDepth + 1;
                 FunctionDepth = parent.FunctionDepth;
             }
         }

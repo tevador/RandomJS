@@ -29,13 +29,12 @@ namespace Tevador.RandomJS.Expressions
             Parent = parentScope;
             FunctionDepth = Parent.FunctionDepth + 1;
             VariableCounter = Parent.VariableCounter;
-            StatementDepth = Parent.StatementDepth; //increased in Body
         }
 
         public readonly List<Variable> Parameters = new List<Variable>();
         private List<Variable> _unusedVariables = new List<Variable>(); // TODO
         public Expression DefaultReturnValue { get; set; }
-        public Block Body { get; set; }
+        public FunctionBody Body { get; set; }
 
         public IEnumerable<Variable> Variables
         {
@@ -64,27 +63,14 @@ namespace Tevador.RandomJS.Expressions
         public override void WriteTo(System.IO.TextWriter w)
         {
             w.Write("function (");
-            using (var enumerator = Parameters.GetEnumerator())
+            for (int i = 0; i < Parameters.Count; ++i)
             {
-                if (enumerator.MoveNext())
-                {
-                    bool isLast;
-                    do
-                    {
-                        var param = enumerator.Current;
-                        isLast = !enumerator.MoveNext();
-
-                        w.Write(param.Name);
-                        if (!isLast)
-                            w.Write(", ");
-                    }
-                    while (!isLast);
-                }
+                w.Write(Parameters[i]);
+                if (i < Parameters.Count - 1) w.Write(",");
             }
             w.Write(")");
             Body.WriteTo(w);
         }
-
 
         public int VariableCounter
         {

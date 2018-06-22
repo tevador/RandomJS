@@ -76,11 +76,15 @@ namespace Tevador.RandomJS
             {
                 program.Statements.Add(GenOutputStatement(program, v));
             }
-            program.SetGlobalVariable(GlobalFunction.STRL.References.Name, _options.MaxStringLengthRange.RandomValue(_rand));
-            program.SetGlobalVariable(GlobalFunction.PREC.References.Name, _options.MathPrecisionRange.RandomValue(_rand));
-            program.SetGlobalVariable(GlobalFunction.STRL.References.Name, _options.MaxStringLengthRange.RandomValue(_rand));
-            program.SetGlobalVariable(CallDepthProtection.MaxDepthConstantName, _options.MaxCallDepthRange.RandomValue(_rand));
-            program.SetGlobalVariable(LoopCyclesProtection.MaxCyclesConstantName, _options.MaxLoopCyclesRange.RandomValue(_rand));
+            if (program.IsDefined(GlobalVariable.ESUM))
+                program.Statements.Add(GenOutputStatement(program, new VariableExpression(GlobalVariable.ESUM)));
+            if (program.IsDefined(GlobalVariable.CSUM))
+                program.Statements.Add(GenOutputStatement(program, new VariableExpression(GlobalVariable.CSUM)));
+            program.SetGlobalVariable(GlobalVariable.STRL.Name, _options.MaxStringLengthRange.RandomValue(_rand));
+            program.SetGlobalVariable(GlobalVariable.PREC.Name, _options.MathPrecisionRange.RandomValue(_rand));
+            program.SetGlobalVariable(GlobalVariable.STRL.Name, _options.MaxStringLengthRange.RandomValue(_rand));
+            program.SetGlobalVariable(CallDepthProtection.MaxDepth.Name, _options.MaxCallDepthRange.RandomValue(_rand));
+            program.SetGlobalVariable(LoopCyclesProtection.MaxCycles.Name, _options.MaxLoopCyclesRange.RandomValue(_rand));
             return program;
         }
 
@@ -98,7 +102,7 @@ namespace Tevador.RandomJS
             {
                 expr = new NonEmptyExpression(expr, GenLiteral(scope));
             }
-            return new ReturnStatement(scope, expr, _depthProtection);
+            return new ReturnStatement(expr);
         }
 
         internal Statement GenStatement(IScope scope, Statement parent, int maxDepth, StatementType list = StatementType.All)
@@ -160,8 +164,21 @@ namespace Tevador.RandomJS
 
                     case StatementType.ForLoopStatement:
                         return GenForLoop(scope, parent, maxDepth - 1);
+
+                case StatementType.ThrowStatement:
+                    return GenThrowStatement(scope);
                 }
             return new EmptyStatement();
+        }
+
+        internal ThrowStatement GenThrowStatement(IScope scope)
+        {
+            scope.Require(GlobalClass.RERR);
+            scope.Require(GlobalOverride.RTST);
+            scope.Require(GlobalOverride.RVOF);
+            var th = new ThrowStatement();
+            th.Value = GenExpression(scope, 2);
+            return th;
         }
 
         internal ForLoop GenForLoop(IScope scope, Statement parent, int maxDepth)
@@ -204,7 +221,7 @@ namespace Tevador.RandomJS
                 Variable = i,
                 Rhs = rhs
             };
-            fl.Body = GenStatement(fl, fl, maxDepth - 1, StatementType.All & ~StatementType.ReturnStatement);
+            fl.Body = GenStatement(fl, fl, maxDepth - 1, StatementType.All & ~StatementType.ReturnStatement & ~StatementType.ThrowStatement);
             return fl;
         }
 
@@ -297,11 +314,7 @@ namespace Tevador.RandomJS
         {
             FunctionInvocationExpression fi = new FunctionInvocationExpression();
             fi.Function = GenFunctionExpression(scope);
-            int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
-            while (paramCount-- > 0)
-            {
-                fi.Parameters.Add(GenExpression(scope, maxDepth));
-            }
+            GenVariableInvocationExpression(fi, scope, maxDepth);
             return fi;
         }
 
@@ -470,9 +483,16 @@ namespace Tevador.RandomJS
             return ee;
         }
 
-        internal VariableInvocationExpression GenVariableInvocationExpression(IScope scope, Variable v, int maxDepth)
+        internal VariableInvocationExpression GenVariableInvocationExpression(IScope scope, IVariable v, int maxDepth)
         {
             var invk = new VariableInvocationExpression(scope, v);
+            return GenVariableInvocationExpression(invk, scope, maxDepth);
+        }
+
+        internal VariableInvocationExpression GenVariableInvocationExpression(VariableInvocationExpression invk, IScope scope, int maxDepth)
+        {
+            invk.InvokeFunction = scope.FunctionDepth > 0 ? GlobalFunction.INVK : GlobalFunction.INVC;
+            scope.Require(invk.InvokeFunction);
             int paramCount = _options.FunctionParametersCountRange.RandomValue(_rand);
             while (paramCount-- > 0)
             {
@@ -555,8 +575,8 @@ namespace Tevador.RandomJS
                 func.Parameters.Add(GenVariable(func, true));
             }
             //func._unusedVariables.AddRange(func.Parameters);
-            func.DefaultReturnValue = GenExpression(func, 0);
-            func.Body = GenBlock(func, _options.MaxStatementDepth);
+            func.DefaultReturnValue = GenExpression(func, 0, ExpressionType.VariableExpression | ExpressionType.Literal);
+            func.Body = GenFunctionBody(func);
             return func;
         }
 
@@ -623,48 +643,57 @@ namespace Tevador.RandomJS
             return ife;
         }
 
-        internal Block GenBlock(IScope scope, int maxDepth)
+        internal FunctionBody GenFunctionBody(FunctionExpression parent)
         {
-            var block = new Block(scope);
-            var func = scope as FunctionExpression;
-            if (func != null)
+            var body = new FunctionBody(parent, _depthProtection, _rand.FlipCoin(_options.CatchChance));
+            var block = body.TryBody;
+            var that = GenVariable(block, false, false, true, false);
+            that.Initializer = new VariableExpression(Variable.This);
+            block.DeclaredVariables.Add(that);
+            block.Statements.Add(that.Declaration);
+            int localVariablesCount = _options.LocalVariablesCountRange.RandomValue(_rand);
+            while (localVariablesCount-- > 0)
             {
-                var that = GenVariable(block, false, false, true, false);
-                that.Initializer = new VariableExpression(Variable.This);
-                block.DeclaredVariables.Add(that);
-                block.Statements.Add(that.Declaration);
-                if (_depthProtection != null)
-                {
-                    block.Statements.Add(_depthProtection.Check);
-                    block.Statements.Add(GenReturnStatement(block, func.DefaultReturnValue));
-                }
-                int localVariablesCount = _options.LocalVariablesCountRange.RandomValue(_rand);
-                while (localVariablesCount-- > 0)
-                {
-                    var v = GenVariable(block);
-                    block.DeclaredVariables.Add(v);
-                    block.Statements.Add(v.Declaration);
-                }
+                var v = GenVariable(block);
+                block.DeclaredVariables.Add(v);
+                block.Statements.Add(v.Declaration);
             }
+            GenBlock(block, _options.MaxStatementDepth);
+            if (block.Statements.Count == 0 || !block.Statements.Last().IsTerminating)
+            {
+                block.Statements.Add(GenReturnStatement(block));
+            }
+            return body;
+        }
+
+        internal Block GenBlock(Block block, int maxDepth)
+        {
             int statementsCount = _options.BlockStatementsRange.RandomValue(_rand);
-            while(statementsCount-- > 0)
+            while (statementsCount-- > 0)
             {
                 var stmt = GenStatement(block, block, maxDepth - 1, StatementType.All & ~StatementType.BlockStatement);
                 block.Statements.Add(stmt);
                 if (stmt.IsTerminating)
                     break;
             }
-            if (func != null && (block.Statements.Count == 0 || !(block.Statements.Last() is ReturnStatement)))
-            {
-                block.Statements.Add(GenReturnStatement(block));
-            }
             return block;
         }
 
-        internal OutputStatement GenOutputStatement(Program program, Variable v)
+        internal Block GenBlock(IScope scope, int maxDepth)
+        {
+            var block = new Block(scope);
+            return GenBlock(block, maxDepth);
+        }
+
+        internal OutputStatement GenOutputStatement(Program program, IVariable v)
+        {
+            return GenOutputStatement(program, GenVariableInvocationExpression(program, v, _options.MaxExpressionDepth));
+        }
+
+        internal OutputStatement GenOutputStatement(Program program, Expression expr)
         {
             program.Require(GlobalFunction.PRNT);
-            var os = new OutputStatement() { Value = GenVariableInvocationExpression(program, v, _options.MaxExpressionDepth) };
+            var os = new OutputStatement() { Value = expr };
             return os;
         }
 

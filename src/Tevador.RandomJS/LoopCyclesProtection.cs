@@ -27,13 +27,13 @@ namespace Tevador.RandomJS
         static readonly string _cyclesVaribleName = "__cycles";
         public static readonly string MaxCyclesConstantName = "__maxCycles";
 
-        readonly static GlobalVariable _cycles = new GlobalVariable(_cyclesVaribleName, false, new Literal("0"));
-        readonly static GlobalVariable _maxCycles = new GlobalVariable(MaxCyclesConstantName, true);
+        public readonly static GlobalVariable Cycles = new GlobalVariable(_cyclesVaribleName, false, new Literal("0"));
+        public readonly static GlobalVariable MaxCycles = new GlobalVariable(MaxCyclesConstantName, true);
 
         public void AttachTo(IScope scope)
         {
-            scope.Require(_cycles);
-            scope.Require(_maxCycles);
+            scope.Require(Cycles);
+            scope.Require(MaxCycles);
         }
 
         public override void WriteTo(TextWriter w)

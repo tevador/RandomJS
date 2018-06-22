@@ -25,9 +25,15 @@ namespace Tevador.RandomJS.Expressions
     class VariableInvocationExpression : Expression
     {
         public readonly List<Expression> Parameters;
+        public GlobalFunction InvokeFunction { get; set; }
         protected IVariable _variable;
 
-        protected VariableInvocationExpression(IVariable variable)
+        protected VariableInvocationExpression()
+        {
+            Parameters = new List<Expression>();
+        }
+
+        protected VariableInvocationExpression(IVariable variable) : this()
         {
             if(variable == null) throw new ArgumentNullException();
             _variable = variable;
@@ -36,15 +42,18 @@ namespace Tevador.RandomJS.Expressions
         public VariableInvocationExpression(IScope scope, IVariable variable)
             : this(variable)
         {
-            scope.Require(GlobalFunction.INVK);
-            Parameters = new List<Expression>();
+        }
+
+        protected virtual void WriteExpressionTo(System.IO.TextWriter w)
+        {
+            w.Write(_variable.Name);
         }
 
         public override void WriteTo(System.IO.TextWriter w)
         {
-            w.Write(GlobalFunction.INVK);
+            w.Write(InvokeFunction);
             w.Write("(");
-            w.Write(_variable.Name);
+            WriteExpressionTo(w);
             foreach (var expr in Parameters)
             {
                 w.Write(",");

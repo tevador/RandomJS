@@ -128,5 +128,6 @@ namespace Tevador.RandomJS
         public double ForLoopVariableBoundsChance { get; set; }
         public bool AllowFunctionInvocationInLoop { get; set; }
         public bool FunctionValueOfOverride { get; set; }
+        public double CatchChance { get; set; }
     }
 }

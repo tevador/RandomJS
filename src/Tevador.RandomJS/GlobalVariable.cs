@@ -25,6 +25,11 @@ namespace Tevador.RandomJS
 {
     class GlobalVariable : Global, IVariable
     {
+        public readonly static GlobalVariable CSUM = new GlobalVariable("__callSum", false, new Literal("0"));
+        public readonly static GlobalVariable STRL = new GlobalVariable("__maxStrlen", true);
+        public readonly static GlobalVariable ESUM = new GlobalVariable("__errorSum", false, new Literal("0"));
+        public readonly static GlobalVariable PREC = new GlobalVariable("__fpMathPrec", true);
+
         private Statement _declaration;
 
         public bool IsConstant { get; private set; }

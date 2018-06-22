@@ -17,17 +17,30 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
+using System.IO;
 
 namespace Tevador.RandomJS
 {
-    interface IScope
+    class GlobalClass : Global
     {
-        IEnumerable<Variable> Variables { get; }
-        IScope Parent { get; }
-        int FunctionDepth { get; }
-        bool HasBreak { get; }
-        int VariableCounter { get; set; }
-        void Require(Global gf);
+        public static readonly GlobalClass RERR = new GlobalClass("RandomError", "class RandomError extends Error{constructor(_){super(_);this.name=_;}}");
+
+        public string Declaration { get; private set; }
+
+        public GlobalClass(string name, string declaration)
+        {
+            Name = name;
+            Declaration = declaration;
+        }
+
+        public override Global Clone()
+        {
+            return this;
+        }
+
+        public override void WriteTo(TextWriter w)
+        {
+            w.Write(Declaration);
+        }
     }
 }

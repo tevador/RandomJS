@@ -88,6 +88,7 @@
     <item type="BlockStatement" weight="6" />
     <item type="VariableInvocationStatement" weight="4" />
     <item type="ObjectSetStatement" weight="2" />
+    <item type="ThrowStatement" weight="1" />
   </Statements>
   <AssignmentInForLoop>
     <item type="Add" weight="3" />          <!-- for(expr; expr; var += expr) -->
@@ -134,4 +135,5 @@
   <ForLoopVariableBoundsChance>0.35</ForLoopVariableBoundsChance> <!-- for(expr; var1 < var2; expr) instead of for(expr; var1 < literal; expr) -->
   <AllowFunctionInvocationInLoop>false</AllowFunctionInvocationInLoop>
   <FunctionValueOfOverride>false</FunctionValueOfOverride>
+  <CatchChance>0.25</CatchChance>
 </ProgramOptions>

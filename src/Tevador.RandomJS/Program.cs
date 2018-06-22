@@ -45,9 +45,14 @@ namespace Tevador.RandomJS
             set;
         }
 
+        public bool IsDefined(Global gl)
+        {
+            return _globalNames.ContainsKey(gl.Name);
+        }
+
         public override void Require(Global gl)
         {
-            if (!_globalNames.ContainsKey(gl.Name))
+            if (!IsDefined(gl))
             {
                 gl = gl.Clone();
                 _globalNames.Add(gl.Name, gl);

@@ -39,6 +39,11 @@ namespace Tevador.RandomJS
             Declaration = new VariableDeclaration(this);
         }
 
+        public Variable(string name) : this()
+        {
+            Name = name;
+        }
+
         public static string GetVariableName(int index)
         {
             string str = string.Empty;

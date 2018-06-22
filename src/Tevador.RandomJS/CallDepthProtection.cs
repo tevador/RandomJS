@@ -23,41 +23,25 @@ namespace Tevador.RandomJS
 {
     class CallDepthProtection
     {
-        static readonly string _depthVaribleName = "__depth";
+        public static readonly string DepthVaribleName = "__depth";
         public static readonly string MaxDepthConstantName = "__maxDepth";
 
-        readonly GlobalVariable _depthVarible = new GlobalVariable(_depthVaribleName, false, new Expressions.Literal("0"));
-        readonly GlobalVariable _maxDepthConstant = new GlobalVariable(MaxDepthConstantName, true);
+        public readonly static GlobalVariable Depth = new GlobalVariable(DepthVaribleName, false, new Expressions.Literal("0"));
+        public readonly static GlobalVariable MaxDepth = new GlobalVariable(MaxDepthConstantName, true);
 
         public CallDepthProtection()
         {
-            Check = new CDPCheck();
-            Cleanup = new CDPCleanup();
+            Check = new CodeStatement($"if(++{DepthVaribleName}>{MaxDepthConstantName})");
+            Cleanup = new CodeStatement($"--{DepthVaribleName};");
         }
 
         public void AttachTo(IScope scope)
         {
-            scope.Require(_depthVarible);
-            scope.Require(_maxDepthConstant);
+            scope.Require(Depth);
+            scope.Require(MaxDepth);
         }
 
         public Statement Check { get; private set; }
         public Statement Cleanup { get; private set; }
-
-        class CDPCheck : Statement
-        {
-            public override void WriteTo(System.IO.TextWriter w)
-            {
-                w.Write("if(++{0}>{1})", _depthVaribleName, MaxDepthConstantName);
-            }
-        }
-
-        class CDPCleanup : Statement
-        {
-            public override void WriteTo(System.IO.TextWriter w)
-            {
-                w.Write("--{0};", _depthVaribleName);
-            }
-        }
     }
 }

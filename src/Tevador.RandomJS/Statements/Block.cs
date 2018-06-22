@@ -30,7 +30,6 @@ namespace Tevador.RandomJS.Statements
             if (Parent != null)
             {
                 VariableCounter = Parent.VariableCounter;
-                StatementDepth = Parent.StatementDepth + 1;
                 FunctionDepth = parent.FunctionDepth;
                 HasBreak = parent.HasBreak;
             }
@@ -39,7 +38,7 @@ namespace Tevador.RandomJS.Statements
         public readonly List<Statement> Statements = new List<Statement>();
         public readonly List<Variable> DeclaredVariables = new List<Variable>();
 
-        public IEnumerable<Variable> Variables
+        public virtual IEnumerable<Variable> Variables
         {
             get
             {
