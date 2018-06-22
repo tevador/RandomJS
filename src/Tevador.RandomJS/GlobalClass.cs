@@ -23,7 +23,7 @@ namespace Tevador.RandomJS
 {
     class GlobalClass : Global
     {
-        public static readonly GlobalClass RERR = new GlobalClass("RandomError", "class RandomError extends Error{constructor(_){super(_);this.name=_;}}");
+        public static readonly GlobalClass RERR = new GlobalClass("RandomError", " extends Error{constructor(_){super(_);this.name=_;};toString(){return this.constructor.name+this.name;};valueOf(){return this.name;}}");
 
         public string Declaration { get; private set; }
 
@@ -40,6 +40,8 @@ namespace Tevador.RandomJS
 
         public override void WriteTo(TextWriter w)
         {
+            w.Write("class ");
+            w.Write(Name);
             w.Write(Declaration);
         }
     }

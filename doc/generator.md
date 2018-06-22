@@ -242,20 +242,20 @@ function __prnt(_) {
 ```
 This function is used to output global variables at the end of the program. The underlying javascript engine should implement a `print` function that prints its argument followed by a newline character to the standard output.
 
-#### RandomError class and overrides
+#### RandomError class
 ```javascript
 class RandomError extends Error {
     constructor(_) {
         super(_);
         this.name = _;
+    };
+    toString() {
+        return this.constructor.name + this.name;
+    };
+    valueOf() {
+        return this.name;
     }
 }
-RandomError.prototype.toString = function() {
-    return this.constructor.name + this.name;
-};
-RandomError.prototype.valueOf = function() {
-    return this.name;
-};
 ```
 This class is used by the `ThrowStatement` to generate a custom error.
 

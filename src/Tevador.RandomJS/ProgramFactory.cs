@@ -174,8 +174,6 @@ namespace Tevador.RandomJS
         internal ThrowStatement GenThrowStatement(IScope scope)
         {
             scope.Require(GlobalClass.RERR);
-            scope.Require(GlobalOverride.RTST);
-            scope.Require(GlobalOverride.RVOF);
             var th = new ThrowStatement();
             th.Value = GenExpression(scope, 2);
             return th;

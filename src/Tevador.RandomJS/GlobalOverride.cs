@@ -28,8 +28,6 @@ namespace Tevador.RandomJS
         public readonly static GlobalOverride OVOF = new GlobalOverride("Object.prototype.valueOf", "{for(const _ in this)if(typeof this[_]==='number') return this[_];return this;}");
         public readonly static GlobalOverride FTST = new GlobalOverride("Function.prototype.toString", "{return '[Function]'+this.name;}");
         public readonly static GlobalOverride FVOF = new GlobalOverride("Function.prototype.valueOf", "{{if(!this.name){{const _='_fvof';(_ in this)||(this[_]={0}(this));if(typeof this[_]!=='function')return this[_];}}return this.toString();}}", INVC);
-        public readonly static GlobalOverride RTST = new GlobalOverride(GlobalClass.RERR + ".prototype.toString", "{{return this.constructor.name+this.name;}}", GlobalClass.RERR);
-        public readonly static GlobalOverride RVOF = new GlobalOverride(GlobalClass.RERR + ".prototype.valueOf", "{{return this.name;}}", GlobalClass.RERR);
 
         public GlobalOverride(string name, string declaration, Global references = null)
             : base(name, declaration, references)
