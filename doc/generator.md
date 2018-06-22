@@ -11,6 +11,8 @@ The general outline of the generated program is following:
     //2. Definition of global helper functions, constants and variables
     let __depth = 0;
     const __maxDepth = 3;
+    let __errorSum=0;
+    let __callSum=0;
     function __tstr(_) {
         return _ != null ? __strl(_.toString()) : _;
     }
@@ -30,6 +32,10 @@ The general outline of the generated program is following:
     __prnt(__invk(c, Expression, ...));
     __prnt(__invk(a, Expression, ...));
     //etc.
+
+    //5. Output program state variables
+    __prnt(__errorSum);
+    __prnt(__callSum);
 }
 ```
 
@@ -49,7 +55,7 @@ These are represented by the `Global` abstract class. The names of all these glo
 let __depth = 0;
 const __maxDepth = 3;
 ```
-These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval). `__depth` is incremented each time a function is entered and decremented just before each `return` statement.
+These variables are used to prevent infinite recursion during program execution. `__depth` represents the current depth of the call stack and `__maxDepth` is the maximum value (this is randomly generated from a specified interval). `__depth` is incremented each time a function is entered and decremented when control leaves the function.
 
 #### Loop cycles variables
 ```javascript
@@ -58,17 +64,25 @@ const __maxCycles = 4530;
 ```
 These variables are used to limit the number of loop executions (especially for nested loops) and to prevent infinite loops. The maximum number of loop cycles is determined by the `__maxCycles` constant (generated at random from a specified interval).
 
+#### Program state variables
+```javascript
+let __errorSum=0;
+let __callSum=0;
+```
+These variables collect additional entropy during program execution. `__errorSum` is incremented each time an error other than a `SyntaxError` is caught (see INVC function below). `__callSum` is incremented by the depth of the call stack just before control leaves each function. Both variables are printed at the end after the randomly generated variables.
+
 #### TRYC function
 ```javascript
 function __tryc(_, __) {
     try {
         return _();
     } catch (_e) {
+        if (!(_e instanceof SyntaxError)) __errorSum++;
         return _e.name + __;
     }
 }
 ```
-This helper function is used for operations which can throw an error. The first parameter is a function which can fail and the second parameter is the default value. In case of an error, the [name](http://www.ecma-international.org/ecma-262/6.0/#sec-error.prototype.name) of the error is prepended to the default value. This is safe because the names of common errors, such as [SyntaxError](http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-syntaxerror), [ReferenceError](http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-referenceerror) or [TypeError](http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-typeerror), are part of the language specification (unlike the error message, which is implementation-defined).
+This helper function is used for operations which can throw an error. The first parameter is a function which can fail and the second parameter is the default value. In case of an error, the [name](http://www.ecma-international.org/ecma-262/6.0/#sec-error.prototype.name) of the error is prepended to the default value. This is safe because the names of common errors, such as [SyntaxError](http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-syntaxerror), [ReferenceError](http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-referenceerror) or [TypeError](http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-typeerror), are part of the language specification (unlike the error message, which is implementation-defined). Additionally, the `__errorSum` variable is incremented if the caught error is not a `SyntaxError`.
 
 #### OTST override
 ```javascript
@@ -86,10 +100,28 @@ Function.prototype.toString = function() {
 ```
 This overrides the default `Function.toString` function, which has implementation-specific output.
 
+#### INVK function
+```javascript
+function __invk(_, ...__) {
+    if (typeof _ === 'function') return _(...__);
+    return _;
+}
+```
+This function is used to 'invoke' a variable. This means the variable is called if it's a function and otherwise just the value of the variable is returned. The function gets a random number of additional arguments to pass to the function call.
+
+#### INVC function
+```javascript
+function __invc(_, ...__) {
+    if (typeof _ === 'function') return __tryc(() => _(...__), _.toString());
+    return _;
+}
+```
+This function is similar to the `__invk` function except is wraps the function call in `__tryc` to catch errors. This 'safe' variant is used instead of `__invk` in cases when invocation may happen outside of a try/catch block.
+
 #### OVOF override
 ```javascript
 Object.prototype.valueOf = function() {
-    for (let _ in this)
+    for (const _ in this)
         if (typeof this[_] === 'number') return this[_];
     return this;
 };
@@ -98,12 +130,11 @@ This overrides the default `Object.valueOf` function. The function is called whe
 
 #### FVOF override
 ```javascript
-const __fvof = '__fvof';
-
 Function.prototype.valueOf = function() {
     if (!this.name) {
-        (__fvof in this) || (this[__fvof] = this());
-        if (typeof this[__fvof] !== 'function') return this[__fvof];
+        const _ = '_fvof';
+        (_ in this) || (this[_] = __invc(this));
+        if (typeof this[_] !== 'function') return this[_];
     }
     return this.toString();
 };
@@ -113,7 +144,7 @@ This overrides the default `Object.valueOf` for the `Function` type. For an anon
 #### OBJC function
 ```javascript
 function __objc(_, ...__) {
-    if (typeof _ === 'function') return new _(...__);
+    if (typeof _ === 'function') return __tryc(() => new _(...__), _.toString());
     if (typeof _ === 'object') return _;
     return { a: _ };
 }
@@ -148,15 +179,6 @@ function __strl(_) {
 }
 ```
 This function is used to limit the length of string variables. This is required to prevent out of memory errors if string concatenation happens in a loop. The value of the `__maxStrlen` constant is generated at random from a specified interval.
-
-#### INVK function
-```javascript
-function __invk(_, ...__) {
-    if (typeof _ === 'function') return __strl(_(...__));
-    else return __strl(_);
-}
-```
-This function is used to 'invoke' a variable. This means the variable is called if it's a function and otherwise just the value of the variable is returned. The function gets a random number of additional arguments to pass to the function call.
 
 #### NONZ function
 ```javascript
@@ -219,6 +241,23 @@ function __prnt(_) {
 }
 ```
 This function is used to output global variables at the end of the program. The underlying javascript engine should implement a `print` function that prints its argument followed by a newline character to the standard output.
+
+#### RandomError class and overrides
+```javascript
+class RandomError extends Error {
+    constructor(_) {
+        super(_);
+        this.name = _;
+    }
+}
+RandomError.prototype.toString = function() {
+    return this.constructor.name + this.name;
+};
+RandomError.prototype.valueOf = function() {
+    return this.name;
+};
+```
+This class is used by the `ThrowStatement` to generate a custom error.
 
 ## Variables
 All variables in the program are block scoped using the [let or const declaration](http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations) (unlike [var declarations](http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement) which are function scoped). Constant variables are generated with specified probability. 
@@ -326,22 +365,37 @@ Examples:
 * `__invk(h, __calc(c, () => (c -= 7), false), true)`
 
 ### FunctionExpression
-This defines a new function. The function takes a random number of arguments. Each function begins with two statements:
+This defines a new function. The function takes a random number of arguments. The body of each function is a try/catch/finally or try/finally block:
 
-1. `const o = this;`
-1. `if (++__depth > __maxDepth) { --__depth; return Expression; }`
-
-First statement is to capture `this` object (for constructor calls), the second statement is for the call depth protection.
-
-After these two statements, a random number of local variables can be defined and a random number of statements is executed (the body of a function is basically a `BlockStatement` as described below). Each function ends with a return statement (there can be multiple return statements if the function contains conditional statements).
+```javascript
+function(Parameter, Parameter, ...) {
+  try {
+      if (++__depth > __maxDepth) return Expression;
+      const Variable = this;
+      //Declaration of local variables
+      let Variable = Expression;
+      let Variable = Expression;
+      //etc.
+      Statement;
+      Statement;
+      //etc.
+      ReturnStatement;
+  } catch(__error) { //optional
+      return __error;
+  } finally {
+      __callSum += __depth;
+      --__depth;
+  }
+}
+```
+The first statement of the TryBlock is the call depth protection. The second statement `const Variable = this;` catures `this` object (for constructor calls). After these two statements, a random number of local variables can be defined and a random number of statements is executed. Each function ends with a `ReturnStatement` or `ThrowStatement`. The `catch` block is optional and can be generated with a specified probability.
 
 The generator will not generate a `FunctionExpression` if the maximum function depth has been reached (to limit function nesting).
 
 ### FunctionInvocationExpression
+`__invc(FunctionExpression, Expression, Expression, ...)`
 
 `FunctionInvocationExpression` is like a `FunctionExpression`, but the function is immediately called with a random set of arguments.
-
-Example: `(function (b, c) { ... })(true, 87605.64090)`
 
 ### UnaryExpression
 The generator uses the following unary operators:
@@ -440,6 +494,7 @@ The following statements can be generated:
 * ObjectSetStatement
 * ReturnStatement
 * VariableInvocationStatement
+* ThrowStatement
 
 Each statement has a specified probability of being generated. Statements can be nested up to the specified depth.
 
@@ -447,16 +502,9 @@ Each statement has a specified probability of being generated. Statements can be
 The statement has the form of `AssignmentExpression;`.
 
 ### BlockStatement
-BlockStatement is a code block with the following structure:
+BlockStatement is a code block, which encapsulates multiple statements:
 ```javascript
 {
-    //1. Declaration of local variables
-    let e = Expression;
-    let f = Expression;
-    const g = Expression;
-    //etc.
-    
-    //2. Sequence of random statements
     Statement
     Statement
     ///etc.
@@ -483,14 +531,10 @@ The statement has the form of: `if(Expression) Statement` or `if(Expression) Sta
 The statement has the form of `ObjectSetExpression;`.
 
 ### ReturnStatement
-The statement has the form of two statements:
-```javascript
-{
-    --__depth;
-    return Expression;
-}
-```
-Only expressions with zero depth can be returned: `Literal`, `VariableExpression` or `EvalExpression`. If the expression is not a  literal, then it has a form of `Expression || Literal` to prevent returning an empty value.
+The statement has the form of `return Expression;`. Only expressions with zero depth can be returned: `Literal` or `VariableExpression`. If the expression is not a literal, then it has a form of `Expression || Literal` to prevent returning an empty value.
 
 ### VariableInvocationStatement
 The statement has the form of `VariableInvocationExpression;`.
+
+### ThrowStatement
+The statement has the form of `throw new RandomError(Expression);`.
