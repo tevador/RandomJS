@@ -24,7 +24,7 @@ namespace Tevador.RandomJS.Statements
 {
     class FunctionBody : TryCatchStatement
     {
-        static readonly Statement _incrementCallSumDepth = new CodeStatement($"{GlobalVariable.CSUM}+={CallDepthProtection.DepthVaribleName};");
+        static readonly Statement _incrementCallSumDepth = new CodeStatement($"{GlobalVariable.CSUM}+={CallDepthProtection.DepthVaribleName}--;");
         static readonly Statement _incrementCallSum = new CodeStatement($"{GlobalVariable.CSUM}++;");
 
         public FunctionBody(FunctionExpression parent, CallDepthProtection protection, bool hasCatch)
@@ -40,7 +40,7 @@ namespace Tevador.RandomJS.Statements
                 TryBody.Statements.Add(protection.Check);
                 TryBody.Statements.Add(new ReturnStatement(parent.DefaultReturnValue));
                 FinallyStatements.Add(_incrementCallSumDepth);
-                FinallyStatements.Add(protection.Cleanup);
+                //FinallyStatements.Add(protection.Cleanup);
             }
             else
             {

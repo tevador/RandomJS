@@ -66,8 +66,8 @@ These variables are used to limit the number of loop executions (especially for 
 
 #### Program state variables
 ```javascript
-let __errorSum=0;
-let __callSum=0;
+let __errorSum = 0;
+let __callSum = 0;
 ```
 These variables collect additional entropy during program execution. `__errorSum` is incremented each time an error other than a `SyntaxError` is caught (see INVC function below). `__callSum` is incremented by the depth of the call stack just before control leaves each function. Both variables are printed at the end after the randomly generated variables.
 
@@ -150,6 +150,24 @@ function __objc(_, ...__) {
 }
 ```
 This function is used to create a new object at runtime. If the first argument is a function, it is used as the constructor. Otherwise either the argument itself is returned (if it's an object) or a new object with property 'a' is created.
+
+#### OBJD function
+```javascript
+function __objd(_) {
+    for (const __ in _)
+        if (typeof _[__] === 'object') return false;
+    return true;
+}
+```
+This helper function checks if an object contains another nested object. It is used by the OBJL function.
+
+#### OBJL function
+```javascript
+function __objl(_) {
+    if (typeof _ !== 'object' || __objd(_)) return _;
+}
+```
+This function is used when creating object literals. It prevents objects from being nested more than one level.
 
 #### EVAL function
 ```javascript
@@ -305,7 +323,7 @@ There are 8 types of numeric literals. Each numeric literal is generated as a st
 * ExpFloat  (one decimal digit before decimal point, 5 digits after and 2 digit exponent, e.g. `9.23234e32`)
 
 #### ObjectLiteral
-Object literals are generated in the form `{ a: literal, b: literal, c: literal, ... }`. The number of properties is generated at random from the specified interval. Object literals can be nested up to the specified depth (e.g. `{ a: { a: true } }`).
+Object literals are generated in the form `{ a: Expression, b: Expression, c: Expression, ... }`, where `Expression` can be either a `Literal` or `__objl(Variable)`. The number of properties is generated at random from the specified interval. Object literals can be nested up to the specified depth (e.g. `{ a: { a: true } }`).
 
 ### EvalExpression
 One of the features of the javascript language is the possiblity of evaluating code at runtime. The `EvalExpression` evaluates a random string literal in the current scope using the EVAL helper function (see above). The evaluated string contains 10 random characters from the following character set: ``/cb1/|=`+-a2+e84``. It has been empirically determined that this character set produces relatively low number of syntax errors, while exploring many features of the language. Two characters are included twice (`/` and `+`) so they have a double chance of occuring. Thus, there are 14 unique characters, giving 14<sup>10</sup> total possibilities (~290 billion). This is sufficiently high to prevent dictionary lookup and forces all implementations to include a javascript parser.
@@ -388,7 +406,7 @@ function(Parameter, Parameter, ...) {
   }
 }
 ```
-The first statement of the TryBlock is the call depth protection. The second statement `const Variable = this;` catures `this` object (for constructor calls). After these two statements, a random number of local variables can be defined and a random number of statements is executed. Each function ends with a `ReturnStatement` or `ThrowStatement`. The `catch` block is optional and can be generated with a specified probability.
+The first statement of the TryBlock is the call depth protection. The second statement `const Variable = this;` captures `this` object (for constructor calls). After these two statements, a random number of local variables can be defined and a random number of statements is executed. Each function ends with a `ReturnStatement` or `ThrowStatement`. The `catch` block is optional and can be generated with a specified probability.
 
 The generator will not generate a `FunctionExpression` if the maximum function depth has been reached (to limit function nesting).
 

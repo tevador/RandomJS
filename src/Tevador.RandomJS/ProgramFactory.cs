@@ -219,7 +219,7 @@ namespace Tevador.RandomJS
                 Variable = i,
                 Rhs = rhs
             };
-            fl.Body = GenStatement(fl, fl, maxDepth - 1, StatementType.All & ~StatementType.ReturnStatement & ~StatementType.ThrowStatement);
+            fl.Body = GenStatement(fl, fl, maxDepth, StatementType.All & ~StatementType.ReturnStatement & ~StatementType.ThrowStatement);
             return fl;
         }
 
@@ -371,9 +371,17 @@ namespace Tevador.RandomJS
             scope.Require(GlobalOverride.OTST);
             var ol = new ObjectLiteral();
             int propertiesCount = _options.ObjectLiteralSizeRange.RandomValue(_rand);
+            Variable v;
             while(propertiesCount-- > 0)
             {
-                ol.Values.Add(GenLiteral(scope, maxDepth - 1));
+                if (_rand.FlipCoin(_options.ObjectLiteralVariableChance) && (v = _varSelector.ChooseVariable(scope)) != null)
+                {
+                    ol.Values.Add(new ShallowExpression(scope, new VariableExpression(v)));
+                }
+                else
+                {
+                    ol.Values.Add(GenLiteral(scope, maxDepth - 1));
+                }
             }
             return ol;
         }
@@ -555,9 +563,9 @@ namespace Tevador.RandomJS
         internal TernaryExpression GenTernaryExpression(IScope scope, int maxDepth)
         {
             TernaryExpression te = new TernaryExpression();
-            te.Condition = GenExpression(scope, maxDepth);
-            te.TrueExpr = GenExpression(scope, maxDepth);
-            te.FalseExpr = GenExpression(scope, maxDepth);
+            te.Condition = GenExpression(scope, maxDepth, ExpressionType.All & ~ExpressionType.Literal);
+            te.TrueExpr = GenExpression(scope, maxDepth, ExpressionType.All & ~ExpressionType.FunctionExpression);
+            te.FalseExpr = GenExpression(scope, maxDepth, ExpressionType.All & ~ExpressionType.FunctionExpression);
             return te;
         }
 
@@ -632,11 +640,11 @@ namespace Tevador.RandomJS
         internal IfElseStatement GenIfElseStatement(IScope scope, Statement parent, int maxDepth)
         {
             var ife = new IfElseStatement(parent);
-            ife.Condition = GenExpression(scope, _options.MaxExpressionDepth);
-            ife.Body = GenStatement(scope, ife, maxDepth - 1);
+            ife.Condition = GenExpression(scope, _options.MaxExpressionDepth, ExpressionType.All & ~ExpressionType.Literal);
+            ife.Body = GenStatement(scope, ife, maxDepth);
             if (_rand.FlipCoin(_options.ElseChance))
             {
-                ife.ElseBody = GenStatement(scope, ife, maxDepth - 1);
+                ife.ElseBody = GenStatement(scope, ife, maxDepth);
             }
             return ife;
         }
@@ -656,7 +664,7 @@ namespace Tevador.RandomJS
                 block.DeclaredVariables.Add(v);
                 block.Statements.Add(v.Declaration);
             }
-            GenBlock(block, _options.MaxStatementDepth);
+            GenBlock(block, _options.FunctionStatementsRange, _options.MaxStatementDepth, StatementType.All & ~StatementType.Terminating);
             if (block.Statements.Count == 0 || !block.Statements.Last().IsTerminating)
             {
                 block.Statements.Add(GenReturnStatement(block));
@@ -664,12 +672,13 @@ namespace Tevador.RandomJS
             return body;
         }
 
-        internal Block GenBlock(Block block, int maxDepth)
+        internal Block GenBlock(Block block, Interval statementsInterval, int maxDepth, StatementType list = StatementType.All)
         {
-            int statementsCount = _options.BlockStatementsRange.RandomValue(_rand);
+            list &= ~StatementType.BlockStatement;
+            int statementsCount = statementsInterval.RandomValue(_rand);
             while (statementsCount-- > 0)
             {
-                var stmt = GenStatement(block, block, maxDepth - 1, StatementType.All & ~StatementType.BlockStatement);
+                var stmt = GenStatement(block, block, maxDepth, list);
                 block.Statements.Add(stmt);
                 if (stmt.IsTerminating)
                     break;
@@ -680,7 +689,7 @@ namespace Tevador.RandomJS
         internal Block GenBlock(IScope scope, int maxDepth)
         {
             var block = new Block(scope);
-            return GenBlock(block, maxDepth);
+            return GenBlock(block, _options.BlockStatementsRange, maxDepth);
         }
 
         internal OutputStatement GenOutputStatement(Program program, IVariable v)

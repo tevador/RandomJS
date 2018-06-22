@@ -35,6 +35,7 @@ namespace Tevador.RandomJS
         ThrowStatement = 1 << 8,
 
         Flat = ReturnStatement | BreakStatement | AssignmentStatement | ObjectSetStatement | VariableInvocationStatement | ThrowStatement,
+        Terminating = ReturnStatement | BreakStatement | ThrowStatement,
         NoCall = All & ~VariableInvocationStatement,
     }
 }

@@ -101,6 +101,7 @@ namespace Tevador.RandomJS
         public OperatorTable<AssignmentOperator> AssignmentInForLoop { get; set; }
 
         public Interval BlockStatementsRange { get; set; }
+        public Interval FunctionStatementsRange { get; set; }
         public Interval FunctionParametersCountRange { get; set; }
         public Interval StringLiteralLengthRange { get; set; }
         public Interval GlobalVariablesCountRange { get; set; }
@@ -129,5 +130,6 @@ namespace Tevador.RandomJS
         public bool AllowFunctionInvocationInLoop { get; set; }
         public bool FunctionValueOfOverride { get; set; }
         public double CatchChance { get; set; }
+        public double ObjectLiteralVariableChance { get; set; }
     }
 }

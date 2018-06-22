@@ -50,6 +50,7 @@
     <Compile Include="Expressions\ObjectConstructorExpression.cs" />
     <Compile Include="Expressions\ObjectLiteral.cs" />
     <Compile Include="Expressions\ObjectSetExpression.cs" />
+    <Compile Include="Expressions\ShallowExpression.cs" />
     <Compile Include="GlobalClass.cs" />
     <Compile Include="GlobalOverride.cs" />
     <Compile Include="Statements\BreakableStatement.cs" />

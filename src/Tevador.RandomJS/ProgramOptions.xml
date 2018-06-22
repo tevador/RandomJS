@@ -5,16 +5,16 @@
       Types from the table are selected randomly proportionally to their weight.
   -->
   <AssignmentOperators>
-    <item type="Basic" weight="10" />   <!-- OPERATOR = -->
+    <item type="Basic" weight="6" />   <!-- OPERATOR = -->
     <item type="Add" weight="4" />      <!-- OPERATOR += -->
     <item type="Sub" weight="1" />      <!-- OPERATOR -= -->
     <item type="Mul" weight="1" />      <!-- OPERATOR *= -->  
     <item type="Div" weight="1" />      <!-- OPERATOR /= -->
     <item type="Mod" weight="1" />      <!-- OPERATOR %= -->
-    <item type="PreInc" weight="3" />   <!-- OPERATOR ++ (prefix) -->
-    <item type="PostDec" weight="3" />  <!-- OPERATOR ‐‐ (postfix) -->
-    <item type="PreDec" weight="3" />   <!-- OPERATOR ‐‐ (prefix) -->
-    <item type="PostInc" weight="3" />  <!-- OPERATOR ++ (postfix) -->
+    <item type="PreInc" weight="2" />   <!-- OPERATOR ++ (prefix) -->
+    <item type="PostDec" weight="2" />  <!-- OPERATOR ‐‐ (postfix) -->
+    <item type="PreDec" weight="2" />   <!-- OPERATOR ‐‐ (prefix) -->
+    <item type="PostInc" weight="2" />  <!-- OPERATOR ++ (postfix) -->
   </AssignmentOperators>
   <UnaryOperators>   
     <item type="Plus" weight="1" />     <!-- OPERATOR + (unary) -->
@@ -75,7 +75,7 @@
     <item type="VariableInvocationExpression" weight="3" />
     <item type="FunctionInvocationExpression" weight="1" />
     <item type="VariableExpression" weight="2" />
-    <item type="EvalExpression" weight="1" />
+    <item type="EvalExpression" weight="2" />
     <item type="ObjectSetExpression" weight="1" />
     <item type="ObjectConstructorExpression" weight="1" />
   </Expressions>
@@ -83,7 +83,7 @@
     <item type="ReturnStatement" weight="2" />
     <item type="BreakStatement" weight="1" />
     <item type="AssignmentStatement" weight="9" />
-    <item type="IfElseStatement" weight="6" />
+    <item type="IfElseStatement" weight="8" />
     <item type="ForLoopStatement" weight="2" />
     <item type="BlockStatement" weight="6" />
     <item type="VariableInvocationStatement" weight="4" />
@@ -106,11 +106,12 @@
   -->
   <GlobalVariablesCountRange>12-12</GlobalVariablesCountRange>
   <LocalVariablesCountRange>0-3</LocalVariablesCountRange>
-  <BlockStatementsRange>4-7</BlockStatementsRange>
+  <BlockStatementsRange>2-4</BlockStatementsRange>
+  <FunctionStatementsRange>5-7</FunctionStatementsRange>
   <FunctionParametersCountRange>1-3</FunctionParametersCountRange>
   <StringLiteralLengthRange>0-10</StringLiteralLengthRange>
   <MaxCallDepthRange>3-3</MaxCallDepthRange>
-  <MaxLoopCyclesRange>3000-6000</MaxLoopCyclesRange>
+  <MaxLoopCyclesRange>1000-2000</MaxLoopCyclesRange>
   <MaxStringLengthRange>35-50</MaxStringLengthRange>
   <MathPrecisionRange>10-14</MathPrecisionRange>  <!-- Functions with inexact results (such as Math.exp or Math.sqrt) are rounded to MathPrecision significant digits. -->
   <ObjectLiteralSizeRange>0-4</ObjectLiteralSizeRange>
@@ -127,13 +128,14 @@
   <EnableCallDepthProtection>true</EnableCallDepthProtection>
   <EnableLoopCyclesProtection>true</EnableLoopCyclesProtection>
   <MaxExpressionDepth>3</MaxExpressionDepth>
-  <MaxStatementDepth>3</MaxStatementDepth>
+  <MaxStatementDepth>2</MaxStatementDepth>
   <ConstVariableChance>0.1</ConstVariableChance>
-  <ElseChance>0.3</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
+  <ElseChance>0.5</ElseChance> <!-- if(expr) stmt; else stmt; instead of if(expr) stmt; -->
   <FunctionsAreConstants>true</FunctionsAreConstants> <!-- Determines whether a function variable can be assigned to. -->
   <VariableSelectorScopeFactor>2</VariableSelectorScopeFactor> <!-- Variables from the enclosing function scope are selected preferentially with this factor. 0 disables this function. -->
   <ForLoopVariableBoundsChance>0.35</ForLoopVariableBoundsChance> <!-- for(expr; var1 < var2; expr) instead of for(expr; var1 < literal; expr) -->
   <AllowFunctionInvocationInLoop>false</AllowFunctionInvocationInLoop>
-  <FunctionValueOfOverride>false</FunctionValueOfOverride>
-  <CatchChance>0.25</CatchChance>
+  <FunctionValueOfOverride>true</FunctionValueOfOverride>
+  <CatchChance>0.4</CatchChance>
+  <ObjectLiteralVariableChance>0.5</ObjectLiteralVariableChance>
 </ProgramOptions>

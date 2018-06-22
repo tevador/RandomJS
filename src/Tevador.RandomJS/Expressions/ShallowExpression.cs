@@ -17,26 +17,12 @@
     along with Tevador.RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
-using System.IO;
-
 namespace Tevador.RandomJS.Expressions
 {
-    class ObjectLiteral : Literal
+    class ShallowExpression : GlobalFunctionExpression
     {
-        public readonly List<Expression> Values = new List<Expression>();
-
-        public override void WriteTo(TextWriter w)
+        public ShallowExpression(IScope scope, Expression expr) : base(GlobalFunction.OBJL, scope, expr)
         {
-            w.Write("{");
-            for(int i = 0; i < Values.Count; ++i)
-            {
-                w.Write(Variable.GetVariableName(i));
-                w.Write(":");
-                Values[i].WriteTo(w);
-                w.Write(",");
-            }
-            w.Write("}");
         }
     }
 }

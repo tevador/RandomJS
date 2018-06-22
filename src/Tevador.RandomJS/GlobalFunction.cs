@@ -35,6 +35,8 @@ namespace Tevador.RandomJS
         public readonly static GlobalFunction OBJC = new GlobalFunction("__objc", "(_,...__){{if(typeof _ === 'function') return {0}(()=>new _(...__),_.toString()); if(typeof _ === 'object') return _; return {{ a: _ }}; }}", TRYC);
         public readonly static GlobalFunction OBJS = new GlobalFunction("__objs", "(_,_k,_v){ if(Object.isExtensible(_)) _[_k]=_v; return _||_v; }");
         public readonly static GlobalFunction EVAL = new GlobalFunction("__eval", "(_f,_s){{return {0}(()=>_f(_s),_s);}}", TRYC);
+        public readonly static GlobalFunction OBJD = new GlobalFunction("__objd", "(_){for(const __ in _)if(typeof _[__]==='object')return false;return true;}");
+        public readonly static GlobalFunction OBJL = new GlobalFunction("__objl", "(_){{if(typeof _!== 'object'||{0}(_))return _;}}", OBJD);
 
         public string Declaration { get; protected set; }
 
