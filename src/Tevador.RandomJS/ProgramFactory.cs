@@ -95,14 +95,19 @@ namespace Tevador.RandomJS
             return new ObjectSetStatement(GenObjectSetExpression(scope, _options.MaxExpressionDepth));
         }
 
-        internal ReturnStatement GenReturnStatement(IScope scope, Expression expr = null)
+        internal Expression GenSafeReturnExpression(IScope scope)
         {
-            expr = expr ?? GenExpression(scope, 0);
+            var expr = GenExpression(scope, 0, ExpressionType.VariableExpression | ExpressionType.Literal);
             if(!(expr is Literal))
             {
                 expr = new NonEmptyExpression(expr, GenLiteral(scope));
             }
-            return new ReturnStatement(expr);
+            return expr;
+        }
+
+        internal ReturnStatement GenReturnStatement(IScope scope)
+        {
+            return new ReturnStatement(GenExpression(scope, _options.MaxExpressionDepth));
         }
 
         internal Statement GenStatement(IScope scope, Statement parent, int maxDepth, StatementType list = StatementType.All)
@@ -581,7 +586,7 @@ namespace Tevador.RandomJS
                 func.Parameters.Add(GenVariable(func, true));
             }
             //func._unusedVariables.AddRange(func.Parameters);
-            func.DefaultReturnValue = GenExpression(func, 0, ExpressionType.VariableExpression | ExpressionType.Literal);
+            func.DefaultReturnValue = GenSafeReturnExpression(func);
             func.Body = GenFunctionBody(func);
             return func;
         }
