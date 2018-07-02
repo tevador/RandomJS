@@ -5,4 +5,7 @@ obj/
 .vs
 node_modules/
 package-lock.json
-
+src-cpp/**/x64/
+src-cpp/**/x86/
+src-cpp/**/Debug/
+src-cpp/**/Release/
