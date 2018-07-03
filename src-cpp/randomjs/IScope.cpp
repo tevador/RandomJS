@@ -21,7 +21,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 IScope::IScope(IScope* parent) : parent(parent), functionDepth(0) {
 	if (parent != nullptr) {
-		variables.insert(variables.begin(), parent->getVariables(), parent->getVariablesEnd());
+		variables.insert(variables.begin(), parent->begin(), parent->end());
 		functionDepth = parent->functionDepth;
 	}
 }

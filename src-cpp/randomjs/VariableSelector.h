@@ -19,17 +19,23 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Expression.h"
-#include "IVariable.h"
+#include "RandomGenerator.h"
+#include "Memory.h"
+#include "Variable.h"
+#include "IScope.h"
 
-class VariableExpression : public Expression
+class VariableSelector
 {
 public:
-	VariableExpression(IVariable*);
-	virtual uint32_t getType();
-protected:
-	virtual void writeTo(std::ostream&) const;
+	VariableSelector();
+	void init();
+	Variable* selectVariable(RandomGenerator& rand, IScope* scope, bool forWriting = false);
 private:
-	IVariable* variable;
+	List<Variable*>* readableVars;
+	List<Variable*>* writableVars;
+	IScope* currentScope;
+	uint32_t scopeVariableCounter;
+
+	void probe(IScope*);
 };
 

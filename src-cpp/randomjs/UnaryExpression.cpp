@@ -18,6 +18,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 #include "UnaryExpression.h"
+#include "ExpressionType.h"
 
 UnaryExpression::UnaryExpression(UnaryOperator* oper, Expression* expr) : oper(oper), expr(expr) {}
 
@@ -33,4 +34,8 @@ void UnaryExpression::writeTo(std::ostream& os) const {
 	else {
 		os << "(" << *oper << *expr << ")";
 	}
+}
+
+uint32_t UnaryExpression::getType() {
+	return ExpressionType::UnaryExpression;
 }

@@ -26,6 +26,7 @@ class UnaryExpression :	public Expression {
 public:
 	UnaryExpression(UnaryOperator*, Expression*);
 	virtual bool isNumeric();
+	virtual uint32_t getType();
 protected:
 	virtual void writeTo(std::ostream& os) const;
 private:

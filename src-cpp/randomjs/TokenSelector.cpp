@@ -42,7 +42,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 template<>
 TableType EnumSelector<LiteralType>::select(RandomGenerator& rand, uint32_t list) {
-	int32_t total = 0.0;
+	int32_t total = 0;
 
 	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, String)
 	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, Numeric)
@@ -56,6 +56,42 @@ TableType EnumSelector<LiteralType>::select(RandomGenerator& rand, uint32_t list
 	SELECTOR_PROBE_LIST(ProgramOptions::Literals, LiteralType, Object)
 
 	return LiteralType::None;
+}
+
+template<>
+TableType EnumSelector<ExpressionType>::select(RandomGenerator& rand, uint32_t list) {
+	int32_t total = 0;
+
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, AssignmentExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, BinaryExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, FunctionExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, Literal)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, TernaryExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, UnaryExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, VariableInvocationExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, FunctionInvocationExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, VariableExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, EvalExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ObjectSetExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ObjectConstructorExpression)
+
+	int32_t pivot = rand.genInt(total);
+	int32_t probe = 0;
+
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, AssignmentExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, BinaryExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, FunctionExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, Literal)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, TernaryExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, UnaryExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, VariableInvocationExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, FunctionInvocationExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, VariableExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, EvalExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, ObjectSetExpression)
+	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, ObjectConstructorExpression)
+
+	return ExpressionType::None;
 }
 
 template<>
@@ -76,7 +112,7 @@ AssignmentOperator& OperatorSelector<AssignmentOperator>::select(RandomGenerator
 
 template<>
 constexpr TableType OperatorSelector<AssignmentOperator>::getTotal() {
-	int32_t total = 0.0;
+	int32_t total = 0;
 
 	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Basic)
 	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Add)

@@ -19,7 +19,14 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "VariableExpression.h"
 #include "IVariable.h"
-
+#include "ExpressionType.h"
 
 VariableExpression::VariableExpression(IVariable* variable) : variable(variable) {}
 
+uint32_t VariableExpression::getType() {
+	return ExpressionType::VariableExpression;
+}
+
+void VariableExpression::writeTo(std::ostream& os) const {
+	os << variable->getName();
+}

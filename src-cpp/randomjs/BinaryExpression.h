@@ -26,6 +26,7 @@ class BinaryExpression : public Expression {
 public:
 	BinaryExpression(BinaryOperator*, Expression*, Expression*);
 	virtual bool isNumeric();
+	virtual uint32_t getType();
 protected:
 	void writeTo(std::ostream&) const;
 private:

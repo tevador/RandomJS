@@ -20,20 +20,25 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "IVariable.h"
-#include "VariableDeclaration.h";
+#include "VariableDeclaration.h"
 
 class IScope;
 
 class Variable : public IVariable {
 public:
-	Variable(IScope* parent, const char* name, bool con, Expression* initializer) : IVariable(name, con, initializer), declaration(this), parent(parent) {}
+	Variable(IScope* parent, const char* name, bool constant, bool loopCounter, Expression* initializer = nullptr)
+		: IVariable(name, constant, initializer), declaration(this), parent(parent), loopCounter(loopCounter) {}
 
 	static const char* getVariableName(int index);
 
 	Statement* getDeclaration() { return &declaration; }
 	IScope* getParent() { return parent; }
+	bool isLoopCounter() {
+		return loopCounter;
+	}
 
 private:
 	VariableDeclaration declaration;
 	IScope* parent;
+	bool loopCounter;
 };

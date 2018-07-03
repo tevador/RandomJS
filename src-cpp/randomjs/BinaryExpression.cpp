@@ -19,6 +19,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "BinaryExpression.h"
 #include "GlobalFunction.h"
+#include "ExpressionType.h"
 
 BinaryExpression::BinaryExpression(BinaryOperator* oper, Expression* lhs, Expression* rhs) : oper(oper), lhs(lhs), rhs(rhs) {}
 
@@ -36,4 +37,8 @@ void BinaryExpression::writeTo(std::ostream& os) const {
 
 bool BinaryExpression::isNumeric() {
 	return oper->has(OperatorRequirement::NumericOnly);
+}
+
+uint32_t BinaryExpression::getType() {
+	return ExpressionType::BinaryExpression;
 }

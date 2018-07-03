@@ -39,6 +39,12 @@ static inline uint64_t rotl(const uint64_t x, int k) {
 	return (x << k) | (x >> (64 - k));
 }
 
+static inline double to_double(uint64_t x) {
+	union { uint64_t i; double d; } u;
+	u.i = UINT64_C(0x3FF) << 52 | x >> 12;
+	return u.d - 1.0;
+}
+
 class RandomGenerator {
 private:
 	uint64_t s[4];
@@ -51,7 +57,7 @@ public:
 		s[3] = lbuff[3];
 	}
 
-	double gen() {
+	uint64_t genInt64() {
 		const uint64_t result_plus = s[0] + s[3];
 
 		const uint64_t t = s[1] << 17;
@@ -66,6 +72,10 @@ public:
 		s[3] = rotl(s[3], 45);
 
 		return result_plus;
+	}
+
+	double gen() {
+		return to_double(genInt64());
 	}
 
 	int32_t genInt(int32_t max) {

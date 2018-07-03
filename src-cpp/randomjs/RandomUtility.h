@@ -39,6 +39,6 @@ public:
 	static const char* genStringLiteral(RandomGenerator& rand, int length, const char* charset);
 	static const char* genStringLiteral(RandomGenerator& rand, int length);
 	template<typename T>
-	static T choose(RandomGenerator& rand, List<T>& items);
+	static T select(RandomGenerator& rand, List<T>* items);
 };
 

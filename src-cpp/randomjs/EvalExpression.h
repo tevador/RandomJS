@@ -20,16 +20,15 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Expression.h"
-#include "IVariable.h"
 
-class VariableExpression : public Expression
+class EvalExpression : public Expression
 {
 public:
-	VariableExpression(IVariable*);
+	EvalExpression(const char*);
 	virtual uint32_t getType();
 protected:
-	virtual void writeTo(std::ostream&) const;
+	virtual void writeTo(std::ostream& os) const;
 private:
-	IVariable* variable;
+	const char* code;
 };
 

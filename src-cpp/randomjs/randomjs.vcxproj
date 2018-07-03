@@ -115,12 +115,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AssignmentExpression.h" />
     <ClInclude Include="AssignmentOperator.h" />
     <ClInclude Include="BinaryExpression.h" />
     <ClInclude Include="BinaryOperator.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="CodeStatement.h" />
+    <ClInclude Include="EvalExpression.h" />
     <ClInclude Include="Expression.h" />
+    <ClInclude Include="ExpressionType.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="GlobalClass.h" />
     <ClInclude Include="GlobalFunction.h" />
@@ -146,10 +149,13 @@
     <ClInclude Include="Variable.h" />
     <ClInclude Include="VariableDeclaration.h" />
     <ClInclude Include="VariableExpression.h" />
+    <ClInclude Include="VariableSelector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssignmentExpression.cpp" />
     <ClCompile Include="BinaryExpression.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="EvalExpression.cpp" />
     <ClCompile Include="IScope.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Operator.cpp" />
@@ -164,6 +170,7 @@
     <ClCompile Include="Variable.cpp" />
     <ClCompile Include="VariableDeclaration.cpp" />
     <ClCompile Include="VariableExpression.cpp" />
+    <ClCompile Include="VariableSelector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

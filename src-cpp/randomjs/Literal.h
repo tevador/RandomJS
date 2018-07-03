@@ -20,6 +20,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Expression.h"
+#include "ExpressionType.h"
 
 class Literal : public Expression {
 public:
@@ -30,6 +31,9 @@ public:
 		StringBuilder sb;
 		sb << val;
 		value = sb.str().data();
+	}
+	virtual uint32_t getType() {
+		return ExpressionType::Literal;
 	}
 
 protected:

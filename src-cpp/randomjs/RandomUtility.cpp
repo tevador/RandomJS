@@ -18,6 +18,24 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 #include "RandomUtility.h"
+#include "Variable.h"
 
+template<typename T>
+void RandomUtility::shuffle(RandomGenerator& rand, List<T>& list) {
+	for (auto i = list.size() - 1; i >= 1; --i) {
+		auto j = rand.genInt(i + 1);
+		//swap
+		T temp = list[i];
+		list[i] = list[j];
+		list[j] = temp;
+	}
+}
 
+template void RandomUtility::shuffle<Variable*>(RandomGenerator&, List<Variable*>&);
 
+template<typename T>
+T RandomUtility::select(RandomGenerator& rand, List<T>* items) {
+	return (*items)[rand.genInt(items->size())];
+}
+
+template Variable* RandomUtility::select(RandomGenerator&, List<Variable*>*);

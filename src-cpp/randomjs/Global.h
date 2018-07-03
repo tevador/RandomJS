@@ -34,7 +34,7 @@ public:
 	}
 	virtual Global* clone() = 0;
 
-	static constexpr size_t count = 26;
+	static constexpr size_t count = 27;
 
 protected:
 	Global(uint32_t index, const char* name, Global* reference = nullptr) : name(name), reference(reference), index(index) {}

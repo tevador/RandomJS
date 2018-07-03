@@ -24,6 +24,14 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "CodeStatement.h"
 #include "Variable.h"
 #include "OutputStatement.h"
+#include "ExpressionType.h"
+#include "VariableSelector.h"
+#include "Literal.h"
+#include "LiteralType.h"
+#include "AssignmentExpression.h"
+#include "EvalExpression.h"
+#include "UnaryExpression.h"
+#include "BinaryExpression.h"
 #include <cstdint>
 
 class ProgramFactory
@@ -34,6 +42,7 @@ public:
 
 private:
 	RandomGenerator& rand;
+	VariableSelector variableSelector;
 	static CodeStatement callDepthCheck;
 	static CodeStatement incrementCallSum;
 	static CodeStatement incrementCallSumDepth;
@@ -43,6 +52,12 @@ private:
 	Variable* genVariable(IScope* scope, bool isParameter = false, bool isLoopCounter = false, bool isConstant = false, bool initialize = true);
 	OutputStatement* genOutputStatement(Program* program, Expression* expr);
 	OutputStatement* genOutputStatement(Program* program, IVariable* v);
-
+	Expression* genExpression(IScope* scope, int maxDepth, uint32_t list = ExpressionType::All);
+	Literal* genLiteral(IScope* scope, int maxDepth, uint32_t list = LiteralType::All);
+	Literal* genLiteral(IScope* scope);
+	AssignmentExpression* genAssignmentExpression(IScope* scope, Variable* v, int maxDepth);
+	EvalExpression* genEvalExpression(IScope* scope);
+	UnaryExpression* genUnaryExpression(IScope* scope, int maxDepth);
+	BinaryExpression* genBinaryExpression(IScope* scope, int maxDepth);
 };
 

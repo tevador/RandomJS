@@ -49,6 +49,7 @@ GlobalFunction GlobalFunction::OBJS = GlobalFunction(__COUNTER__, "__objs", "(_,
 GlobalFunction GlobalFunction::EVAL = GlobalFunction(__COUNTER__, "__eval", "(_f,_s){return {0}(()=>_f(_s),_s);}", &GlobalFunction::TRYC);
 GlobalFunction GlobalFunction::OBJD = GlobalFunction(__COUNTER__, "__objd", "(_) {for(const __ in _)if(typeof _[__]==='object')return false;return true;}");
 GlobalFunction GlobalFunction::OBJL = GlobalFunction(__COUNTER__, "__objl", "(_){if(typeof _!== 'object'||__objd(_))return _;}", &GlobalFunction::OBJD);
+GlobalFunction GlobalFunction::PRNT = GlobalFunction(__COUNTER__, "__prnt", "(_) {print(__tstr(_));}", &GlobalFunction::TSTR);
 
 GlobalOverride GlobalOverride::OTST = GlobalOverride(__COUNTER__, "Object.prototype.toString", "{return __tryc(()=>JSON.stringify(this),'[Object]');}", &GlobalFunction::TRYC);
 GlobalOverride GlobalOverride::OVOF = GlobalOverride(__COUNTER__, "Object.prototype.valueOf", "{for(const _ in this)if(typeof this[_]==='number') return this[_];return this;}");

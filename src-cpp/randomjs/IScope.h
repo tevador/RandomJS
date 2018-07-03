@@ -26,11 +26,11 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 class IScope {
 public:
-	List<Variable*>::iterator getVariables() {
+	List<Variable*>::iterator begin() {
 		return variables.begin();
 	}
 
-	List<Variable*>::iterator getVariablesEnd() {
+	List<Variable*>::iterator end() {
 		return variables.end();
 	}
 	

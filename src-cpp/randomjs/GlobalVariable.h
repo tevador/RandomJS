@@ -23,7 +23,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "IVariable.h"
 #include "VariableDeclaration.h"
 
-class GlobalVariable : public AllocatorBase, public Global, public IVariable {
+class GlobalVariable : public Global, public IVariable {
 public:
 	static GlobalVariable CSUM;
 	static GlobalVariable STRL;

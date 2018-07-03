@@ -17,19 +17,7 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "AssignmentExpression.h"
 
-#include "Expression.h"
-#include "IVariable.h"
-
-class VariableExpression : public Expression
-{
-public:
-	VariableExpression(IVariable*);
-	virtual uint32_t getType();
-protected:
-	virtual void writeTo(std::ostream&) const;
-private:
-	IVariable* variable;
-};
+AssignmentExpression::AssignmentExpression() {}
 

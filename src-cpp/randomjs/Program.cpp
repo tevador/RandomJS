@@ -62,3 +62,5 @@ void Program::setGlobalVariable(GlobalVariable& gVar, T value) {
 		gv->setInitializer(new Literal(value));
 	}
 }
+
+template void Program::setGlobalVariable<int>(GlobalVariable&, int);

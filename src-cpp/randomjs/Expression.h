@@ -24,4 +24,5 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 class Expression : public Statement {
 public:
 	virtual bool isNumeric() { return false; }
+	virtual uint32_t getType() = 0;
 };

@@ -17,19 +17,17 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "EvalExpression.h"
+#include "GlobalFunction.h"
+#include "ExpressionType.h"
 
-#include "Expression.h"
-#include "IVariable.h"
+EvalExpression::EvalExpression(const char* code) : code(code) {}
 
-class VariableExpression : public Expression
-{
-public:
-	VariableExpression(IVariable*);
-	virtual uint32_t getType();
-protected:
-	virtual void writeTo(std::ostream&) const;
-private:
-	IVariable* variable;
-};
 
+void EvalExpression::writeTo(std::ostream& os) const {
+	os << GlobalFunction::EVAL.getName() << "(_=>eval(_)," << code << ")";
+}
+
+uint32_t EvalExpression::getType() {
+	return ExpressionType::EvalExpression;
+}

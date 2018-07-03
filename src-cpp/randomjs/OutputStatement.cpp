@@ -18,5 +18,10 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 #include "OutputStatement.h"
+#include "GlobalFunction.h"
 
 OutputStatement::OutputStatement(Expression* expr) : expr(expr) {}
+
+void OutputStatement::writeTo(std::ostream& os) const {
+	os << GlobalFunction::PRNT.getName() << "(" << *expr << ");";
+}
