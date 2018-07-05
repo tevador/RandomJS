@@ -121,12 +121,17 @@
     <ClInclude Include="BinaryOperator.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="CodeStatement.h" />
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="EvalExpression.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionType.h" />
+    <ClInclude Include="FunctionBody.h" />
+    <ClInclude Include="FunctionExpression.h" />
+    <ClInclude Include="FunctionInvocationExpression.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="GlobalClass.h" />
     <ClInclude Include="GlobalFunction.h" />
+    <ClInclude Include="GlobalFunctionExpression.h" />
     <ClInclude Include="GlobalOverride.h" />
     <ClInclude Include="GlobalVariable.h" />
     <ClInclude Include="IScope.h" />
@@ -134,6 +139,14 @@
     <ClInclude Include="Literal.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="LiteralType.h" />
+    <ClInclude Include="NonNegativeExpression.h" />
+    <ClInclude Include="NonZeroExpression.h" />
+    <ClInclude Include="NumericExpression.h" />
+    <ClInclude Include="NumericLiteral.h" />
+    <ClInclude Include="NumericLiteralType.h" />
+    <ClInclude Include="ObjectConstructorExpression.h" />
+    <ClInclude Include="ObjectLiteral.h" />
+    <ClInclude Include="ObjectSetExpression.h" />
     <ClInclude Include="Operator.h" />
     <ClInclude Include="OperatorRequirement.h" />
     <ClInclude Include="OutputStatement.h" />
@@ -142,13 +155,18 @@
     <ClInclude Include="ProgramOptions.h" />
     <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="RandomUtility.h" />
+    <ClInclude Include="ShallowExpression.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="StatementType.h" />
+    <ClInclude Include="TernaryExpression.h" />
     <ClInclude Include="TokenSelector.h" />
+    <ClInclude Include="TryCatchStatement.h" />
     <ClInclude Include="UnaryExpression.h" />
     <ClInclude Include="UnaryOperator.h" />
     <ClInclude Include="Variable.h" />
     <ClInclude Include="VariableDeclaration.h" />
     <ClInclude Include="VariableExpression.h" />
+    <ClInclude Include="VariableInvocationExpression.h" />
     <ClInclude Include="VariableSelector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -156,8 +174,16 @@
     <ClCompile Include="BinaryExpression.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="EvalExpression.cpp" />
+    <ClCompile Include="FunctionBody.cpp" />
+    <ClCompile Include="FunctionExpression.cpp" />
+    <ClCompile Include="FunctionInvocationExpression.cpp" />
+    <ClCompile Include="GlobalFunctionExpression.cpp" />
     <ClCompile Include="IScope.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NumericExpression.cpp" />
+    <ClCompile Include="ObjectConstructorExpression.cpp" />
+    <ClCompile Include="ObjectLiteral.cpp" />
+    <ClCompile Include="ObjectSetExpression.cpp" />
     <ClCompile Include="Operator.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -165,11 +191,14 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="ProgramFactory.cpp" />
     <ClCompile Include="RandomUtility.cpp" />
+    <ClCompile Include="TernaryExpression.cpp" />
     <ClCompile Include="TokenSelector.cpp" />
+    <ClCompile Include="TryCatchStatement.cpp" />
     <ClCompile Include="UnaryExpression.cpp" />
     <ClCompile Include="Variable.cpp" />
     <ClCompile Include="VariableDeclaration.cpp" />
     <ClCompile Include="VariableExpression.cpp" />
+    <ClCompile Include="VariableInvocationExpression.cpp" />
     <ClCompile Include="VariableSelector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

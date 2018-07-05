@@ -19,14 +19,15 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Enum.h"
+#include "Literal.h"
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
-
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
+class ObjectLiteral : public Literal {
+public:
+	ObjectLiteral();
+	void addProperty(Expression*);
+protected:
+	virtual void writeTo(std::ostream& os) const;
+private:
+	List<Expression*> properties;
 };
+

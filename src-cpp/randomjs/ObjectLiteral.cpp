@@ -17,16 +17,21 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "ObjectLiteral.h"
+#include "ProgramOptions.h"
+#include "Variable.h"
 
-#include "Enum.h"
+ObjectLiteral::ObjectLiteral() {}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
+void ObjectLiteral::addProperty(Expression* expr) {
+	properties.push_back(expr);
+}
 
-	static constexpr EnumType All = String | Numeric | Object;
-};
+void ObjectLiteral::writeTo(std::ostream& os) const {
+	os << "{";
+	for (int i = 0; i < properties.size(); ++i) {
+		os << Variable::getVariableName(i) << ":" << *properties[i] << ",";
+	}
+	os << "}";
+}

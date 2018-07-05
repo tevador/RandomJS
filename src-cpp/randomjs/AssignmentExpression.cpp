@@ -18,6 +18,55 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 #include "AssignmentExpression.h"
+#include "ExpressionType.h"
+#include "OperatorRequirement.h"
+#include "GlobalFunction.h"
 
-AssignmentExpression::AssignmentExpression() {}
+AssignmentExpression::AssignmentExpression(AssignmentOperator& oper, Variable* v) : variable(v), oper(oper) {}
 
+uint32_t AssignmentExpression::getType() {
+	return ExpressionType::AssignmentExpression;
+}
+
+bool AssignmentExpression::isNumeric() {
+	return oper.has(OperatorRequirement::NumericOnly);
+}
+
+void AssignmentExpression::writeTo(std::ostream& os) const {
+	if (!variable->isLoopCounter() && oper.has(OperatorRequirement::StringLengthLimit)) {
+		// ((var += expr), var = __strl(var))
+		os << "((" << *variable << oper << *rhs << "),"
+		   << *variable << AssignmentOperator::Basic << GlobalFunction::STRL.getName()
+		   << "(" << *variable << "))";
+	}
+	else if (variable->isLoopCounter() || !oper.has(OperatorRequirement::NumericOnly)) {
+		os << "(";
+		if (oper.has(OperatorRequirement::Prefix)) {
+			os << oper << variable;
+		}
+		else {
+			os << *variable << oper;
+		}
+		if (!oper.has(OperatorRequirement::WithoutRhs))
+			os << *rhs;
+		os << ")";
+	}
+	else
+	{
+		os << GlobalFunction::CALC.getName() << "(" << *variable << ",()=>(";
+		if (oper.has(OperatorRequirement::WithoutRhs))
+		{
+			if (oper.has(OperatorRequirement::Prefix)) {
+				os << oper << variable;
+			}
+			else {
+				os << *variable << oper;
+			}
+		}
+		else
+		{
+			os << *variable << oper << *rhs;
+		}
+		os << ")," << *defaultValue << ")";
+	}
+}

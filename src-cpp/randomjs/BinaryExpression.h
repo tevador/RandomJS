@@ -24,13 +24,13 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 class BinaryExpression : public Expression {
 public:
-	BinaryExpression(BinaryOperator*, Expression*, Expression*);
+	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
 	virtual bool isNumeric();
 	virtual uint32_t getType();
 protected:
 	void writeTo(std::ostream&) const;
 private:
-	BinaryOperator* oper;
+	BinaryOperator& oper;
 	Expression* lhs;
 	Expression* rhs;
 };

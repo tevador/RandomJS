@@ -21,22 +21,22 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "GlobalFunction.h"
 #include "ExpressionType.h"
 
-BinaryExpression::BinaryExpression(BinaryOperator* oper, Expression* lhs, Expression* rhs) : oper(oper), lhs(lhs), rhs(rhs) {}
+BinaryExpression::BinaryExpression(BinaryOperator& oper, Expression* lhs, Expression* rhs) : oper(oper), lhs(lhs), rhs(rhs) {}
 
 void BinaryExpression::writeTo(std::ostream& os) const {
-	if (oper->has(OperatorRequirement::FunctionCall)) {
-		os << *oper << "(" << *lhs << "," << *rhs << ")";
+	if (oper.has(OperatorRequirement::FunctionCall)) {
+		os << oper << "(" << *lhs << "," << *rhs << ")";
 	}
 	else {
-		if (oper->has(OperatorRequirement::StringLengthLimit)) {
+		if (oper.has(OperatorRequirement::StringLengthLimit)) {
 			os << GlobalFunction::STRL.getName();
 		}
-		os << "(" << *lhs << *oper << *rhs << ")";
+		os << "(" << *lhs << oper << *rhs << ")";
 	}
 }
 
 bool BinaryExpression::isNumeric() {
-	return oper->has(OperatorRequirement::NumericOnly);
+	return oper.has(OperatorRequirement::NumericOnly);
 }
 
 uint32_t BinaryExpression::getType() {

@@ -17,16 +17,16 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "FunctionInvocationExpression.h"
+#include "ExpressionType.h"
 
-#include "Enum.h"
+FunctionInvocationExpression::FunctionInvocationExpression(FunctionExpression* function) : function(function) {
+}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
+uint32_t FunctionInvocationExpression::getType() {
+	return ExpressionType::FunctionInvocationExpression;
+}
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
-};
+void FunctionInvocationExpression::writeExpressionTo(std::ostream& os) const {
+	os << *function;
+}

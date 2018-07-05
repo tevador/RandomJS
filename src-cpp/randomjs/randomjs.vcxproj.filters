@@ -132,11 +132,65 @@
     <ClInclude Include="VariableSelector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TernaryExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
     <ClInclude Include="EvalExpression.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableInvocationExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionInvocationExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSetExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectConstructorExpression.h">
+      <Filter>Header Files\Expressions</Filter>
     </ClInclude>
     <ClInclude Include="AssignmentExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="StatementType.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NumericLiteral.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="TryCatchStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="NumericLiteralType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalFunctionExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLiteral.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionBody.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="NumericExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="NonZeroExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="NonNegativeExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ShallowExpression.h">
+      <Filter>Header Files\Expressions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,11 +245,44 @@
     <ClCompile Include="VariableSelector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TernaryExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
     <ClCompile Include="EvalExpression.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="VariableInvocationExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionInvocationExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSetExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectConstructorExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
     </ClCompile>
     <ClCompile Include="AssignmentExpression.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="TryCatchStatement.cpp">
+      <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalFunctionExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectLiteral.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionBody.cpp">
+      <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="NumericExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

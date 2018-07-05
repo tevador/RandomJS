@@ -30,3 +30,8 @@ const char* Variable::getVariableName(int index) {
 	}
 	return str.c_str();
 }
+
+std::ostream& operator<<(std::ostream& os, const Variable& v) {
+	os << v.getName();
+	return os;
+}

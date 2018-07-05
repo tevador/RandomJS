@@ -20,6 +20,13 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "RandomUtility.h"
 #include "Variable.h"
 
+const std::string RandomUtility::printableChars = "STsqQ$jM`@yZ2wav(794)N,{iGW0[Ot_K/me3.nLHrf]=-!b~g<pcV&k%1o+;YB':h^dCP86}IDE?5*\tA#X\\F\"RzJx\nulU>| ";
+const std::string RandomUtility::hexChars = "5b2de387f419ac60";
+const std::string RandomUtility::decimalChars = "4651320978";
+const std::string RandomUtility::octalChars = "37652014";
+const std::string RandomUtility::binaryChars = "01";
+const std::string RandomUtility::evalChars = "/cb1/|=`+-a2+e84";
+
 template<typename T>
 void RandomUtility::shuffle(RandomGenerator& rand, List<T>& list) {
 	for (auto i = list.size() - 1; i >= 1; --i) {
@@ -39,3 +46,45 @@ T RandomUtility::select(RandomGenerator& rand, List<T>* items) {
 }
 
 template Variable* RandomUtility::select(RandomGenerator&, List<Variable*>*);
+
+void RandomUtility::genString(RandomGenerator& rand, StringBuilder& sb, int length, const std::string& charset, bool canStartWithZero) {
+	if (!canStartWithZero) {
+		char c = '\0';
+		while (length-- > 0 && (c = charset[rand.genInt(charset.length())]) == '0');
+		sb << c;
+	}
+	while (length-- > 0) {
+		sb << charset[rand.genInt(charset.length())];
+	}
+}
+
+const char* RandomUtility::genEvalString(RandomGenerator& rand, int length) {
+	return genStringLiteral(rand, length, evalChars);
+}
+
+const char* RandomUtility::genStringLiteral(RandomGenerator& rand, int length) {
+	return genStringLiteral(rand, length, printableChars);
+}
+
+const char* RandomUtility::genStringLiteral(RandomGenerator& rand, int length, const std::string& charset) {
+	char quote = rand.flipCoin() ? '\'' : '"';
+	StringBuilder* sb = new StringBuilder();
+	*sb << quote;
+	while (length-- > 0) {
+		char c = charset[rand.genInt(charset.length())];
+		if (c == '\n') {
+			*sb << "\\n";
+			continue;
+		}
+		if (c == '\t') {
+			*sb << "\\t";
+			continue;
+		}
+		if (c == quote || c == '\\') {
+			*sb << '\\';
+		}
+		*sb << c;
+	}
+	*sb << quote;
+	return sb->str().data(); //TODO
+}

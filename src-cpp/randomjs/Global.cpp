@@ -23,9 +23,10 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "GlobalClass.h"
 #include "GlobalVariable.h"
 #include "Literal.h"
+#include "NumericLiteral.h"
 #include "AssignmentOperator.h"
 
-Literal Literal::Zero = Literal("0");
+Literal Literal::Zero = NumericLiteral("0");
 
 GlobalVariable GlobalVariable::CSUM = GlobalVariable(__COUNTER__, "__callSum", false, &Literal::Zero);
 GlobalVariable GlobalVariable::STRL = GlobalVariable(__COUNTER__, "__maxStrlen", true);

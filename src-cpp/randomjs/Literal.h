@@ -28,15 +28,16 @@ public:
 	Literal(const char* value) : value(value) {}
 	template<typename T>
 	Literal(T val) {
-		StringBuilder sb;
-		sb << val;
-		value = sb.str().data();
+		StringBuilder* sb = new StringBuilder();
+		*sb << val;
+		value = sb->str().data();
 	}
 	virtual uint32_t getType() {
 		return ExpressionType::Literal;
 	}
 
 protected:
+	Literal() {}
 	virtual void writeTo(std::ostream& os) const {
 		os << value;
 	}

@@ -27,11 +27,20 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "ExpressionType.h"
 #include "VariableSelector.h"
 #include "Literal.h"
+#include "ObjectLiteral.h"
 #include "LiteralType.h"
+#include "StatementType.h"
 #include "AssignmentExpression.h"
 #include "EvalExpression.h"
 #include "UnaryExpression.h"
 #include "BinaryExpression.h"
+#include "TernaryExpression.h"
+#include "VariableInvocationExpression.h"
+#include "FunctionInvocationExpression.h"
+#include "ObjectSetExpression.h"
+#include "FunctionExpression.h"
+#include "ObjectConstructorExpression.h"
+#include "FunctionExpression.h"
 #include <cstdint>
 
 class ProgramFactory
@@ -52,12 +61,24 @@ private:
 	Variable* genVariable(IScope* scope, bool isParameter = false, bool isLoopCounter = false, bool isConstant = false, bool initialize = true);
 	OutputStatement* genOutputStatement(Program* program, Expression* expr);
 	OutputStatement* genOutputStatement(Program* program, IVariable* v);
-	Expression* genExpression(IScope* scope, int maxDepth, uint32_t list = ExpressionType::All);
-	Literal* genLiteral(IScope* scope, int maxDepth, uint32_t list = LiteralType::All);
+	Expression* genExpression(IScope* scope, int maxDepth, EnumType list = ExpressionType::All);
+	Literal* genLiteral(IScope* scope, int maxDepth, EnumType list = LiteralType::All);
 	Literal* genLiteral(IScope* scope);
 	AssignmentExpression* genAssignmentExpression(IScope* scope, Variable* v, int maxDepth);
 	EvalExpression* genEvalExpression(IScope* scope);
 	UnaryExpression* genUnaryExpression(IScope* scope, int maxDepth);
 	BinaryExpression* genBinaryExpression(IScope* scope, int maxDepth);
+	TernaryExpression* genTernaryExpression(IScope* scope, int maxDepth);
+	VariableInvocationExpression* genVariableInvocationExpression(IScope* scope, IVariable* v, int maxDepth);
+	VariableInvocationExpression* genVariableInvocationExpression(VariableInvocationExpression* invk, IScope* scope, int maxDepth);
+	FunctionInvocationExpression* genFunctionInvocationExpression(IScope* scope, int maxDepth);
+	ObjectSetExpression* genObjectSetExpression(IScope* scope, int maxDepth);
+	ObjectConstructorExpression* genObjectConstructorExpression(IScope* scope, int maxDepth);
+	FunctionExpression* genFunctionExpression(IScope* scope);
+	NumericLiteral* genNumericLiteral();
+	NumericLiteral* genNumericLiteral(EnumType type);
+	ObjectLiteral* genObjectLiteral(IScope* scope, int maxDepth);
+
+	Statement* genStatement(IScope* scope, int maxDepth, EnumType list = StatementType::All);
 };
 

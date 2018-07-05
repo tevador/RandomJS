@@ -17,16 +17,12 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "NumericExpression.h"
 
-#include "Enum.h"
+NumericExpression::NumericExpression(IScope* scope, Expression* value, NumericLiteral* fallback)
+	: GlobalFunctionExpression(scope, GlobalFunction::NUMB, value), fallback(fallback) {}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
-};
+void NumericExpression::writeTo(std::ostream& os) const {
+	os << func.getName() << "(" << *value << "," << *fallback << ")";
+}

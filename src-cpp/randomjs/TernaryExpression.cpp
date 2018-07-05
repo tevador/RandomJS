@@ -17,16 +17,21 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "TernaryExpression.h"
+#include "ExpressionType.h"
 
-#include "Enum.h"
+TernaryExpression::TernaryExpression(Expression* condition, Expression* trueExpr, Expression* falseExpr) : condition(condition), trueExpr(trueExpr), falseExpr(falseExpr)
+{
+}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
+bool TernaryExpression::isNumeric() {
+	return trueExpr->isNumeric() && falseExpr->isNumeric();
+}
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
+uint32_t TernaryExpression::getType() {
+	return ExpressionType::TernaryExpression;
+}
 
-	static constexpr EnumType All = String | Numeric | Object;
-};
+void TernaryExpression::writeTo(std::ostream& os) const {
+	os << *condition << "?" << *trueExpr << ":" << *falseExpr;
+}

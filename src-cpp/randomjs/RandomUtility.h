@@ -25,18 +25,18 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 class RandomUtility
 {
 public:
-	static const char* printableChars;
-	static const char* hexChars;
-	static const char* decimalChars;
-	static const char* octalChars;
-	static const char* binaryChars;
-	static const char* evalChars;
+	static const std::string printableChars;
+	static const std::string hexChars;
+	static const std::string decimalChars;
+	static const std::string octalChars;
+	static const std::string binaryChars;
+	static const std::string evalChars;
 
 	template<typename T>
 	static void shuffle(RandomGenerator& rand, List<T>& list);
 	static const char* genEvalString(RandomGenerator& rand, int length);
-	static const char* genString(RandomGenerator& rand, StringBuilder& sb, int length, const char* charset, bool canStartWithZero = true);
-	static const char* genStringLiteral(RandomGenerator& rand, int length, const char* charset);
+	static void genString(RandomGenerator& rand, StringBuilder& sb, int length, const std::string& charset, bool canStartWithZero = true);
+	static const char* genStringLiteral(RandomGenerator& rand, int length, const std::string& charset);
 	static const char* genStringLiteral(RandomGenerator& rand, int length);
 	template<typename T>
 	static T select(RandomGenerator& rand, List<T>* items);

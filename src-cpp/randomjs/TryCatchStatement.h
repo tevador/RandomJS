@@ -19,14 +19,12 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Enum.h"
+#include "Statement.h"
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
-
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
+class TryCatchStatement : public Statement {
+public:
+	TryCatchStatement();
+protected:
+	virtual void writeTo(std::ostream&) const;
 };
+

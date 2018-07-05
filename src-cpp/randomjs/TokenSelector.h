@@ -19,12 +19,9 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <cstdint>
+#include "Enum.h"
 #include "RandomGenerator.h"
 #include "ProgramOptions.h"
-#include "LiteralType.h"
-#include "ExpressionType.h"
-#include "AssignmentOperator.h"															
 
 template<typename T>
 class OperatorSelector {
@@ -37,5 +34,5 @@ protected:
 template<typename T>
 class EnumSelector {
 public:
-	static TableType select(RandomGenerator&, uint32_t);
+	static EnumType select(RandomGenerator&, EnumType);
 };

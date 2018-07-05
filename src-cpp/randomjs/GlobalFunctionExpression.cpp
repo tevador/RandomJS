@@ -17,16 +17,12 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "GlobalFunctionExpression.h"
 
-#include "Enum.h"
+GlobalFunctionExpression::GlobalFunctionExpression(IScope* scope, GlobalFunction& func, Expression* value) : func(func), value(value) {
+	scope->require(&func);
+}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
-
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
-};
+void GlobalFunctionExpression::writeTo(std::ostream& os) const {
+	os << func.getName() << "(" << *value << ")";
+}

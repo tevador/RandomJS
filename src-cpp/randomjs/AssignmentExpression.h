@@ -22,19 +22,26 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "Expression.h"
 #include "AssignmentOperator.h"
 #include "Variable.h"
+#include "NumericLiteral.h"
 
 class AssignmentExpression : public Expression
 {
 public:
-	AssignmentExpression();
+	AssignmentExpression(AssignmentOperator&, Variable*);
 	virtual bool isNumeric();
 	virtual uint32_t getType();
+	void setDefaultValue(NumericLiteral* value) {
+		defaultValue = value;
+	}
+	void setRightHandSide(Expression* expr) {
+		rhs = expr;
+	}
 protected:
 	void writeTo(std::ostream&) const;
 private:
+	AssignmentOperator & oper;
 	Variable* variable;
-	AssignmentOperator* oper;
-	
+	NumericLiteral* defaultValue;
 	Expression* rhs;
 };
 

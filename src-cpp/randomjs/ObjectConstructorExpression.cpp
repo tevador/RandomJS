@@ -17,16 +17,18 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "ObjectConstructorExpression.h"
+#include "ExpressionType.h"
+#include "GlobalFunction.h"
 
-#include "Enum.h"
+ObjectConstructorExpression::ObjectConstructorExpression(Expression* constructor) : constructor(constructor) {
+	setInvokeFunction(&GlobalFunction::OBJC);
+}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
+uint32_t ObjectConstructorExpression::getType() {
+	return ExpressionType::ObjectConstructorExpression;
+}
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
-};
+void ObjectConstructorExpression::writeExpressionTo(std::ostream& os) const {
+	os << *constructor;
+}

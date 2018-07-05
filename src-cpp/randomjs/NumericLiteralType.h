@@ -21,12 +21,15 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "Enum.h"
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
+struct NumericLiteralType {
+	static constexpr EnumType Boolean = 0;
+	static constexpr EnumType SmallInteger = 1;
+	static constexpr EnumType BinaryInteger = 2;
+	static constexpr EnumType DecimalInteger = 3;
+	static constexpr EnumType OctalInteger = 4;
+	static constexpr EnumType HexInteger = 5;
+	static constexpr EnumType FixedFloat = 6;
+	static constexpr EnumType ExpFloat = 7;
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
+	static constexpr EnumType Count = 8;
 };

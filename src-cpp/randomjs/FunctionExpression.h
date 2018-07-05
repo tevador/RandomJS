@@ -19,14 +19,27 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Enum.h"
+#include "Expression.h"
+#include "IScope.h"
+#include "FunctionBody.h"
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
-
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
+class FunctionExpression : public Expression, public IScope
+{
+public:
+	FunctionExpression(IScope*);
+	virtual uint32_t getType();
+	void setBody(FunctionBody* body) {
+		this->body = body;
+	}
+	void setDefaultReturnValue(Expression* expr) {
+		defaultReturnValue = expr;
+	}
+	void addParameter(Variable*);
+protected:
+	virtual void writeTo(std::ostream& os) const;
+private:
+	List<Variable*> parameters;
+	Expression* defaultReturnValue;
+	FunctionBody* body;
 };
+

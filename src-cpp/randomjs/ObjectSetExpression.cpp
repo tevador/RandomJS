@@ -17,16 +17,16 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "ObjectSetExpression.h"
+#include "GlobalFunction.h"
+#include "ExpressionType.h"
 
-#include "Enum.h"
+ObjectSetExpression::ObjectSetExpression(Expression* target, const char* property, Expression* value) : target(target), property(property), value(value) {}
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
+void ObjectSetExpression::writeTo(std::ostream& os) const {
+	os << GlobalFunction::OBJS.getName() << "(" << *target << ",'" << property << "'," << *value << ")";
+}
 
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
-};
+uint32_t ObjectSetExpression::getType() {
+	return ExpressionType::ObjectSetExpression;
+}

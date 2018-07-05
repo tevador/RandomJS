@@ -20,19 +20,19 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "UnaryExpression.h"
 #include "ExpressionType.h"
 
-UnaryExpression::UnaryExpression(UnaryOperator* oper, Expression* expr) : oper(oper), expr(expr) {}
+UnaryExpression::UnaryExpression(UnaryOperator& oper, Expression* expr) : oper(oper), expr(expr) {}
 
 
 bool UnaryExpression::isNumeric() {
-	return oper->has(OperatorRequirement::NumericOnly);
+	return oper.has(OperatorRequirement::NumericOnly);
 }
 
 void UnaryExpression::writeTo(std::ostream& os) const {
-	if (oper->has(OperatorRequirement::FunctionCall)) {
-		os << *oper << "(" << *expr << ")";
+	if (oper.has(OperatorRequirement::FunctionCall)) {
+		os << oper << "(" << *expr << ")";
 	}
 	else {
-		os << "(" << *oper << *expr << ")";
+		os << "(" << oper << *expr << ")";
 	}
 }
 

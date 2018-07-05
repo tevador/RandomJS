@@ -17,31 +17,30 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "FunctionExpression.h"
+#include "ExpressionType.h"
+#include "ProgramOptions.h"
 
-#include "Expression.h"
-#include "Memory.h"
+FunctionExpression::FunctionExpression(IScope* parent) : IScope(parent) {
+	parameters.reserve(ProgramOptions::FunctionParametersCountMax);
+}
 
-class IVariable : public AllocatorBase {
-public:
-	const char* getName() const {
-		return name;
-	};
-	bool isConstant() const {
-		return constant;
-	}
-	Expression* getInitializer() const {
-		return initializer;
-	}
-	void setInitializer(Expression* expr) {
-		initializer = expr;
-	}
-	
-protected:
-	IVariable(const char* name, bool constant, Expression* initializer) : name(name), constant(constant), initializer(initializer) {}
+uint32_t FunctionExpression::getType() {
+	return ExpressionType::FunctionExpression;
+}
 
-private:
-	const char* name;
-	Expression* initializer;
-	bool constant;
-};
+void FunctionExpression::writeTo(std::ostream& os) const {
+	os << "function (";
+	for (auto it = parameters.begin(); it != parameters.end(); ++it) {
+		os << (*it)->getName();
+		if (std::next(it) != parameters.end())
+			os << ",";
+	}
+	os << ")";
+	os << *body;
+}
+
+void FunctionExpression::addParameter(Variable* v) {
+	parameters.push_back(v);
+	declareVariable(v);
+}

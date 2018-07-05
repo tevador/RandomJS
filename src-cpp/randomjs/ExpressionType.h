@@ -19,26 +19,26 @@ along with RandomJS.  If not; see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <cstdint>
+#include "Enum.h"
 
 struct ExpressionType {
-	static constexpr uint32_t Literal = 1 << 0;
-	static constexpr uint32_t AssignmentExpression = 1 << 1;
-	static constexpr uint32_t VariableInvocationExpression = 1 << 2;
-	static constexpr uint32_t FunctionInvocationExpression = 1 << 3;
-	static constexpr uint32_t FunctionExpression = 1 << 4;
-	static constexpr uint32_t UnaryExpression = 1 << 5;
-	static constexpr uint32_t BinaryExpression = 1 << 6;
-	static constexpr uint32_t TernaryExpression = 1 << 7;
-	static constexpr uint32_t EvalExpression = 1 << 8;
-	static constexpr uint32_t VariableExpression = 1 << 9;
-	static constexpr uint32_t ObjectConstructorExpression = 1 << 10;
-	static constexpr uint32_t ObjectSetExpression = 1 << 11;
+	static constexpr EnumType Literal = 1 << 0;
+	static constexpr EnumType AssignmentExpression = 1 << 1;
+	static constexpr EnumType VariableInvocationExpression = 1 << 2;
+	static constexpr EnumType FunctionInvocationExpression = 1 << 3;
+	static constexpr EnumType FunctionExpression = 1 << 4;
+	static constexpr EnumType UnaryExpression = 1 << 5;
+	static constexpr EnumType BinaryExpression = 1 << 6;
+	static constexpr EnumType TernaryExpression = 1 << 7;
+	static constexpr EnumType EvalExpression = 1 << 8;
+	static constexpr EnumType VariableExpression = 1 << 9;
+	static constexpr EnumType ObjectConstructorExpression = 1 << 10;
+	static constexpr EnumType ObjectSetExpression = 1 << 11;
 
-	static constexpr uint32_t None = 0;
-	static constexpr uint32_t All = ~None;
-	static constexpr uint32_t Function = FunctionExpression | FunctionInvocationExpression;
-	static constexpr uint32_t NoVariable = Literal | FunctionInvocationExpression | FunctionExpression | EvalExpression | ObjectConstructorExpression;
-	static constexpr uint32_t NoCall = Literal | AssignmentExpression | UnaryExpression | BinaryExpression | TernaryExpression | VariableExpression | ObjectSetExpression;
-	static constexpr uint32_t Flat = Literal | VariableExpression | EvalExpression;
+	static constexpr EnumType None = 0;
+	static constexpr EnumType All = ~None;
+	static constexpr EnumType Function = FunctionExpression | FunctionInvocationExpression;
+	static constexpr EnumType NoVariable = Literal | FunctionInvocationExpression | FunctionExpression | EvalExpression | ObjectConstructorExpression;
+	static constexpr EnumType NoCall = Literal | AssignmentExpression | UnaryExpression | BinaryExpression | TernaryExpression | VariableExpression | ObjectSetExpression;
+	static constexpr EnumType Flat = Literal | VariableExpression | EvalExpression;
 };

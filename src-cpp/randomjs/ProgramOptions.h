@@ -120,11 +120,16 @@ struct ProgramOptions {
 		static constexpr TableType Greater = 2;
 		static constexpr TableType Equal = 2;
 		static constexpr TableType NotEqual = 2;
+		static constexpr TableType And = 0;
+		static constexpr TableType Or = 0;
 		static constexpr TableType Min = 1;
 		static constexpr TableType Max = 1;
 		static constexpr TableType BitAnd = 1;
 		static constexpr TableType BitOr = 1;
 		static constexpr TableType Xor = 1;
+		static constexpr TableType ShLeft = 0;
+		static constexpr TableType ShRight = 0;
+		static constexpr TableType UnShRight = 0;
 	};
 
 	struct Literals {

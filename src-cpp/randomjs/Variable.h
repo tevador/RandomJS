@@ -42,3 +42,5 @@ private:
 	IScope* parent;
 	bool loopCounter;
 };
+
+std::ostream& operator<<(std::ostream& os, const Variable& v);

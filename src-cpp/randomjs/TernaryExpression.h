@@ -19,14 +19,19 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Enum.h"
+#include "Expression.h"
 
-struct LiteralType {
-	static constexpr EnumType None = 0;
-
-	static constexpr EnumType Numeric = 1 << 0;
-	static constexpr EnumType Object = 1 << 1;
-	static constexpr EnumType String = 1 << 2;
-
-	static constexpr EnumType All = String | Numeric | Object;
+class TernaryExpression : public Expression
+{
+public:
+	TernaryExpression(Expression*, Expression*, Expression*);
+	virtual bool isNumeric();
+	virtual uint32_t getType();
+protected:
+	virtual void writeTo(std::ostream& os) const;
+private:
+	Expression* condition;
+	Expression* trueExpr;
+	Expression* falseExpr;
 };
+
