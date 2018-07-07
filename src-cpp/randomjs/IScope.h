@@ -53,7 +53,11 @@ public:
 	}
 
 	uint32_t getVariableCounter() {
-		return variables.size();
+		return variableCounter;
+	}
+
+	void incrementCounter() {
+		variableCounter++;
 	}
 
 	void declareVariable(Variable* variable) {
@@ -66,6 +70,7 @@ protected:
 	IScope(IScope* parent = nullptr);
 
 private:
+	uint32_t variableCounter;
 	IScope* parent;
 	List<Variable*> variables;
 };

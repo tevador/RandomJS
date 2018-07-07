@@ -19,9 +19,10 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "IScope.h"
 
-IScope::IScope(IScope* parent) : parent(parent), functionDepth(0) {
+IScope::IScope(IScope* parent) : functionDepth(0), parent(parent) {
 	if (parent != nullptr) {
 		variables.insert(variables.begin(), parent->begin(), parent->end());
+		variableCounter = parent->variableCounter;
 		functionDepth = parent->functionDepth;
 	}
 }

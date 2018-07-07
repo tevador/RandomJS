@@ -59,16 +59,13 @@ Program* ProgramFactory::genProgram(void* seed) {
 		p->require(&GlobalVariable::CYCL);
 	}
 	int32_t globalsCount = genValueFromInterval(ProgramOptions::GlobalVariablesCountMin, ProgramOptions::GlobalVariablesCountMax);
-	while (p->getVariableCounter() < globalsCount)
-	{
+	while (p->getVariableCounter() < globalsCount) {
 		Variable* v = genVariable(p);
-		p->declareVariable(v);
 		p->addStatement(v->getDeclaration());
 	}
 	List<Variable*> printOrder(p->begin(), p->end());
 	RandomUtility::shuffle(rand, printOrder);
-	for(Variable* v : printOrder)
-	{
+	for (Variable* v : printOrder) {
 		p->addStatement(genOutputStatement(p, v));
 	}
 	if (p->isDefined(&GlobalVariable::ESUM))
@@ -88,14 +85,15 @@ int32_t ProgramFactory::genValueFromInterval(int32_t min, int32_t max) {
 }
 
 Variable* ProgramFactory::genVariable(IScope* scope, bool isParameter, bool isLoopCounter, bool isConstant, bool initialize) {
+	auto name = Variable::getVariableName(scope->getVariableCounter());
+	scope->incrementCounter();
+	isConstant = isConstant || (!isParameter && !isLoopCounter && rand.flipCoin(ProgramOptions::ConstVariableChance));
 	Expression* init = nullptr;
 	if (initialize && !isParameter && !isLoopCounter) {
 		init = genExpression(scope, ProgramOptions::VariableInitializerDepth);
 		isConstant = isConstant || (ProgramOptions::FunctionsAreConstants && init->getType() == ExpressionType::FunctionExpression);
 	}
-	auto name = Variable::getVariableName(scope->getVariableCounter());
-	bool constant = isConstant || (!isParameter && !isLoopCounter && rand.flipCoin(ProgramOptions::ConstVariableChance));
-	Variable* v = new Variable(scope, name, constant, isLoopCounter, init);
+	Variable* v = new Variable(scope, name, isConstant, isLoopCounter, init);
 	scope->declareVariable(v);
 	return v;
 }
