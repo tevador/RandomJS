@@ -41,6 +41,9 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "FunctionExpression.h"
 #include "ObjectConstructorExpression.h"
 #include "FunctionExpression.h"
+#include "IfElseStatement.h"
+#include "ThrowStatement.h"
+#include "ForLoopStatement.h"
 #include <cstdint>
 
 class ProgramFactory
@@ -56,6 +59,7 @@ private:
 	static CodeStatement incrementCallSum;
 	static CodeStatement incrementCallSumDepth;
 	static CodeStatement loopCyclesCheck;
+	static CodeStatement catchReturn;
 
 	int32_t genValueFromInterval(int32_t, int32_t);
 	Variable* genVariable(IScope* scope, bool isParameter = false, bool isLoopCounter = false, bool isConstant = false, bool initialize = true);
@@ -78,7 +82,13 @@ private:
 	NumericLiteral* genNumericLiteral();
 	NumericLiteral* genNumericLiteral(EnumType type);
 	ObjectLiteral* genObjectLiteral(IScope* scope, int maxDepth);
-
+	FunctionBody* genFunctionBody(FunctionExpression* parent);
+	Expression* genSafeReturnExpression(IScope* scope);
 	Statement* genStatement(IScope* scope, int maxDepth, EnumType list = StatementType::All);
+	Block* genBlock(Block* block, int minStatements, int maxStatements, int maxDepth, EnumType list = StatementType::All);
+	Block* genBlock(IScope* scope, int maxDepth);
+	IfElseStatement* genIfElseStatement(IScope* scope, int maxDepth);
+	ThrowStatement* genThrowStatement(IScope* scope);
+	ForLoopStatement* genForLoopStatement(IScope* scope, int maxDepth);
 };
 

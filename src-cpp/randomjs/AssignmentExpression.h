@@ -39,7 +39,7 @@ public:
 protected:
 	void writeTo(std::ostream&) const;
 private:
-	AssignmentOperator & oper;
+	const AssignmentOperator& oper;
 	Variable* variable;
 	NumericLiteral* defaultValue;
 	Expression* rhs;

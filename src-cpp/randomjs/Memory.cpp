@@ -30,7 +30,7 @@ LinearAllocator::~LinearAllocator() {
 	delete[] bufferStart;
 }
 
-void* LinearAllocator::allocate(size_t numBytes) throw(OutOfMemoryException) {
+void* LinearAllocator::allocate(size_t numBytes) {
 	char* ptr = bufferHead;
 	bufferHead += numBytes;
 	if (bufferHead > bufferStart + size) {

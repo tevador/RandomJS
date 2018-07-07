@@ -19,6 +19,14 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "TryCatchStatement.h"
 
-TryCatchStatement::TryCatchStatement()
-{
+TryCatchStatement::TryCatchStatement() {}
+
+const char* TryCatchStatement::ErrorIdentifier = "__error";
+
+void TryCatchStatement::writeTo(std::ostream& os) const {
+	os << "try" << *tryBody;
+	if (catchStatement != nullptr) {
+		os << "catch(" << ErrorIdentifier << "){" << *catchStatement << "}";
+	}
+	os << "finally{" << *finallyStatement << "}";
 }

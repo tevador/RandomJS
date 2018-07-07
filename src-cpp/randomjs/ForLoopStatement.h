@@ -19,18 +19,28 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+#include "LoopStatement.h"
+#include "Variable.h"
 
-class BinaryExpression : public Expression {
+class ForLoopStatement : public LoopStatement {
 public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
+	ForLoopStatement(IScope*);
+	void setCounter(Variable* var) {
+		counter = var;
+	}
+	void setBody(Statement* stmt) {
+		body = stmt;
+	}
+	void setIterator(Expression* expr) {
+		iterator = expr;
+	}
+
 protected:
-	void writeTo(std::ostream&) const;
+	void writeTo(std::ostream& os) const override;
+
 private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
+	Variable* counter;
+	Expression* iterator;
+	Statement* body;
 };
+

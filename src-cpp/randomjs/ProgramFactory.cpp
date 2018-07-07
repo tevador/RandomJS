@@ -29,12 +29,19 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "NonNegativeExpression.h"
 #include "NumericLiteralType.h"
 #include "ShallowExpression.h"
+#include "ReturnStatement.h"
+#include "NonEmptyExpression.h"
+#include "EmptyStatement.h"
+#include "BreakStatement.h"
+#include "ExpressionStatement.h"
+#include "GlobalClass.h"
 
 //TODO
 CodeStatement ProgramFactory::callDepthCheck = CodeStatement("if(++__depth>__maxDepth)");
 CodeStatement ProgramFactory::incrementCallSum = CodeStatement("__callSum++;");
 CodeStatement ProgramFactory::incrementCallSumDepth = CodeStatement("__callSum+=__depth--;");
 CodeStatement ProgramFactory::loopCyclesCheck = CodeStatement("(__cycles++<__maxCycles)");
+CodeStatement ProgramFactory::catchReturn = CodeStatement("return __error;");
 
 ProgramFactory::ProgramFactory(RandomGenerator& rand) : rand(rand) {}
 
@@ -82,8 +89,7 @@ int32_t ProgramFactory::genValueFromInterval(int32_t min, int32_t max) {
 
 Variable* ProgramFactory::genVariable(IScope* scope, bool isParameter, bool isLoopCounter, bool isConstant, bool initialize) {
 	Expression* init = nullptr;
-	if (initialize && !isParameter && !isLoopCounter)
-	{
+	if (initialize && !isParameter && !isLoopCounter) {
 		init = genExpression(scope, ProgramOptions::VariableInitializerDepth);
 		isConstant = isConstant || (ProgramOptions::FunctionsAreConstants && init->getType() == ExpressionType::FunctionExpression);
 	}
@@ -190,7 +196,7 @@ Literal* ProgramFactory::genLiteral(IScope* scope) {
 }
 
 AssignmentExpression* ProgramFactory::genAssignmentExpression(IScope* scope, Variable* v, int maxDepth) {
-	auto oper = OperatorSelector<AssignmentOperator>::select(rand);
+	auto& oper = OperatorSelector<AssignmentOperator, ProgramOptions::AssignmentOperators>::select(rand);
 	AssignmentExpression* ae = new AssignmentExpression(oper, v);
 	if (oper.has(OperatorRequirement::NumericOnly)) {
 		scope->require(&GlobalFunction::CALC);
@@ -217,7 +223,7 @@ EvalExpression* ProgramFactory::genEvalExpression(IScope* scope) {
 }
 
 UnaryExpression* ProgramFactory::genUnaryExpression(IScope* scope, int maxDepth) {
-	auto op = OperatorSelector<UnaryOperator>::select(rand);
+	auto& op = OperatorSelector<UnaryOperator, ProgramOptions::UnaryOperators>::select(rand);
 	auto expr = genExpression(scope, maxDepth);
 	if (op.has(OperatorRequirement::NumericOnly) && !expr->isNumeric()) {
 		expr = new NumericExpression(scope, expr, genNumericLiteral());
@@ -232,7 +238,7 @@ UnaryExpression* ProgramFactory::genUnaryExpression(IScope* scope, int maxDepth)
 }
 
 BinaryExpression* ProgramFactory::genBinaryExpression(IScope* scope, int maxDepth) {
-	auto op = OperatorSelector<BinaryOperator>::select(rand);
+	auto& op = OperatorSelector<BinaryOperator, ProgramOptions::BinaryOperators>::select(rand);
 	auto lhs = genExpression(scope, maxDepth);
 	auto rhs = genExpression(scope, maxDepth);
 	if (op.has(OperatorRequirement::StringLengthLimit)) {
@@ -315,60 +321,61 @@ NumericLiteral* ProgramFactory::genNumericLiteral() {
 }
 
 NumericLiteral* ProgramFactory::genNumericLiteral(EnumType type) {
-	StringBuilder* sb = new StringBuilder(); //TODO reseve 37
+	String* str = new String();
+	str->reserve(37);
 	bool negative = false;
 	if (type != NumericLiteralType::Boolean && rand.flipCoin()) {
-		*sb << "(-";
+		str->append("(-");
 		negative = true;
 	}
 	switch (type) {
 		case NumericLiteralType::Boolean:
 			if (rand.flipCoin())
-				*sb << "true";
+				str->append("true");
 			else
-				*sb << "false";
+				str->append("false");
 			break;
 
 		case NumericLiteralType::SmallInteger:
-			RandomUtility::genString(rand, *sb, 2, RandomUtility::decimalChars, false);
+			RandomUtility::genString(rand, str, 2, RandomUtility::decimalChars, false);
 			break;
 
 		case NumericLiteralType::BinaryInteger:
-			*sb << "0b";
-			RandomUtility::genString(rand, *sb, 32, RandomUtility::binaryChars);
+			str->append("0b");
+			RandomUtility::genString(rand, str, 32, RandomUtility::binaryChars);
 			break;
 
 		case NumericLiteralType::DecimalInteger:
-			RandomUtility::genString(rand, *sb, 9, RandomUtility::decimalChars, false);
+			RandomUtility::genString(rand, str, 9, RandomUtility::decimalChars, false);
 			break;
 
 		case NumericLiteralType::OctalInteger:
-			*sb << "0o";
-			RandomUtility::genString(rand, *sb, 10, RandomUtility::octalChars);
+			str->append("0o");
+			RandomUtility::genString(rand, str, 10, RandomUtility::octalChars);
 			break;
 
 		case NumericLiteralType::HexInteger:
-			*sb << "0x";
-			RandomUtility::genString(rand, *sb, 8, RandomUtility::hexChars);
+			str->append("0x");
+			RandomUtility::genString(rand, str, 8, RandomUtility::hexChars);
 			break;
 
 		case NumericLiteralType::FixedFloat:
-			RandomUtility::genString(rand, *sb, 5, RandomUtility::decimalChars, false);
-			*sb << '.';
-			RandomUtility::genString(rand, *sb, 5, RandomUtility::decimalChars);
+			RandomUtility::genString(rand, str, 5, RandomUtility::decimalChars, false);
+			str->push_back('.');
+			RandomUtility::genString(rand, str, 5, RandomUtility::decimalChars);
 			break;
 
 		case NumericLiteralType::ExpFloat:
-			*sb << RandomUtility::decimalChars[rand.genInt(10)];
-			*sb << '.';
-			RandomUtility::genString(rand, *sb, 5, RandomUtility::decimalChars);
-			*sb << 'e';
-			if (rand.flipCoin()) *sb << '-';
-			RandomUtility::genString(rand, *sb, 2, RandomUtility::decimalChars);
+			str->push_back(RandomUtility::decimalChars[rand.genInt(10)]);
+			str->push_back('.');
+			RandomUtility::genString(rand, str, 5, RandomUtility::decimalChars);
+			str->push_back('e');
+			if (rand.flipCoin()) str->push_back('-');
+			RandomUtility::genString(rand, str, 2, RandomUtility::decimalChars);
 			break;
 	}
-	if (negative) *sb << ")";
-	return new NumericLiteral(sb->str().data());
+	if (negative) str->push_back(')');
+	return new NumericLiteral(str->data());
 }
 
 ObjectLiteral* ProgramFactory::genObjectLiteral(IScope* scope, int maxDepth) {
@@ -386,4 +393,181 @@ ObjectLiteral* ProgramFactory::genObjectLiteral(IScope* scope, int maxDepth) {
 		}
 	}
 	return ol;
+}
+
+FunctionBody* ProgramFactory::genFunctionBody(FunctionExpression* parent) {
+	parent->require(&GlobalVariable::CSUM);
+	auto tryBody = new Block(parent);
+	auto funcBody = new FunctionBody();
+	funcBody->setTry(tryBody);
+	if (ProgramOptions::EnableCallDepthProtection) {
+		tryBody->addStatement(&callDepthCheck);
+		tryBody->addStatement(new ReturnStatement(genSafeReturnExpression(parent)));
+		funcBody->setFinally(&incrementCallSumDepth);
+	}
+	else {
+		funcBody->setFinally(&incrementCallSum);
+	}
+	if (rand.flipCoin(ProgramOptions::CatchChance)) {
+		funcBody->setCatch(&catchReturn);
+	}
+	else {
+		funcBody->setCatch(nullptr);
+	}
+	auto that = genVariable(tryBody, false, false, true, false);
+	that->setInitializer(new VariableExpression(&Variable::This));
+	tryBody->addStatement(that->getDeclaration());
+	int localVariablesCount = genValueFromInterval(ProgramOptions::LocalVariablesCountMin, ProgramOptions::LocalVariablesCountMax);
+	while (localVariablesCount-- > 0) {
+		auto v = genVariable(tryBody);
+		tryBody->addStatement(v->getDeclaration());
+	}
+	genBlock(tryBody, ProgramOptions::FunctionStatementsMin, ProgramOptions::FunctionStatementsMax, ProgramOptions::MaxStatementDepth, StatementType::All & ~StatementType::Terminating);
+	if (tryBody->getStatementCount() == 0 || !tryBody->getLastStatement()->isTerminating()) {
+		tryBody->addStatement(new ReturnStatement(genExpression(tryBody, ProgramOptions::MaxExpressionDepth)));
+	}
+	return funcBody;
+}
+
+FunctionExpression* ProgramFactory::genFunctionExpression(IScope* scope) {
+	scope->require(&GlobalOverride::FTST);
+	if (ProgramOptions::FunctionValueOfOverride)
+		scope->require(&GlobalOverride::FVOF);
+	auto func = new FunctionExpression(scope);
+	int paramCount = genValueFromInterval(ProgramOptions::FunctionParametersCountMin, ProgramOptions::FunctionParametersCountMax);
+	for (int i = 0; i < paramCount; ++i) {
+		func->addParameter(genVariable(func, true));
+	}
+	func->setBody(genFunctionBody(func));
+	return func;
+}
+
+Expression* ProgramFactory::genSafeReturnExpression(IScope* scope) {
+	auto expr = genExpression(scope, 0, ExpressionType::VariableExpression | ExpressionType::Literal);
+	if (expr->getType() != ExpressionType::Literal) {
+		expr = new NonEmptyExpression(expr, genLiteral(scope));
+	}
+	return expr;
+}
+
+Block* ProgramFactory::genBlock(Block* block, int minStatements, int maxStatements, int maxDepth, EnumType list) {
+	list &= ~StatementType::BlockStatement;
+	int statementsCount = genValueFromInterval(minStatements, maxStatements);
+	while (statementsCount-- > 0) {
+		auto stmt = genStatement(block, maxDepth, list);
+		block->addStatement(stmt);
+		if (stmt->isTerminating())
+			break;
+	}
+	return block;
+}
+
+Block* ProgramFactory::genBlock(IScope* scope, int maxDepth) {
+	auto block = new Block(scope);
+	return genBlock(block, ProgramOptions::BlockStatementsMin, ProgramOptions::BlockStatementsMax, maxDepth);
+}
+
+Statement* ProgramFactory::genStatement(IScope* scope, int maxDepth, EnumType list) {
+	if (maxDepth <= 0) {
+		list &= StatementType::Flat;
+	}
+	if (scope->getVariableCounter() == 0) {
+		list &= ~StatementType::AssignmentStatement;
+	}
+	if (!scope->hasBreak()) {
+		list &= ~StatementType::BreakStatement;
+	}
+	else if (!ProgramOptions::AllowFunctionInvocationInLoop) {
+		list &= StatementType::NoCall;
+	}
+	if (scope->getFunctionDepth() == 0) {
+		list &= ~StatementType::ReturnStatement;
+	}
+
+	auto type = EnumSelector<StatementType>::select(rand, list);
+	Variable* v;
+	switch (type)
+	{
+		case StatementType::AssignmentStatement:
+			if ((v = variableSelector.selectVariable(rand, scope, true)) != nullptr) {
+				return new ExpressionStatement(genAssignmentExpression(scope, v, ProgramOptions::MaxExpressionDepth));
+			}
+			break;
+
+		case StatementType::BreakStatement:
+			return new BreakStatement();
+
+		case StatementType::ObjectSetStatement:
+			return new ExpressionStatement(genObjectSetExpression(scope, ProgramOptions::MaxExpressionDepth));
+
+		case StatementType::ReturnStatement:
+			return new ReturnStatement(genExpression(scope, ProgramOptions::MaxExpressionDepth));
+
+		case StatementType::IfElseStatement:
+			return genIfElseStatement(scope, maxDepth - 1);
+
+		case StatementType::VariableInvocationStatement:
+			if ((v = variableSelector.selectVariable(rand, scope)) != nullptr) {
+				auto expr = genVariableInvocationExpression(scope, v, ProgramOptions::MaxExpressionDepth);
+				return new ExpressionStatement(expr);
+			}
+			break;
+
+		case StatementType::BlockStatement:
+			return genBlock(scope, maxDepth - 1);
+
+		case StatementType::ForLoopStatement:
+			return genForLoopStatement(scope, maxDepth - 1);
+
+		case StatementType::ThrowStatement:
+			return genThrowStatement(scope);
+	}
+	return new EmptyStatement();
+}
+
+IfElseStatement* ProgramFactory::genIfElseStatement(IScope* scope, int maxDepth) {
+	auto condition = genExpression(scope, ProgramOptions::MaxExpressionDepth, ExpressionType::All & ~ExpressionType::Literal);
+	auto body = genStatement(scope, maxDepth);
+	Statement* elseBody = nullptr;
+	if (rand.flipCoin(ProgramOptions::ElseChance)) {
+		elseBody = genStatement(scope,  maxDepth);
+	}
+	return new IfElseStatement(condition, body, elseBody);
+}
+
+ThrowStatement* ProgramFactory::genThrowStatement(IScope* scope) {
+	scope->require(&GlobalClass::RERR);
+	auto value = genExpression(scope, ProgramOptions::ThrowExpressionDepth);
+	return new ThrowStatement(value);
+}
+
+ForLoopStatement* ProgramFactory::genForLoopStatement(IScope* scope, int maxDepth) {
+	auto fl = new ForLoopStatement(scope);
+	auto i = genVariable(fl, false, true);
+	i->setInitializer(genNumericLiteral(NumericLiteralType::SmallInteger));
+	fl->setCounter(i);
+	Expression* control = nullptr;
+	if (rand.flipCoin(ProgramOptions::ForLoopVariableBoundsChance)) {
+		auto v = variableSelector.selectVariable(rand, scope);
+		if (v != nullptr)
+			control = new NumericExpression(fl, new VariableExpression(v), genNumericLiteral());
+	}
+	if (control == nullptr) {
+		control = genNumericLiteral();
+	}
+	control = new BinaryExpression(rand.flipCoin() ? BinaryOperator::Less : BinaryOperator::Greater, new VariableExpression(i), control);
+	fl->setControl(new LoopControlExpression(control, &loopCyclesCheck));
+	auto& oper = OperatorSelector<AssignmentOperator, ProgramOptions::AssignmentInForLoop>::select(rand);
+	Expression* rhs = nullptr;
+	if (!oper.has(OperatorRequirement::WithoutRhs)) {
+		rhs = genNumericLiteral();
+		if (oper.has(OperatorRequirement::RhsNonzero)) {
+			rhs = new NonZeroExpression(fl, rhs);
+		}
+	}
+	auto iterator = new AssignmentExpression(oper, i);
+	iterator->setRightHandSide(rhs);
+	fl->setIterator(iterator);
+	fl->setBody(genStatement(fl, maxDepth, StatementType::All & ~StatementType::ReturnStatement & ~StatementType::ThrowStatement));
+	return fl;
 }

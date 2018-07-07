@@ -30,7 +30,7 @@ public:
 protected:
 	virtual void writeTo(std::ostream& os) const;
 private:
-	UnaryOperator& oper;
+	const UnaryOperator& oper;
 	Expression* expr;
 };
 

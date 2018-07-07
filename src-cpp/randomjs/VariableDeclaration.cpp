@@ -23,10 +23,11 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 VariableDeclaration::VariableDeclaration(IVariable* variable) : variable(variable) {}
 
 void VariableDeclaration::writeTo(std::ostream& os) const {
-	os << variable->isConstant() ? "const " : "let ";
+	os << (variable->isConstant() ? "const " : "let ");
 	os << variable->getName();
 	if (variable->getInitializer() != nullptr) {
 		os << AssignmentOperator::Basic;
 		os << *variable->getInitializer();
 	}
+	os << ';';
 }

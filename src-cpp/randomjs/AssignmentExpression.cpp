@@ -42,7 +42,7 @@ void AssignmentExpression::writeTo(std::ostream& os) const {
 	else if (variable->isLoopCounter() || !oper.has(OperatorRequirement::NumericOnly)) {
 		os << "(";
 		if (oper.has(OperatorRequirement::Prefix)) {
-			os << oper << variable;
+			os << oper << *variable;
 		}
 		else {
 			os << *variable << oper;
@@ -57,7 +57,7 @@ void AssignmentExpression::writeTo(std::ostream& os) const {
 		if (oper.has(OperatorRequirement::WithoutRhs))
 		{
 			if (oper.has(OperatorRequirement::Prefix)) {
-				os << oper << variable;
+				os << oper << *variable;
 			}
 			else {
 				os << *variable << oper;

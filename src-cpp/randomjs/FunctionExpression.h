@@ -31,15 +31,11 @@ public:
 	void setBody(FunctionBody* body) {
 		this->body = body;
 	}
-	void setDefaultReturnValue(Expression* expr) {
-		defaultReturnValue = expr;
-	}
 	void addParameter(Variable*);
 protected:
 	virtual void writeTo(std::ostream& os) const;
 private:
 	List<Variable*> parameters;
-	Expression* defaultReturnValue;
 	FunctionBody* body;
 };
 

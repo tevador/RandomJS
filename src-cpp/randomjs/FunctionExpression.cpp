@@ -23,6 +23,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 FunctionExpression::FunctionExpression(IScope* parent) : IScope(parent) {
 	parameters.reserve(ProgramOptions::FunctionParametersCountMax);
+	functionDepth++;
 }
 
 uint32_t FunctionExpression::getType() {
@@ -42,5 +43,5 @@ void FunctionExpression::writeTo(std::ostream& os) const {
 
 void FunctionExpression::addParameter(Variable* v) {
 	parameters.push_back(v);
-	declareVariable(v);
+	//declareVariable(v);
 }

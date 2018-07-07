@@ -17,20 +17,15 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "ThrowStatement.h"
+#include "GlobalClass.h"
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+ThrowStatement::ThrowStatement(Expression* value) : value(value) {}
 
-class BinaryExpression : public Expression {
-public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
-protected:
-	void writeTo(std::ostream&) const;
-private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
-};
+bool ThrowStatement::isTerminating() {
+	return true;
+}
+
+void ThrowStatement::writeTo(std::ostream& os) const {
+	os << "throw new " << GlobalClass::RERR.getName() << '(' << *value << ");";
+}

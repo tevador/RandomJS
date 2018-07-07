@@ -130,7 +130,7 @@ namespace Tevador.RandomJS
             }
             if (scope.FunctionDepth == 0)
             {
-                list &= StatementType.ReturnStatement;
+                list &= ~StatementType.ReturnStatement;
             }
 
                 var type = _options.Statements.ChooseRandom(_rand, list);
@@ -189,7 +189,7 @@ namespace Tevador.RandomJS
             var fl = new ForLoop(scope);
             Variable i = fl.IteratorVariable = GenVariable(fl, false, true);
             i.Initializer = GenNumericLiteral(NumericLiteralType.SmallInteger);
-            bool decrease = _rand.FlipCoin();
+            //bool decrease = _rand.FlipCoin();
             Expression iteratorExpr = null;
             if (_rand.FlipCoin(_options.ForLoopVariableBoundsChance))
             {

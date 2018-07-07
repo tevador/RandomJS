@@ -20,17 +20,18 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Expression.h"
-#include "BinaryOperator.h"
+#include "Literal.h"
 
-class BinaryExpression : public Expression {
+class NonEmptyExpression : public Expression {
 public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
+	NonEmptyExpression(Expression*, Literal*);
+	virtual uint32_t getType() {
+		return ExpressionType::None;
+	}
 protected:
-	void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
-	const BinaryOperator& oper;
 	Expression* lhs;
-	Expression* rhs;
+	Literal* rhs;
 };
+

@@ -19,16 +19,19 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "Variable.h"
 #include "Memory.h"
+#include <algorithm>
+
+Variable Variable::This = Variable(nullptr, "this", true, false);
 
 const char* Variable::getVariableName(int index) {
-	String str;
-	while (index >= 0)
-	{
+	String* str = new String();
+	while (index >= 0) {
 		int mod = index % 26;
-		str = (char)('a' + mod) + str;
+		str->push_back((char)('a' + mod));
 		index = index / 26 - 1;
 	}
-	return str.c_str();
+	std::reverse(str->begin(), str->end());
+	return str->data();
 }
 
 std::ostream& operator<<(std::ostream& os, const Variable& v) {

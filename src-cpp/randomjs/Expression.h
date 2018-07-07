@@ -20,9 +20,10 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Statement.h"
+#include "Enum.h"
 
 class Expression : public Statement {
 public:
 	virtual bool isNumeric() { return false; }
-	virtual uint32_t getType() = 0;
+	virtual EnumType getType() = 0;
 };

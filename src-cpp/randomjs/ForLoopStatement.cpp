@@ -17,20 +17,10 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "ForLoopStatement.h"
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+ForLoopStatement::ForLoopStatement(IScope* scope) : LoopStatement(scope) {}
 
-class BinaryExpression : public Expression {
-public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
-protected:
-	void writeTo(std::ostream&) const;
-private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
-};
+void ForLoopStatement::writeTo(std::ostream& os) const {
+	os << "for(" << *counter->getDeclaration() << *control << ';' << *iterator << ')' << *body;
+}

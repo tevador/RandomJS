@@ -19,9 +19,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "FunctionBody.h"
 
-FunctionBody::FunctionBody()
-{
-}
+FunctionBody::FunctionBody() {}
 
 void FunctionBody::writeTo(std::ostream& os) const {
 	os << '{';

@@ -41,7 +41,7 @@ void VariableSelector::probe(IScope* scope) {
 	}
 	for (auto i = scope->begin() + scopeVariableCounter; i != scope->end(); ++i) {
 		Variable* v = *i;
-		for (int j = 0; j <= ProgramOptions::VariableSelectorScopeFactor * v->getParent()->getFunctionDepth(); ++j) {
+		for (uint32_t j = 0; j <= ProgramOptions::VariableSelectorScopeFactor * v->getParent()->getFunctionDepth(); ++j) {
 			readableVars->push_back(v);
 			if (!v->isLoopCounter() && !v->isConstant())
 				writableVars->push_back(v);
@@ -52,5 +52,5 @@ void VariableSelector::probe(IScope* scope) {
 
 Variable* VariableSelector::selectVariable(RandomGenerator& rand, IScope* scope, bool forWriting) {
 	probe(scope);
-	return RandomUtility::select(rand, forWriting ? writableVars : readableVars);
+	return RandomUtility::select<Variable>(rand, forWriting ? writableVars : readableVars);
 }

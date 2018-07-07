@@ -23,10 +23,10 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "RandomGenerator.h"
 #include "ProgramOptions.h"
 
-template<typename T>
+template<typename TOperator, typename TDistribution>
 class OperatorSelector {
 public:
-	static T& select(RandomGenerator&);
+	static TOperator& select(RandomGenerator&);
 protected:
 	static constexpr TableType getTotal();
 };

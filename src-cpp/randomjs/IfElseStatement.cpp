@@ -17,20 +17,14 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "IfElseStatement.h"
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+IfElseStatement::IfElseStatement(Expression* condition, Statement* body, Statement* elseBody) : condition(condition), body(body), elseBody(elseBody) {}
 
-class BinaryExpression : public Expression {
-public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
-protected:
-	void writeTo(std::ostream&) const;
-private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
-};
+
+void IfElseStatement::writeTo(std::ostream& os) const {
+	os << "if(" << *condition << ')' << *body;
+	if (elseBody != nullptr) {
+		os << "else " << *elseBody;
+	}
+}

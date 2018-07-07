@@ -41,29 +41,34 @@ private:
 
 public:
 	~LinearAllocator();
-	static LinearAllocator getInstance() { return instance; }
-	void* allocate(size_t numBytes) throw(OutOfMemoryException);
+	static LinearAllocator& getInstance() { return instance; }
+	void* allocate(size_t numBytes);
 	void reset();
 };
 
 template<typename T>
 class Allocator : public std::allocator<T> {
 public:
-	T* allocate(size_t count) throw(OutOfMemoryException) { 
+	T* allocate(size_t count) {
 		return static_cast<T*>(LinearAllocator::getInstance().allocate(count * sizeof(T)));
 	}
 	void deallocate(T*, size_t) noexcept {}
 
 	Allocator() : std::allocator<T>() {}
-	Allocator(const Allocator& a) throw() : std::allocator<T>(a) { }
+	Allocator(const Allocator& a) { }
 	template <typename U>
-	Allocator(const Allocator<U>& a) throw() : std::allocator<T>(a) { }
+	Allocator(const Allocator<U>& a) { }
 	~Allocator() { }
 
 	template <typename U>
 	bool operator==(const Allocator<U>&) { return true; }
 	template <typename U>
 	bool operator!=(const Allocator<U>&) { return false; }
+
+	template<typename U>
+	struct rebind {
+		typedef Allocator<U> other;
+	};
 };
 
 class AllocatorBase {

@@ -26,6 +26,7 @@ class IScope;
 
 class Variable : public IVariable {
 public:
+	static Variable This;
 	Variable(IScope* parent, const char* name, bool constant, bool loopCounter, Expression* initializer = nullptr)
 		: IVariable(name, constant, initializer), declaration(this), parent(parent), loopCounter(loopCounter) {}
 

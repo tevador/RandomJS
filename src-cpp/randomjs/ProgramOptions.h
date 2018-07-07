@@ -41,6 +41,7 @@ struct ProgramOptions {
 	static constexpr bool FunctionValueOfOverride = true;
 	static constexpr double CatchChance = 0.4;
 	static constexpr double ObjectLiteralVariableChance = 0.5;
+	static constexpr int ThrowExpressionDepth = 2;
 
 	static constexpr int GlobalVariablesCountMin = 12;
 	static constexpr int GlobalVariablesCountMax = 12;
@@ -89,10 +90,14 @@ struct ProgramOptions {
 	};
 
 	struct AssignmentInForLoop {
+		static constexpr TableType Basic = 0;
 		static constexpr TableType Add = 3;
 		static constexpr TableType Sub = 3;
 		static constexpr TableType Mul = 3;
 		static constexpr TableType Div = 3;
+		static constexpr TableType Mod = 0;
+		static constexpr TableType PreInc = 0;
+		static constexpr TableType PreDec = 0;
 		static constexpr TableType PostInc = 2;
 		static constexpr TableType PostDec = 2;
 	};

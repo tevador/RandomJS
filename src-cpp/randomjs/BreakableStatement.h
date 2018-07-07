@@ -19,18 +19,12 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+#include "Statement.h"
+#include "IScope.h"
 
-class BinaryExpression : public Expression {
+class BreakableStatement : public Statement, public IScope {
 public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
-protected:
-	void writeTo(std::ostream&) const;
-private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
+	BreakableStatement(IScope*);
+	bool hasBreak() override;
 };
+

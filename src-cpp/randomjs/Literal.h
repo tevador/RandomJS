@@ -26,11 +26,11 @@ class Literal : public Expression {
 public:
 	static Literal Zero;
 	Literal(const char* value) : value(value) {}
-	template<typename T>
-	Literal(T val) {
+	Literal(int32_t val) {
 		StringBuilder* sb = new StringBuilder();
 		*sb << val;
-		value = sb->str().data();
+		String* str = new String(sb->str());
+		value = str->data();
 	}
 	virtual uint32_t getType() {
 		return ExpressionType::Literal;

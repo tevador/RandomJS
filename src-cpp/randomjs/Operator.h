@@ -23,7 +23,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 class Operator {
 public:
-	bool has(uint32_t flag) {
+	bool has(uint32_t flag) const {
 		return (flags & flag) != 0;
 	}
 

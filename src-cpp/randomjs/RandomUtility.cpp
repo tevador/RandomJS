@@ -40,21 +40,23 @@ void RandomUtility::shuffle(RandomGenerator& rand, List<T>& list) {
 
 template void RandomUtility::shuffle<Variable*>(RandomGenerator&, List<Variable*>&);
 
-template<typename T>
-T RandomUtility::select(RandomGenerator& rand, List<T>* items) {
+template<class T>
+T* RandomUtility::select(RandomGenerator& rand, List<T*>* items) {
+	if (items->size() == 0)
+		return nullptr;
 	return (*items)[rand.genInt(items->size())];
 }
 
-template Variable* RandomUtility::select(RandomGenerator&, List<Variable*>*);
+template Variable* RandomUtility::select<Variable>(RandomGenerator&, List<Variable*>*);
 
-void RandomUtility::genString(RandomGenerator& rand, StringBuilder& sb, int length, const std::string& charset, bool canStartWithZero) {
+void RandomUtility::genString(RandomGenerator& rand, String* str, int length, const std::string& charset, bool canStartWithZero) {
 	if (!canStartWithZero) {
 		char c = '\0';
 		while (length-- > 0 && (c = charset[rand.genInt(charset.length())]) == '0');
-		sb << c;
+		str->push_back(c);
 	}
 	while (length-- > 0) {
-		sb << charset[rand.genInt(charset.length())];
+		str->push_back(charset[rand.genInt(charset.length())]);
 	}
 }
 
@@ -68,23 +70,24 @@ const char* RandomUtility::genStringLiteral(RandomGenerator& rand, int length) {
 
 const char* RandomUtility::genStringLiteral(RandomGenerator& rand, int length, const std::string& charset) {
 	char quote = rand.flipCoin() ? '\'' : '"';
-	StringBuilder* sb = new StringBuilder();
-	*sb << quote;
+	String* str = new String();
+	str->reserve(2 * length);
+	str->push_back(quote);
 	while (length-- > 0) {
 		char c = charset[rand.genInt(charset.length())];
 		if (c == '\n') {
-			*sb << "\\n";
+			str->append("\\n");
 			continue;
 		}
 		if (c == '\t') {
-			*sb << "\\t";
+			str->append("\\t");
 			continue;
 		}
 		if (c == quote || c == '\\') {
-			*sb << '\\';
+			str->push_back('\\');
 		}
-		*sb << c;
+		str->push_back(c);
 	}
-	*sb << quote;
-	return sb->str().data(); //TODO
+	str->push_back(quote);
+	return str->data();
 }

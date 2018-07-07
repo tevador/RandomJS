@@ -36,7 +36,7 @@ GlobalVariable GlobalVariable::CYCL = GlobalVariable(__COUNTER__, "__cycles", fa
 GlobalVariable GlobalVariable::MDPT = GlobalVariable(__COUNTER__, "__maxDepth", true);
 GlobalVariable GlobalVariable::DPTH = GlobalVariable(__COUNTER__, "__depth", false, &Literal::Zero);
 
-GlobalFunction GlobalFunction::NONZ = GlobalFunction(__COUNTER__, "__nonz", "(_) {return _= 0?1:_;}");
+GlobalFunction GlobalFunction::NONZ = GlobalFunction(__COUNTER__, "__nonz", "(_) {return _==0?1:_;}");
 GlobalFunction GlobalFunction::CALC = GlobalFunction(__COUNTER__, "__calc", "(_,_f,_d){if(typeof _==='number')return _f(_);return _d;}");
 GlobalFunction GlobalFunction::STRL = GlobalFunction(__COUNTER__, "__strl", "(_) { if(typeof _==='string'&&_.length>__maxStrlen)return _.substring(0, __maxStrlen);return _;}", &GlobalVariable::STRL);
 GlobalFunction GlobalFunction::TSTR = GlobalFunction(__COUNTER__, "__tstr", "(_){return _!=null?__strl(_.toString()):''+_;}", &GlobalFunction::STRL);
@@ -47,7 +47,7 @@ GlobalFunction GlobalFunction::NUMB = GlobalFunction(__COUNTER__, "__numb", "(_,
 GlobalFunction GlobalFunction::NNEG = GlobalFunction(__COUNTER__, "__nneg", "(_) { return _ < 0 ? -_ : _; }");
 GlobalFunction GlobalFunction::OBJC = GlobalFunction(__COUNTER__, "__objc", "(_,...__){if(typeof _ === 'function') return __tryc(()=>new _(...__),_.toString()); if(typeof _ === 'object') return _; return { a: _ }; }", &GlobalFunction::TRYC);
 GlobalFunction GlobalFunction::OBJS = GlobalFunction(__COUNTER__, "__objs", "(_,_k,_v) { if(Object.isExtensible(_)) _[_k]=_v; return _||_v; }");
-GlobalFunction GlobalFunction::EVAL = GlobalFunction(__COUNTER__, "__eval", "(_f,_s){return {0}(()=>_f(_s),_s);}", &GlobalFunction::TRYC);
+GlobalFunction GlobalFunction::EVAL = GlobalFunction(__COUNTER__, "__eval", "(_f,_s){return __tryc(()=>_f(_s),_s);}", &GlobalFunction::TRYC);
 GlobalFunction GlobalFunction::OBJD = GlobalFunction(__COUNTER__, "__objd", "(_) {for(const __ in _)if(typeof _[__]==='object')return false;return true;}");
 GlobalFunction GlobalFunction::OBJL = GlobalFunction(__COUNTER__, "__objl", "(_){if(typeof _!== 'object'||__objd(_))return _;}", &GlobalFunction::OBJD);
 GlobalFunction GlobalFunction::PRNT = GlobalFunction(__COUNTER__, "__prnt", "(_) {print(__tstr(_));}", &GlobalFunction::TSTR);

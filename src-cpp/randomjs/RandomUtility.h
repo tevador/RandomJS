@@ -35,10 +35,10 @@ public:
 	template<typename T>
 	static void shuffle(RandomGenerator& rand, List<T>& list);
 	static const char* genEvalString(RandomGenerator& rand, int length);
-	static void genString(RandomGenerator& rand, StringBuilder& sb, int length, const std::string& charset, bool canStartWithZero = true);
+	static void genString(RandomGenerator& rand, String* str, int length, const std::string& charset, bool canStartWithZero = true);
 	static const char* genStringLiteral(RandomGenerator& rand, int length, const std::string& charset);
 	static const char* genStringLiteral(RandomGenerator& rand, int length);
-	template<typename T>
-	static T select(RandomGenerator& rand, List<T>* items);
+	template<class T>
+	static T* select(RandomGenerator& rand, List<T*>* items);
 };
 

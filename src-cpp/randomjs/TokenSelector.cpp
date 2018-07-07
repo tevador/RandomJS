@@ -24,20 +24,24 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "NumericLiteralType.h"
 #include "UnaryOperator.h"
 #include "BinaryOperator.h"
+#include "StatementType.h"
 
-#define SELECTOR_REGISTER(type, item)								\
-		total += type::item;
+#define SELECTOR_REGISTER(item)										\
+		total += TDistribution::item;
 
-#define SELECTOR_PROBE(typeSource, typeResult, item)				\
-	if (typeSource::item > 0) {										\
-		probe += typeSource::item;									\
+
+#define SELECTOR_PROBE(typeResult, item)							\
+	if (TDistribution::item > 0) {									\
+		probe += TDistribution::item;								\
 		if (pivot < probe)											\
 			return typeResult::item;								\
-	}						
+	}
+
 
 #define SELECTOR_REGISTER_LIST(type, item)							\
 	if (type::item & list)											\
 		total += type::item;
+
 
 #define SELECTOR_PROBE_LIST(typeSource, typeResult, item)			\
 	if ((typeResult::item & list) && typeSource::item > 0) {		\
@@ -45,6 +49,164 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 		if (pivot < probe)											\
 			return typeResult::item;								\
 	}
+
+
+template<typename TDistribution>
+class OperatorSelector<AssignmentOperator, TDistribution> {
+public:
+	static AssignmentOperator& select(RandomGenerator&);
+protected:
+	static constexpr TableType getTotal();
+};
+
+template<typename TDistribution>
+class OperatorSelector<UnaryOperator, TDistribution> {
+public:
+	static UnaryOperator& select(RandomGenerator&);
+protected:
+	static constexpr TableType getTotal();
+};
+
+template<typename TDistribution>
+class OperatorSelector<BinaryOperator, TDistribution> {
+public:
+	static BinaryOperator& select(RandomGenerator&);
+protected:
+	static constexpr TableType getTotal();
+};
+
+template class OperatorSelector<AssignmentOperator, ProgramOptions::AssignmentOperators>;
+template class OperatorSelector<AssignmentOperator, ProgramOptions::AssignmentInForLoop>;
+template class OperatorSelector<UnaryOperator, ProgramOptions::UnaryOperators>;
+template class OperatorSelector<BinaryOperator, ProgramOptions::BinaryOperators>;
+
+template<typename TDistribution>
+AssignmentOperator& OperatorSelector<AssignmentOperator, TDistribution>::select(RandomGenerator& rand) {
+	int32_t pivot = rand.genInt(getTotal());
+	int32_t probe = 0;
+
+	SELECTOR_PROBE(AssignmentOperator, Basic)
+	SELECTOR_PROBE(AssignmentOperator, Add)
+	SELECTOR_PROBE(AssignmentOperator, Sub)
+	SELECTOR_PROBE(AssignmentOperator, Mul)
+	SELECTOR_PROBE(AssignmentOperator, Div)
+	SELECTOR_PROBE(AssignmentOperator, Mod)
+	SELECTOR_PROBE(AssignmentOperator, PreInc)
+	SELECTOR_PROBE(AssignmentOperator, PostInc)
+	SELECTOR_PROBE(AssignmentOperator, PreDec)
+	SELECTOR_PROBE(AssignmentOperator, PostDec)
+}
+
+template<typename TDistribution>
+constexpr TableType OperatorSelector<AssignmentOperator, TDistribution>::getTotal() {
+	int32_t total = 0;
+
+	SELECTOR_REGISTER(Basic)
+	SELECTOR_REGISTER(Add)
+	SELECTOR_REGISTER(Sub)
+	SELECTOR_REGISTER(Mul)
+	SELECTOR_REGISTER(Div)
+	SELECTOR_REGISTER(Mod)
+	SELECTOR_REGISTER(PreInc)
+	SELECTOR_REGISTER(PostInc)
+	SELECTOR_REGISTER(PreDec)
+	SELECTOR_REGISTER(PostDec)
+
+	return total;
+}
+
+template<typename TDistribution>
+UnaryOperator& OperatorSelector<UnaryOperator, TDistribution>::select(RandomGenerator& rand) {
+	int32_t pivot = rand.genInt(getTotal());
+	int32_t probe = 0;
+
+	SELECTOR_PROBE(UnaryOperator, Not)
+	SELECTOR_PROBE(UnaryOperator, Plus)
+	SELECTOR_PROBE(UnaryOperator, Typeof)
+	SELECTOR_PROBE(UnaryOperator, Minus)
+	SELECTOR_PROBE(UnaryOperator, Sqrt)
+	SELECTOR_PROBE(UnaryOperator, Abs)
+	SELECTOR_PROBE(UnaryOperator, Ceil)
+	SELECTOR_PROBE(UnaryOperator, Floor)
+	SELECTOR_PROBE(UnaryOperator, Trunc)
+}
+
+template<typename TDistribution>
+constexpr TableType OperatorSelector<UnaryOperator, TDistribution>::getTotal() {
+	int32_t total = 0;
+
+	SELECTOR_REGISTER(Not)
+	SELECTOR_REGISTER(Plus)
+	SELECTOR_REGISTER(Typeof)
+	SELECTOR_REGISTER(Minus)
+	SELECTOR_REGISTER(Sqrt)
+	SELECTOR_REGISTER(Abs)
+	SELECTOR_REGISTER(Ceil)
+	SELECTOR_REGISTER(Floor)
+	SELECTOR_REGISTER(Trunc)
+
+	return total;
+}
+
+template<typename TDistribution>
+BinaryOperator& OperatorSelector<BinaryOperator, TDistribution>::select(RandomGenerator& rand) {
+	int32_t pivot = rand.genInt(getTotal());
+	int32_t probe = 0;
+
+	SELECTOR_PROBE(BinaryOperator, Add)
+	SELECTOR_PROBE(BinaryOperator, Comma)
+	SELECTOR_PROBE(BinaryOperator, Sub)
+	SELECTOR_PROBE(BinaryOperator, Mul)
+	SELECTOR_PROBE(BinaryOperator, Div)
+	SELECTOR_PROBE(BinaryOperator, Mod)
+	SELECTOR_PROBE(BinaryOperator, Less)
+	SELECTOR_PROBE(BinaryOperator, Greater)
+	SELECTOR_PROBE(BinaryOperator, Equal)
+	SELECTOR_PROBE(BinaryOperator, NotEqual)
+	SELECTOR_PROBE(BinaryOperator, And)
+	SELECTOR_PROBE(BinaryOperator, Or)
+	SELECTOR_PROBE(BinaryOperator, BitAnd)
+	SELECTOR_PROBE(BinaryOperator, BitOr)
+	SELECTOR_PROBE(BinaryOperator, Xor)
+	SELECTOR_PROBE(BinaryOperator, ShLeft)
+	SELECTOR_PROBE(BinaryOperator, ShRight)
+	SELECTOR_PROBE(BinaryOperator, UnShRight)
+	SELECTOR_PROBE(BinaryOperator, Min)
+	SELECTOR_PROBE(BinaryOperator, Max)
+}
+
+template<typename TDistribution>
+constexpr TableType OperatorSelector<BinaryOperator, TDistribution>::getTotal() {
+	int32_t total = 0;
+
+	SELECTOR_REGISTER(Add)
+	SELECTOR_REGISTER(Comma)
+	SELECTOR_REGISTER(Sub)
+	SELECTOR_REGISTER(Mul)
+	SELECTOR_REGISTER(Div)
+	SELECTOR_REGISTER(Mod)
+	SELECTOR_REGISTER(Less)
+	SELECTOR_REGISTER(Greater)
+	SELECTOR_REGISTER(Equal)
+	SELECTOR_REGISTER(NotEqual)
+	SELECTOR_REGISTER(And)
+	SELECTOR_REGISTER(Or)
+	SELECTOR_REGISTER(BitAnd)
+	SELECTOR_REGISTER(BitOr)
+	SELECTOR_REGISTER(Xor)
+	SELECTOR_REGISTER(ShLeft)
+	SELECTOR_REGISTER(ShRight)
+	SELECTOR_REGISTER(UnShRight)
+	SELECTOR_REGISTER(Min)
+	SELECTOR_REGISTER(Max)
+
+	return total;
+}
+
+template<>
+EnumType EnumSelector<NumericLiteralType>::select(RandomGenerator& rand, EnumType list) {
+	return rand.genInt(NumericLiteralType::Count);
+}
 
 template<>
 EnumType EnumSelector<LiteralType>::select(RandomGenerator& rand, EnumType list) {
@@ -101,129 +263,31 @@ EnumType EnumSelector<ExpressionType>::select(RandomGenerator& rand, EnumType li
 }
 
 template<>
-AssignmentOperator& OperatorSelector<AssignmentOperator>::select(RandomGenerator& rand) {
-	int32_t pivot = rand.genInt(getTotal());
-	int32_t probe = 0;
-
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, Basic)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, Add)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, Sub)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, Mul)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, Div)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, Mod)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, PreInc)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, PostInc)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, PreDec)
-	SELECTOR_PROBE(ProgramOptions::AssignmentOperators, AssignmentOperator, PostDec)
-}
-
-template<>
-constexpr TableType OperatorSelector<AssignmentOperator>::getTotal() {
+EnumType EnumSelector<StatementType>::select(RandomGenerator& rand, EnumType list) {
 	int32_t total = 0;
 
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Basic)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Add)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Sub)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Mul)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Div)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, Mod)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, PreInc)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, PostInc)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, PreDec)
-	SELECTOR_REGISTER(ProgramOptions::AssignmentOperators, PostDec)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ReturnStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, BreakStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, AssignmentStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ObjectSetStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, IfElseStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ForLoopStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, BlockStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, VariableInvocationStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ThrowStatement)
 
-	return total;
-}
-
-template<>
-EnumType EnumSelector<NumericLiteralType>::select(RandomGenerator& rand, EnumType list) {
-	return rand.genInt(NumericLiteralType::Count);
-}
-
-template<>
-UnaryOperator& OperatorSelector<UnaryOperator>::select(RandomGenerator& rand) {
-	int32_t pivot = rand.genInt(getTotal());
+	int32_t pivot = rand.genInt(total);
 	int32_t probe = 0;
 
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Not)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Plus)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Typeof)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Minus)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Sqrt)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Abs)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Ceil)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Floor)
-	SELECTOR_PROBE(ProgramOptions::UnaryOperators, UnaryOperator, Trunc)
-}
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ReturnStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, BreakStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, AssignmentStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ObjectSetStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, IfElseStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ForLoopStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, BlockStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, VariableInvocationStatement)
+	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ThrowStatement)
 
-template<>
-constexpr TableType OperatorSelector<UnaryOperator>::getTotal() {
-	int32_t total = 0;
-
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Not)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Plus)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Typeof)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Minus)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Sqrt)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Abs)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Ceil)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Floor)
-	SELECTOR_REGISTER(ProgramOptions::UnaryOperators, Trunc)
-
-	return total;
-}
-
-template<>
-BinaryOperator& OperatorSelector<BinaryOperator>::select(RandomGenerator& rand) {
-	int32_t pivot = rand.genInt(getTotal());
-	int32_t probe = 0;
-
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Add)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Comma)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Sub)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Mul)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Div)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Mod)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Less)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Greater)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Equal)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, NotEqual)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, And)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Or)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, BitAnd)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, BitOr)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Xor)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, ShLeft)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, ShRight)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, UnShRight)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Min)
-	SELECTOR_PROBE(ProgramOptions::BinaryOperators, BinaryOperator, Max)
-}
-
-template<>
-constexpr TableType OperatorSelector<BinaryOperator>::getTotal() {
-	int32_t total = 0;
-
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Add)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Comma)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Sub)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Mul)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Div)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Mod)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Less)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Greater)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Equal)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, NotEqual)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, And)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Or)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, BitAnd)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, BitOr)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Xor)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, ShLeft)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, ShRight)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, UnShRight)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Min)
-	SELECTOR_REGISTER(ProgramOptions::BinaryOperators, Max)
-
-	return total;
+	return StatementType::None;
 }

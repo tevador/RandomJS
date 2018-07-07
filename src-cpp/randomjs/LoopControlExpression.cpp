@@ -17,20 +17,19 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "LoopControlExpression.h"
+#include "ExpressionType.h"
+#include "ProgramOptions.h"
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+LoopControlExpression::LoopControlExpression(Expression* expr, Statement* protection) : expr(expr), protection(protection) {}
 
-class BinaryExpression : public Expression {
-public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
-protected:
-	void writeTo(std::ostream&) const;
-private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
-};
+EnumType LoopControlExpression::getType() {
+	return ExpressionType::None;
+}
+
+void LoopControlExpression::writeTo(std::ostream& os) const {
+	os << *expr;
+	if (ProgramOptions::EnableLoopCyclesProtection) {
+		os << "&&" << *protection;
+	}
+}

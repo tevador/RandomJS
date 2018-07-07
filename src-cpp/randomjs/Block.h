@@ -29,7 +29,12 @@ public:
 	inline void addStatement(Statement* stmt) {
 		statements.push_back(stmt);
 	}
-
+	inline Statement* getLastStatement() {
+		return statements.back();
+	}
+	size_t getStatementCount() {
+		return statements.size();
+	}
 protected:
 	List<Statement*> statements;
 	virtual void writeTo(std::ostream& os) const;

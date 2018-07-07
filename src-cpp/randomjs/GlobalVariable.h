@@ -35,7 +35,7 @@ public:
 	static GlobalVariable DPTH;
 
 	virtual Global* clone() {
-		return new GlobalVariable(*this);
+		return new GlobalVariable(getIndex(), Global::getName(), isConstant(), getInitializer());
 	}
 
 protected:

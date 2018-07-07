@@ -20,11 +20,26 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Statement.h"
+#include "Block.h"
 
 class TryCatchStatement : public Statement {
 public:
+	static const char* ErrorIdentifier;
 	TryCatchStatement();
+	void setTry(Block* body) {
+		tryBody = body;
+	}
+	void setCatch(Statement* stmt) {
+		catchStatement = stmt;
+	}
+	void setFinally(Statement* stmt) {
+		finallyStatement = stmt;
+	}
 protected:
 	virtual void writeTo(std::ostream&) const;
+private:
+	Block* tryBody;
+	Statement* catchStatement;
+	Statement* finallyStatement;
 };
 

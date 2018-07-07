@@ -17,20 +17,14 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "ReturnStatement.h"
 
-#include "Expression.h"
-#include "BinaryOperator.h"
+ReturnStatement::ReturnStatement(Expression* expr) : value(expr) {}
 
-class BinaryExpression : public Expression {
-public:
-	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
-protected:
-	void writeTo(std::ostream&) const;
-private:
-	const BinaryOperator& oper;
-	Expression* lhs;
-	Expression* rhs;
-};
+void ReturnStatement::writeTo(std::ostream& os) const {
+	os << "return";
+	if (value != nullptr) {
+		os << ' ' << *value;
+	}
+	os << ';';
+}

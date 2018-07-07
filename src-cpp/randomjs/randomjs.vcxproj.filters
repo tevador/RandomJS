@@ -192,6 +192,39 @@
     <ClInclude Include="ShallowExpression.h">
       <Filter>Header Files\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="ReturnStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="NonEmptyExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="IfElseStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="ThrowStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="LoopControlExpression.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="LoopStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakableStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
+    <ClInclude Include="ForLoopStatement.h">
+      <Filter>Header Files\Statements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
@@ -283,6 +316,27 @@
     </ClCompile>
     <ClCompile Include="NumericExpression.cpp">
       <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ReturnStatement.cpp">
+      <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="NonEmptyExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="IfElseStatement.cpp">
+      <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="ThrowStatement.cpp">
+      <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="LoopControlExpression.cpp">
+      <Filter>Source Files\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakableStatement.cpp">
+      <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="ForLoopStatement.cpp">
+      <Filter>Source Files\Statements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

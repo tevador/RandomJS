@@ -30,7 +30,7 @@ VariableInvocationExpression::VariableInvocationExpression() : invokeFunction(nu
 }
 
 void VariableInvocationExpression::writeTo(std::ostream& os) const {
-	os << invokeFunction << "(";
+	os << invokeFunction->getName() << "(";
 	writeExpressionTo(os);
 	for (auto expr : parameters) {
 		os << "," << *expr;

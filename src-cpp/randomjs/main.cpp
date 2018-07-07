@@ -22,9 +22,9 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include <iostream>
 
 int main(int argc, char** argv) {
+	char seed[32];
 	RandomGenerator rand;
 	ProgramFactory pf(rand);
-	char seed[32];
 	Program* p = pf.genProgram(seed);
 	std::cout << *p;
 	return 0;
