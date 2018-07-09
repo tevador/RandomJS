@@ -82,9 +82,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Program Files\Boost\boost_1_67_0</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Program Files\Boost\boost_1_67_0\lib</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -140,6 +144,7 @@
     <ClInclude Include="GlobalOverride.h" />
     <ClInclude Include="GlobalVariable.h" />
     <ClInclude Include="IfElseStatement.h" />
+    <ClInclude Include="GenericLiteral.h" />
     <ClInclude Include="IScope.h" />
     <ClInclude Include="IVariable.h" />
     <ClInclude Include="Literal.h" />

@@ -44,6 +44,7 @@ public:
 	static LinearAllocator& getInstance() { return instance; }
 	void* allocate(size_t numBytes);
 	void reset();
+	size_t getUsed() { return bufferHead - bufferStart; }
 };
 
 template<typename T>

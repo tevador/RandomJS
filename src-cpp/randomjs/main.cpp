@@ -20,12 +20,40 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "RandomGenerator.h"
 #include "ProgramFactory.h"
 #include <iostream>
+#include <sstream>
+#include <boost/process.hpp>
+
+using namespace boost::process;
+
+void readResult(std::istream& is) {
+	char c;
+	while (is.get(c) && c != '\0') {
+		std::cout << c;
+	}
+	std::cout << "---------------------------------" << std::endl;
+}
 
 int main(int argc, char** argv) {
 	char seed[32];
-	RandomGenerator rand;
-	ProgramFactory pf(rand);
-	Program* p = pf.genProgram(seed);
-	std::cout << *p;
+	ipstream is;
+	opstream os;
+	try {
+		child xs("Q:\\projects\\moddable\\build\\bin\\win\\debug\\xst.exe", std_out > is, std_in < os);
+		for (int i = 0; i < 100; ++i) {
+			seed[0] = i;
+			RandomGenerator rand;
+			ProgramFactory pf(rand);
+			Program* p = pf.genProgram(seed);
+			os << *p << '\0';
+			os.flush();
+			readResult(is);
+			if (!xs.running()) {
+				return 1;
+			}
+		}
+	}
+	catch(...){
+		return 1;
+	}
 	return 0;
 }

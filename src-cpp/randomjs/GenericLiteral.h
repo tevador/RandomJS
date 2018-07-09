@@ -17,16 +17,23 @@ You should have received a copy of the GNU General Public License
 along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 */
 
-#include "IScope.h"
+#pragma once
 
-IScope::IScope(IScope* parent) : parent(parent) {
-	if (parent != nullptr) {
-		variables.insert(variables.begin(), parent->begin(), parent->end());
-		variableCounter = parent->variableCounter;
-		functionDepth = parent->functionDepth;
+#include "Expression.h"
+#include "ExpressionType.h"
+
+template<typename T>
+class GenericLiteral : public Expression {
+public:
+	GenericLiteral(T value) : value(value) {}
+	virtual uint32_t getType() {
+		return ExpressionType::Literal;
 	}
-	else {
-		variableCounter = 0;
-		functionDepth = 0;
+
+protected:
+	virtual void writeTo(std::ostream& os) const {
+		os << value;
 	}
-}
+private:
+	T value;
+};

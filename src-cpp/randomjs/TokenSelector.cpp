@@ -38,13 +38,13 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 	}
 
 
-#define SELECTOR_REGISTER_LIST(type, item)							\
-	if (type::item & list)											\
-		total += type::item;
+#define SELECTOR_REGISTER_LIST(typeSource, typeResult, item)		\
+	if (typeSource::item > 0 && (typeResult::item & list))			\
+		total += typeSource::item;
 
 
 #define SELECTOR_PROBE_LIST(typeSource, typeResult, item)			\
-	if ((typeResult::item & list) && typeSource::item > 0) {		\
+	if (typeSource::item > 0 && (typeResult::item & list)) {		\
 		probe += typeSource::item;									\
 		if (pivot < probe)											\
 			return typeResult::item;								\
@@ -94,7 +94,9 @@ AssignmentOperator& OperatorSelector<AssignmentOperator, TDistribution>::select(
 	SELECTOR_PROBE(AssignmentOperator, PreInc)
 	SELECTOR_PROBE(AssignmentOperator, PostInc)
 	SELECTOR_PROBE(AssignmentOperator, PreDec)
-	SELECTOR_PROBE(AssignmentOperator, PostDec)
+	//SELECTOR_PROBE(AssignmentOperator, PostDec)
+
+	return AssignmentOperator::PostDec;
 }
 
 template<typename TDistribution>
@@ -128,7 +130,9 @@ UnaryOperator& OperatorSelector<UnaryOperator, TDistribution>::select(RandomGene
 	SELECTOR_PROBE(UnaryOperator, Abs)
 	SELECTOR_PROBE(UnaryOperator, Ceil)
 	SELECTOR_PROBE(UnaryOperator, Floor)
-	SELECTOR_PROBE(UnaryOperator, Trunc)
+	//SELECTOR_PROBE(UnaryOperator, Trunc)
+
+	return UnaryOperator::Trunc;
 }
 
 template<typename TDistribution>
@@ -172,7 +176,9 @@ BinaryOperator& OperatorSelector<BinaryOperator, TDistribution>::select(RandomGe
 	SELECTOR_PROBE(BinaryOperator, ShRight)
 	SELECTOR_PROBE(BinaryOperator, UnShRight)
 	SELECTOR_PROBE(BinaryOperator, Min)
-	SELECTOR_PROBE(BinaryOperator, Max)
+	//SELECTOR_PROBE(BinaryOperator, Max)
+
+	return BinaryOperator::Max;
 }
 
 template<typename TDistribution>
@@ -212,36 +218,36 @@ template<>
 EnumType EnumSelector<LiteralType>::select(RandomGenerator& rand, EnumType list) {
 	int32_t total = 0;
 
-	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, String)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, Numeric)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, Object)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, LiteralType, String)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, LiteralType, Numeric)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Literals, LiteralType, Object)
 
 	int32_t pivot = rand.genInt(total);
 	int32_t probe = 0;
 
 	SELECTOR_PROBE_LIST(ProgramOptions::Literals, LiteralType, String)
 	SELECTOR_PROBE_LIST(ProgramOptions::Literals, LiteralType, Numeric)
-	SELECTOR_PROBE_LIST(ProgramOptions::Literals, LiteralType, Object)
+	//SELECTOR_PROBE_LIST(ProgramOptions::Literals, LiteralType, Object)
 
-	return LiteralType::None;
+	return LiteralType::Object;
 }
 
 template<>
 EnumType EnumSelector<ExpressionType>::select(RandomGenerator& rand, EnumType list) {
 	int32_t total = 0;
 
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, AssignmentExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, BinaryExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, FunctionExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, Literal)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, TernaryExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, UnaryExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, VariableInvocationExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, FunctionInvocationExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, VariableExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, EvalExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ObjectSetExpression)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ObjectConstructorExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, AssignmentExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, BinaryExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, FunctionExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, Literal)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, TernaryExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, UnaryExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, VariableInvocationExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, FunctionInvocationExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, VariableExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, EvalExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, ObjectSetExpression)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Expressions, ExpressionType, ObjectConstructorExpression)
 
 	int32_t pivot = rand.genInt(total);
 	int32_t probe = 0;
@@ -257,24 +263,24 @@ EnumType EnumSelector<ExpressionType>::select(RandomGenerator& rand, EnumType li
 	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, VariableExpression)
 	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, EvalExpression)
 	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, ObjectSetExpression)
-	SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, ObjectConstructorExpression)
+	//SELECTOR_PROBE_LIST(ProgramOptions::Expressions, ExpressionType, ObjectConstructorExpression)
 
-	return ExpressionType::None;
+	return ExpressionType::ObjectConstructorExpression;
 }
 
 template<>
 EnumType EnumSelector<StatementType>::select(RandomGenerator& rand, EnumType list) {
 	int32_t total = 0;
 
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ReturnStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, BreakStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, AssignmentStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ObjectSetStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, IfElseStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ForLoopStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, BlockStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, VariableInvocationStatement)
-	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, ThrowStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, ReturnStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, BreakStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, AssignmentStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, ObjectSetStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, IfElseStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, ForLoopStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, BlockStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, VariableInvocationStatement)
+	SELECTOR_REGISTER_LIST(ProgramOptions::Statements, StatementType, ThrowStatement)
 
 	int32_t pivot = rand.genInt(total);
 	int32_t probe = 0;
@@ -287,7 +293,7 @@ EnumType EnumSelector<StatementType>::select(RandomGenerator& rand, EnumType lis
 	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ForLoopStatement)
 	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, BlockStatement)
 	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, VariableInvocationStatement)
-	SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ThrowStatement)
+	//SELECTOR_PROBE_LIST(ProgramOptions::Statements, StatementType, ThrowStatement)
 
-	return StatementType::None;
+	return StatementType::ThrowStatement;
 }

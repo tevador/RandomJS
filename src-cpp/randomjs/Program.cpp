@@ -19,9 +19,9 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #include "Program.h"
 #include "GlobalVariable.h"
-#include "Literal.h"
+#include "GenericLiteral.h"
 
-Program::Program() : Block(nullptr) {
+Program::Program() : Block(nullptr), definedGlobals() {
 	globals.reserve(Global::count);
 }
 
@@ -59,7 +59,7 @@ void Program::setGlobalVariable(GlobalVariable& gVar, T value) {
 	Global* g;
 	if ((g = definedGlobals[gVar.getIndex()]) != nullptr) {
 		GlobalVariable* gv = (GlobalVariable*)g;
-		gv->setInitializer(new Literal(value));
+		gv->setInitializer(new GenericLiteral<T>(value));
 	}
 }
 

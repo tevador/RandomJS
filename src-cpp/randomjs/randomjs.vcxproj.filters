@@ -225,6 +225,9 @@
     <ClInclude Include="ForLoopStatement.h">
       <Filter>Header Files\Statements</Filter>
     </ClInclude>
+    <ClInclude Include="GenericLiteral.h">
+      <Filter>Header Files\Expressions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
