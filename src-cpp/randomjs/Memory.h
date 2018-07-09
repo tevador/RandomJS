@@ -35,7 +35,7 @@ class LinearAllocator {
 private:
 	char* bufferStart;
 	char* bufferHead;
-	static constexpr size_t size = 25 * 1024 * 1024; //25 MiB
+	static constexpr size_t size = 1 * 1024 * 1024; //1 MiB
 	static thread_local LinearAllocator instance;
 	LinearAllocator();
 

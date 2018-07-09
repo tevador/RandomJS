@@ -104,10 +104,10 @@ struct ProgramOptions {
 
 	struct UnaryOperators {
 		static constexpr TableType Plus = 1;
-		static constexpr TableType Typeof = 1;
+		static constexpr TableType Typeof = 2;
 		static constexpr TableType Minus = 1;
 		static constexpr TableType Not = 1;
-		static constexpr TableType Sqrt = 1;
+		static constexpr TableType Sqrt = 3;
 		static constexpr TableType Floor = 1;
 		static constexpr TableType Ceil = 1;
 		static constexpr TableType Abs = 1;

@@ -19,8 +19,8 @@
   <UnaryOperators>   
     <item type="Plus" weight="1" />     <!-- OPERATOR + (unary) -->
     <item type="Typeof" weight="2" />   <!-- OPERATOR typeof -->  
-    <item type="Minus" weight="4" />    <!-- OPERATOR - (unary) -->
-    <item type="Not" weight="4" />      <!-- OPERATOR ! -->
+    <item type="Minus" weight="1" />    <!-- OPERATOR - (unary) -->
+    <item type="Not" weight="1" />      <!-- OPERATOR ! -->
     <item type="Sqrt" weight="3" />     <!-- FUNCTION Math.sqrt -->
     <item type="Exp" weight="0" />      <!-- FUNCTION Math.exp -->
     <item type="Log" weight="0" />      <!-- FUNCTION Math.log -->

@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Statements">
       <UniqueIdentifier>{7bdd458c-ef41-43d7-8b9c-5bbc1ccb3693}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Blake2">
+      <UniqueIdentifier>{94b7288c-4cd0-4b3e-82fc-d8d98fc16d88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Blake2">
+      <UniqueIdentifier>{1aa29498-4564-42be-b33c-e4c1c05a416a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LiteralType.h">
@@ -228,6 +234,36 @@
     <ClInclude Include="GenericLiteral.h">
       <Filter>Header Files\Expressions</Filter>
     </ClInclude>
+    <ClInclude Include="ProgramRunner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FastStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FastBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2-config.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2s-load-sse2.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2s-load-sse41.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2s-load-xop.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2-impl.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
+    <ClInclude Include="blake2\blake2b-round.h">
+      <Filter>Header Files\Blake2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
@@ -340,6 +376,12 @@
     </ClCompile>
     <ClCompile Include="ForLoopStatement.cpp">
       <Filter>Source Files\Statements</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramRunner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="blake2\blake2b.c">
+      <Filter>Source Files\Blake2</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

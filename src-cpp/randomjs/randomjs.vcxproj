@@ -85,6 +85,7 @@
       <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\Boost\boost_1_67_0</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files\Boost\boost_1_67_0\lib</AdditionalLibraryDirectories>
@@ -112,10 +113,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Program Files\Boost\boost_1_67_0</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Program Files\Boost\boost_1_67_0\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -123,6 +127,13 @@
     <ClInclude Include="AssignmentOperator.h" />
     <ClInclude Include="BinaryExpression.h" />
     <ClInclude Include="BinaryOperator.h" />
+    <ClInclude Include="blake2\blake2-config.h" />
+    <ClInclude Include="blake2\blake2-impl.h" />
+    <ClInclude Include="blake2\blake2.h" />
+    <ClInclude Include="blake2\blake2b-round.h" />
+    <ClInclude Include="blake2\blake2s-load-sse2.h" />
+    <ClInclude Include="blake2\blake2s-load-sse41.h" />
+    <ClInclude Include="blake2\blake2s-load-xop.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BreakableStatement.h" />
     <ClInclude Include="BreakStatement.h" />
@@ -133,6 +144,8 @@
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionStatement.h" />
     <ClInclude Include="ExpressionType.h" />
+    <ClInclude Include="FastBuffer.h" />
+    <ClInclude Include="FastStream.h" />
     <ClInclude Include="ForLoopStatement.h" />
     <ClInclude Include="FunctionBody.h" />
     <ClInclude Include="FunctionExpression.h" />
@@ -167,6 +180,7 @@
     <ClInclude Include="Program.h" />
     <ClInclude Include="ProgramFactory.h" />
     <ClInclude Include="ProgramOptions.h" />
+    <ClInclude Include="ProgramRunner.h" />
     <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="RandomUtility.h" />
     <ClInclude Include="ReturnStatement.h" />
@@ -188,6 +202,7 @@
   <ItemGroup>
     <ClCompile Include="AssignmentExpression.cpp" />
     <ClCompile Include="BinaryExpression.cpp" />
+    <ClCompile Include="blake2\blake2b.c" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BreakableStatement.cpp" />
     <ClCompile Include="EvalExpression.cpp" />
@@ -211,6 +226,7 @@
     <ClCompile Include="OutputStatement.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="ProgramFactory.cpp" />
+    <ClCompile Include="ProgramRunner.cpp" />
     <ClCompile Include="RandomUtility.cpp" />
     <ClCompile Include="ReturnStatement.cpp" />
     <ClCompile Include="TernaryExpression.cpp" />
