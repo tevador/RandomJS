@@ -158,6 +158,7 @@
     <ClInclude Include="GlobalVariable.h" />
     <ClInclude Include="IfElseStatement.h" />
     <ClInclude Include="GenericLiteral.h" />
+    <ClInclude Include="InvalidOperationException.h" />
     <ClInclude Include="IScope.h" />
     <ClInclude Include="IVariable.h" />
     <ClInclude Include="Literal.h" />

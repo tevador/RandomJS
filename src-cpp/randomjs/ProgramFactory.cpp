@@ -35,6 +35,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "BreakStatement.h"
 #include "ExpressionStatement.h"
 #include "GlobalClass.h"
+#include "InvalidOperationException.h"
 
 //TODO
 CodeStatement ProgramFactory::callDepthCheck = CodeStatement("if(++__depth>__maxDepth)");
@@ -307,7 +308,7 @@ ObjectConstructorExpression* ProgramFactory::genObjectConstructorExpression(ISco
 		constructor = genFunctionExpression(scope);
 	}
 	else {
-		throw std::exception("Unable to create a constructor for ObjectCreateExpression");
+		throw InvalidOperationException("Unable to create a constructor for ObjectCreateExpression");
 	}
 	auto oce = new ObjectConstructorExpression(constructor);
 	genVariableInvocationExpression(oce, scope, maxDepth);

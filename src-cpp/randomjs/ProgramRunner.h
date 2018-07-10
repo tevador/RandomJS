@@ -28,14 +28,14 @@ namespace boost {
 	namespace process {
 		class child;
 
-		template<class CharT, class Traits = std::char_traits<CharT>>
+		template<class CharT, class Traits>
 		class basic_ipstream;
 
-		template<class CharT, class Traits = std::char_traits<CharT>>
+		template<class CharT, class Traits>
 		class basic_opstream;
 
-		typedef basic_ipstream<char> ipstream;
-		typedef basic_opstream<char> opstream;
+		typedef basic_ipstream<char, std::char_traits<char>> ipstream;
+		typedef basic_opstream<char, std::char_traits<char>> opstream;
 	}
 }
 

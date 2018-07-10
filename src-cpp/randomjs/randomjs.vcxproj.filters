@@ -264,6 +264,9 @@
     <ClInclude Include="blake2\blake2b-round.h">
       <Filter>Header Files\Blake2</Filter>
     </ClInclude>
+    <ClInclude Include="InvalidOperationException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
