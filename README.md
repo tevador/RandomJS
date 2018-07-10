@@ -55,34 +55,5 @@ In case of an DoS attack attempt, just 2 Blake2b hash calculations are required 
 The generator is documented in [generator.md](doc/generator.md).
 
 ## Build dependencies and instructions
-The concept of random javascript generator and miner presented here is written in C#. The generated javascript code is run externally in a NodeJS sandbox.
+See [build.md](doc/build.md).
 
-The project has 4 executables:
-
-* `Tevador.RandomJS.exe` - generates a random javascript program and prints it to standard output. Optional parameter is a 256-bit seed (64 hex characters). The generator reads its settings from the `ProgramOptions.xml` file.
-* `sandbox.js` - NodeJS sandbox for executing javascript. The sandbox must be running to use the 2 executables below.
-* `Tevador.RandomJS.Miner.exe` - runs the miner for about 60 seconds and shows the mining statistics. Optional parameter is a Monero block header template (152 hex characters).
-* `Tevador.RandomJS.Test.exe` - runs 1000 random programs and prints statistics. Run `Tevador.RandomJS.Test.exe -h` for a list of supported parameters.
-
-### Windows
-#### Dependencies
-1. Visual studio 2017 ([official download](https://www.visualstudio.com/downloads/))
-1. NodeJS ([official download](https://nodejs.org/en/download))
-
-#### Instructions
-1. Build the solution in Visual studio.
-1. Open the command prompt in the src directory.
-1. Run `npm install`.
-1. Run the javascript sandbox: `node sandbox.js`.
-1. Run `Tevador.RandomJS.exe` or `Tevador.RandomJS.Miner.exe` in a separate command prompt.
-
-### Linux
-#### Dependencies
-1. Mono 4.0+ ([via package manager](http://www.mono-project.com/download/stable/#download-lin)). For recent Ubuntu and Debian distros, install using `sudo apt-get install mono-devel`.
-1. NodeJS ([via package manager](https://nodejs.org/en/download/package-manager/)). For recent Ubuntu and Debian distros, install using `curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -` and `sudo apt-get install -y nodejs`
-
-#### Instructions
-1. Build with `make`.
-1. Run `npm install`.
-1. Run the javascript sandbox: `node sandbox.js`.
-1. Run `mono Tevador.RandomJS.exe` or `mono Tevador.RandomJS.Miner.exe` in a separate terminal window.
