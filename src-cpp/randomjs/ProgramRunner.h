@@ -42,7 +42,8 @@ namespace boost {
 class ProgramRunner
 {
 public:
-	ProgramRunner(const char* executable, bool searchPath = false, const char* arguments = nullptr);
+	ProgramRunner(const char* self, const char* xs);
+	//ProgramRunner(const char* executable, bool searchPath = false, const char* arguments = nullptr);
 	void writeProgram(Program*);
 	const char* getProgramBuffer() const {
 		return stream.data();
