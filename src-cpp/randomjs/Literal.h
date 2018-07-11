@@ -27,9 +27,9 @@ public:
 	static Literal Zero;
 	Literal(const char* value) : value(value) {}
 	Literal(int32_t val) {
-		StringBuilder* sb = new StringBuilder();
+		StringBuilder* sb = new (LinearAllocator::getInstance().allocate(sizeof(StringBuilder))) StringBuilder();
 		*sb << val;
-		String* str = new String(sb->str());
+		String* str = new (LinearAllocator::getInstance().allocate(sizeof(String))) String(sb->str());
 		value = str->data();
 	}
 	virtual uint32_t getType() {

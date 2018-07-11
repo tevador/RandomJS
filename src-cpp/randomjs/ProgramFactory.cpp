@@ -320,7 +320,7 @@ NumericLiteral* ProgramFactory::genNumericLiteral() {
 }
 
 NumericLiteral* ProgramFactory::genNumericLiteral(EnumType type) {
-	String* str = new String();
+	String* str = new (LinearAllocator::getInstance().allocate(sizeof(String))) String();
 	str->reserve(37);
 	bool negative = false;
 	if (type != NumericLiteralType::Boolean && rand.flipCoin()) {

@@ -24,7 +24,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 Variable Variable::This = Variable(nullptr, "this", true, false);
 
 const char* Variable::getVariableName(int index) {
-	String* str = new String();
+	String* str = new (LinearAllocator::getInstance().allocate(sizeof(String))) String();
 	while (index >= 0) {
 		int mod = index % 26;
 		str->push_back((char)('a' + mod));
