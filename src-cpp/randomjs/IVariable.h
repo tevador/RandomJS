@@ -38,7 +38,7 @@ public:
 	}
 	
 protected:
-	IVariable(const char* name, bool constant, Expression* initializer) : name(name), constant(constant), initializer(initializer) {}
+	IVariable(const char* name, bool constant, Expression* initializer) : name(name), initializer(initializer), constant(constant) {}
 
 private:
 	const char* name;

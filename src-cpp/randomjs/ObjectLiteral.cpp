@@ -30,7 +30,7 @@ void ObjectLiteral::addProperty(Expression* expr) {
 
 void ObjectLiteral::writeTo(std::ostream& os) const {
 	os << "{";
-	for (int i = 0; i < properties.size(); ++i) {
+	for (unsigned i = 0; i < properties.size(); ++i) {
 		os << Variable::getVariableName(i) << ":" << *properties[i] << ",";
 	}
 	os << "}";

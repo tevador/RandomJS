@@ -22,7 +22,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #include "OperatorRequirement.h"
 #include "GlobalFunction.h"
 
-AssignmentExpression::AssignmentExpression(AssignmentOperator& oper, Variable* v) : variable(v), oper(oper) {}
+AssignmentExpression::AssignmentExpression(AssignmentOperator& oper, Variable* v) : oper(oper), variable(v) {}
 
 EnumType AssignmentExpression::getType() {
 	return ExpressionType::AssignmentExpression;
