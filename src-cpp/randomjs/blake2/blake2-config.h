@@ -15,6 +15,10 @@
 #ifndef BLAKE2_CONFIG_H
 #define BLAKE2_CONFIG_H
 
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+#define HAVE_NEON
+#else
+
 /* These don't work everywhere */
 #if defined(__SSE2__) || defined(__x86_64__) || defined(__amd64__) || defined(_M_AMD64) || defined(_M_X64)
 #define HAVE_SSE2
@@ -65,8 +69,6 @@
 #define HAVE_SSE2
 #endif
 
-#if !defined(HAVE_SSE2)
-#error "This code requires at least SSE2."
 #endif
 
 #endif
