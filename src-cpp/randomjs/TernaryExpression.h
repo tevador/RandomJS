@@ -24,11 +24,11 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 class TernaryExpression : public Expression
 {
 public:
-	TernaryExpression(Expression*, Expression*, Expression*);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
+	TernaryExpression(Expression* condition, Expression* trueExpr, Expression* falseExpr);
+	bool isNumeric() override;
+	EnumType getType() override;
 protected:
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 private:
 	Expression* condition;
 	Expression* trueExpr;

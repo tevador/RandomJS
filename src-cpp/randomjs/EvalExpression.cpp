@@ -28,6 +28,6 @@ void EvalExpression::writeTo(std::ostream& os) const {
 	os << GlobalFunction::EVAL.getName() << "(_=>eval(_)," << code << ")";
 }
 
-uint32_t EvalExpression::getType() {
+EnumType EvalExpression::getType() {
 	return ExpressionType::EvalExpression;
 }

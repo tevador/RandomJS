@@ -26,12 +26,12 @@ template<typename T>
 class GenericLiteral : public Expression {
 public:
 	GenericLiteral(T value) : value(value) {}
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::Literal;
 	}
 
 protected:
-	virtual void writeTo(std::ostream& os) const {
+	void writeTo(std::ostream& os) const override {
 		os << value;
 	}
 private:

@@ -25,7 +25,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 class NonEmptyExpression : public Expression {
 public:
 	NonEmptyExpression(Expression*, Literal*);
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::None;
 	}
 protected:

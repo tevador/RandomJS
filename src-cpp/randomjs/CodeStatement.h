@@ -26,7 +26,7 @@ public:
 	CodeStatement(const char* code) : code(code) {}
 
 protected:
-	void writeTo(std::ostream& os) const {
+	void writeTo(std::ostream& os) const override {
 		os << code;
 	}
 private:

@@ -27,13 +27,13 @@ class FunctionExpression : public Expression, public IScope
 {
 public:
 	FunctionExpression(IScope*);
-	virtual uint32_t getType();
+	EnumType getType() override;
 	void setBody(FunctionBody* body) {
 		this->body = body;
 	}
 	void addParameter(Variable*);
 protected:
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 private:
 	List<Variable*> parameters;
 	FunctionBody* body;

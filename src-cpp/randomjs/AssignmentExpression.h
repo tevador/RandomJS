@@ -28,8 +28,8 @@ class AssignmentExpression : public Expression
 {
 public:
 	AssignmentExpression(AssignmentOperator&, Variable*);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
+	bool isNumeric() override;
+	EnumType getType() override;
 	void setDefaultValue(NumericLiteral* value) {
 		defaultValue = value;
 	}
@@ -37,7 +37,7 @@ public:
 		rhs = expr;
 	}
 protected:
-	void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
 	const AssignmentOperator& oper;
 	Variable* variable;

@@ -52,13 +52,14 @@ ProgramRunner::ProgramRunner(const char* self, const char* xs)
 	auto basedir = bf::system_complete(self).parent_path();
 	searchPaths.push_back(basedir);
 	auto fullPath = bp::search_path(xs, searchPaths);
-	auto pathString = fullPath.string();
-	int allocationSize = pathString.length() + 1;
-	char* pathBuffer = new char[allocationSize];
-	std::copy(pathString.begin(), pathString.end(), pathBuffer);
-	pathBuffer[pathString.length()] = '\0';
-	this->executable = pathBuffer;
+	executable = fullPath.string();
 	startProcess();
+}
+
+ProgramRunner::~ProgramRunner() {
+	delete runnerStdout;
+	delete runnerStdin;
+	delete runner;
 }
 
 /*ProgramRunner::ProgramRunner(const char* executable, bool searchPath, const char* arguments)

@@ -28,7 +28,7 @@ bool TernaryExpression::isNumeric() {
 	return trueExpr->isNumeric() && falseExpr->isNumeric();
 }
 
-uint32_t TernaryExpression::getType() {
+EnumType TernaryExpression::getType() {
 	return ExpressionType::TernaryExpression;
 }
 

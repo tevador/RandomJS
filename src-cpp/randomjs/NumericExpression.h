@@ -26,11 +26,11 @@ class NumericExpression : public GlobalFunctionExpression
 {
 public:
 	NumericExpression(IScope* scope, Expression* value, NumericLiteral* fallback);
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::None;
 	}
 protected:
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 private:
 	NumericLiteral* fallback;
 };

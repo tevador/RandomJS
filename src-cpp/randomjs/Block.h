@@ -37,6 +37,6 @@ public:
 	}
 protected:
 	List<Statement*> statements;
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 	virtual void writeStatements(std::ostream& os) const;
 };

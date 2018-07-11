@@ -25,10 +25,10 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 class BinaryExpression : public Expression {
 public:
 	BinaryExpression(BinaryOperator&, Expression* lhs, Expression* rhs);
-	virtual bool isNumeric();
-	virtual uint32_t getType();
+	bool isNumeric() override;
+	EnumType getType() override;
 protected:
-	void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
 	const BinaryOperator& oper;
 	Expression* lhs;

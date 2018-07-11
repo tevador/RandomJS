@@ -26,9 +26,9 @@ class FunctionInvocationExpression : public VariableInvocationExpression
 {
 public:
 	FunctionInvocationExpression(FunctionExpression*);
-	virtual uint32_t getType();
+	EnumType getType() override;
 protected:
-	virtual void writeExpressionTo(std::ostream& os) const;
+	void writeExpressionTo(std::ostream& os) const override;
 private:
 	FunctionExpression* function;
 };

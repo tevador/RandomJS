@@ -19,16 +19,16 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <cstdint>
+#include "Enum.h"
 
 struct OperatorRequirement {
-	static constexpr uint32_t None = 0;
-	static constexpr uint32_t NumericOnly = 1 << 0;
-	static constexpr uint32_t RhsNonzero = 1 << 1;
-	static constexpr uint32_t RhsNonnegative = 1 << 2;
-	static constexpr uint32_t FunctionCall = 1 << 3;
-	static constexpr uint32_t LimitedPrecision = 1 << 4;
-	static constexpr uint32_t Prefix = 1 << 5;
-	static constexpr uint32_t WithoutRhs = 1 << 6;
-	static constexpr uint32_t StringLengthLimit = 1 << 7;
+	static constexpr EnumType None = 0;
+	static constexpr EnumType NumericOnly = 1 << 0;
+	static constexpr EnumType RhsNonzero = 1 << 1;
+	static constexpr EnumType RhsNonnegative = 1 << 2;
+	static constexpr EnumType FunctionCall = 1 << 3;
+	static constexpr EnumType LimitedPrecision = 1 << 4;
+	static constexpr EnumType Prefix = 1 << 5;
+	static constexpr EnumType WithoutRhs = 1 << 6;
+	static constexpr EnumType StringLengthLimit = 1 << 7;
 };

@@ -27,7 +27,7 @@ class OutputStatement :	public Statement
 public:
 	OutputStatement(Expression*);
 protected:
-	virtual void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
 	Expression* expr;
 };

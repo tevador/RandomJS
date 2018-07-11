@@ -20,10 +20,11 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <iostream>
+#include "Enum.h"
 
 class Operator {
 public:
-	bool has(uint32_t flag) const {
+	bool has(EnumType flag) const {
 		return (flags & flag) != 0;
 	}
 
@@ -32,8 +33,8 @@ public:
 		return os;
 	}
 protected:
-	Operator(const char* symbol, uint32_t flags) : symbol(symbol), flags(flags) {}
+	Operator(const char* symbol, EnumType flags) : symbol(symbol), flags(flags) {}
 private:
 	const char* symbol;
-	uint32_t flags;
+	EnumType flags;
 };

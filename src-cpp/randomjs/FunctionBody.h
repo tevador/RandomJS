@@ -25,6 +25,6 @@ class FunctionBody : public TryCatchStatement {
 public:
 	FunctionBody();
 protected:
-	virtual void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 };
 

@@ -26,5 +26,5 @@ public:
 	static GlobalClass RERR;
 protected:
 	GlobalClass(uint32_t index, const char* name, const char* declaration, Global* reference = nullptr) : GlobalFunction(index, name, declaration, reference) {}
-	void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 };

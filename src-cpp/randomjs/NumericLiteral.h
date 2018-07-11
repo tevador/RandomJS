@@ -24,7 +24,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 class NumericLiteral : public Literal {
 public:
 	NumericLiteral(const char* value) : Literal(value) {}
-	virtual bool isNumeric() {
+	bool isNumeric() override {
 		return true;
 	}
 };

@@ -59,7 +59,7 @@ Program* ProgramFactory::genProgram(void* seed) {
 		p->require(&GlobalVariable::MCYC);
 		p->require(&GlobalVariable::CYCL);
 	}
-	int32_t globalsCount = genValueFromInterval(ProgramOptions::GlobalVariablesCountMin, ProgramOptions::GlobalVariablesCountMax);
+	auto globalsCount = (uint32_t)genValueFromInterval(ProgramOptions::GlobalVariablesCountMin, ProgramOptions::GlobalVariablesCountMax);
 	while (p->getVariableCounter() < globalsCount) {
 		Variable* v = genVariable(p);
 		p->addStatement(v->getDeclaration());

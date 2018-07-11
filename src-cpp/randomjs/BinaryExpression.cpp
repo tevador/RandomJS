@@ -39,6 +39,6 @@ bool BinaryExpression::isNumeric() {
 	return oper.has(OperatorRequirement::NumericOnly);
 }
 
-uint32_t BinaryExpression::getType() {
+EnumType BinaryExpression::getType() {
 	return ExpressionType::BinaryExpression;
 }

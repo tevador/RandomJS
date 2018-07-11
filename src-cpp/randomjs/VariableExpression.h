@@ -26,9 +26,9 @@ class VariableExpression : public Expression
 {
 public:
 	VariableExpression(IVariable*);
-	virtual uint32_t getType();
+	EnumType getType();
 protected:
-	virtual void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
 	IVariable* variable;
 };

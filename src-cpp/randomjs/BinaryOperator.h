@@ -45,5 +45,5 @@ public:
 	static BinaryOperator Min;
 	static BinaryOperator Max;
 private:
-	BinaryOperator(const char* symbol, uint32_t flags = OperatorRequirement::None) : Operator(symbol, flags) {}
+	BinaryOperator(const char* symbol, EnumType flags = OperatorRequirement::None) : Operator(symbol, flags) {}
 };

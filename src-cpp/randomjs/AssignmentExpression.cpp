@@ -24,7 +24,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 AssignmentExpression::AssignmentExpression(AssignmentOperator& oper, Variable* v) : variable(v), oper(oper) {}
 
-uint32_t AssignmentExpression::getType() {
+EnumType AssignmentExpression::getType() {
 	return ExpressionType::AssignmentExpression;
 }
 

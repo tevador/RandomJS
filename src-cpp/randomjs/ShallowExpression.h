@@ -26,7 +26,7 @@ class ShallowExpression : public GlobalFunctionExpression {
 public:
 	ShallowExpression(IScope* scope, Expression* value)
 		: GlobalFunctionExpression(scope, GlobalFunction::OBJL, value) {}
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::None;
 	}
 };

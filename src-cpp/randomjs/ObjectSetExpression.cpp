@@ -27,6 +27,6 @@ void ObjectSetExpression::writeTo(std::ostream& os) const {
 	os << GlobalFunction::OBJS.getName() << "(" << *target << ",'" << property << "'," << *value << ")";
 }
 
-uint32_t ObjectSetExpression::getType() {
+EnumType ObjectSetExpression::getType() {
 	return ExpressionType::ObjectSetExpression;
 }

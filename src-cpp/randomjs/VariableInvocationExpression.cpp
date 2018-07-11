@@ -46,6 +46,6 @@ void VariableInvocationExpression::addParameter(Expression* parameter) {
 	parameters.push_back(parameter);
 }
 
-uint32_t VariableInvocationExpression::getType() {
+EnumType VariableInvocationExpression::getType() {
 	return ExpressionType::VariableInvocationExpression;
 }

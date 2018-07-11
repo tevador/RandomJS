@@ -25,7 +25,7 @@ class NonNegativeExpression : public GlobalFunctionExpression {
 public:
 	NonNegativeExpression(IScope* scope, Expression* value)
 		: GlobalFunctionExpression(scope, GlobalFunction::NNEG, value) {}
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::None;
 	}
 };

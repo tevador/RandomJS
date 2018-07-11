@@ -27,7 +27,7 @@ class VariableInvocationExpression : public Expression
 {
 public:
 	VariableInvocationExpression(IVariable*);
-	virtual uint32_t getType();
+	EnumType getType() override;
 	void addParameter(Expression*);
 	void setInvokeFunction(GlobalFunction* invokeFunction) {
 		this->invokeFunction = invokeFunction;
@@ -38,7 +38,7 @@ public:
 protected:
 	VariableInvocationExpression();
 	virtual void writeExpressionTo(std::ostream& os) const;
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 
 private:
 	IVariable* variable;

@@ -26,19 +26,12 @@ class Literal : public Expression {
 public:
 	static Literal Zero;
 	Literal(const char* value) : value(value) {}
-	Literal(int32_t val) {
-		StringBuilder* sb = new StringBuilder();
-		*sb << val;
-		String* str = new String(sb->str());
-		value = str->data();
-	}
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::Literal;
 	}
-
 protected:
 	Literal() {}
-	virtual void writeTo(std::ostream& os) const {
+	void writeTo(std::ostream& os) const override {
 		os << value;
 	}
 private:

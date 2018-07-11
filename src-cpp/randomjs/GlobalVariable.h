@@ -41,7 +41,7 @@ public:
 protected:
 	GlobalVariable(uint32_t index, const char* name, bool constant = false, Expression* initializer = nullptr) : Global(index, name), IVariable(name, constant, initializer), declaration(this) {}
 
-	void writeTo(std::ostream& os) const {
+	void writeTo(std::ostream& os) const override {
 		os << declaration;
 	}
 

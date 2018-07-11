@@ -36,5 +36,5 @@ public:
 	static AssignmentOperator PostDec;
 
 private:
-	AssignmentOperator(const char* symbol, uint32_t flags = OperatorRequirement::None) : Operator(symbol, flags) {}
+	AssignmentOperator(const char* symbol, EnumType flags = OperatorRequirement::None) : Operator(symbol, flags) {}
 };

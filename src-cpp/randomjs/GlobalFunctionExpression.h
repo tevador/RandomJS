@@ -30,6 +30,6 @@ public:
 protected:
 	GlobalFunction& func;
 	Expression* value;
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 };
 

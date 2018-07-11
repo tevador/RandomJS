@@ -25,9 +25,9 @@ class ObjectConstructorExpression : public VariableInvocationExpression
 {
 public:
 	ObjectConstructorExpression(Expression* constructor);
-	virtual uint32_t getType();
+	EnumType getType() override;
 protected:
-	virtual void writeExpressionTo(std::ostream& os) const;
+	void writeExpressionTo(std::ostream& os) const override;
 private:
 	Expression* constructor;
 };

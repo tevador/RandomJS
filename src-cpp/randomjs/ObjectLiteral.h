@@ -26,7 +26,7 @@ public:
 	ObjectLiteral();
 	void addProperty(Expression*);
 protected:
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 private:
 	List<Expression*> properties;
 };

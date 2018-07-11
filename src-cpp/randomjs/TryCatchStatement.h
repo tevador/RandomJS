@@ -36,7 +36,7 @@ public:
 		finallyStatement = stmt;
 	}
 protected:
-	virtual void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
 	Block* tryBody;
 	Statement* catchStatement;

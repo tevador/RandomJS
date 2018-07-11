@@ -20,6 +20,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "FastStream.h"
+#include <string>
 
 class Program;
 
@@ -43,6 +44,7 @@ class ProgramRunner
 {
 public:
 	ProgramRunner(const char* self, const char* xs);
+	~ProgramRunner();
 	//ProgramRunner(const char* executable, bool searchPath = false, const char* arguments = nullptr);
 	void writeProgram(Program*);
 	const char* getProgramBuffer() const {
@@ -56,7 +58,7 @@ private:
 	void startProcess();
 
 	FastStream stream;
-	const char* executable;
+	std::string executable;
 	const char* arguments;
 	boost::process::child* runner;
 	boost::process::ipstream* runnerStdout;

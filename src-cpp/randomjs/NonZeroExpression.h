@@ -25,7 +25,7 @@ class NonZeroExpression : public GlobalFunctionExpression {
 public:
 	NonZeroExpression(IScope* scope, Expression* value)
 		: GlobalFunctionExpression(scope, GlobalFunction::NONZ, value) {}
-	virtual uint32_t getType() {
+	EnumType getType() override {
 		return ExpressionType::None;
 	}
 };

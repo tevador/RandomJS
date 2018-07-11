@@ -25,7 +25,7 @@ ObjectConstructorExpression::ObjectConstructorExpression(Expression* constructor
 	setInvokeFunction(&GlobalFunction::OBJC);
 }
 
-uint32_t ObjectConstructorExpression::getType() {
+EnumType ObjectConstructorExpression::getType() {
 	return ExpressionType::ObjectConstructorExpression;
 }
 

@@ -23,7 +23,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 
 VariableExpression::VariableExpression(IVariable* variable) : variable(variable) {}
 
-uint32_t VariableExpression::getType() {
+EnumType VariableExpression::getType() {
 	return ExpressionType::VariableExpression;
 }
 

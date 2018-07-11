@@ -25,9 +25,9 @@ class ObjectSetExpression : public Expression
 {
 public:
 	ObjectSetExpression(Expression* target, const char* property, Expression* value);
-	virtual uint32_t getType();
+	EnumType getType() override;
 protected:
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 private:
 	Expression* target;
 	const char* property;

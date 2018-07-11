@@ -34,5 +34,5 @@ public:
 	static UnaryOperator Floor;
 	static UnaryOperator Trunc;
 private:
-	UnaryOperator(const char* symbol, uint32_t flags = OperatorRequirement::None) : Operator(symbol, flags) {}
+	UnaryOperator(const char* symbol, EnumType flags = OperatorRequirement::None) : Operator(symbol, flags) {}
 };

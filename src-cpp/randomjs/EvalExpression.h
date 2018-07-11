@@ -25,9 +25,9 @@ class EvalExpression : public Expression
 {
 public:
 	EvalExpression(const char*);
-	virtual uint32_t getType();
+	EnumType getType() override;
 protected:
-	virtual void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 private:
 	const char* code;
 };

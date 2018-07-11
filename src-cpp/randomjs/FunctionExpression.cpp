@@ -26,7 +26,7 @@ FunctionExpression::FunctionExpression(IScope* parent) : IScope(parent) {
 	functionDepth++;
 }
 
-uint32_t FunctionExpression::getType() {
+EnumType FunctionExpression::getType() {
 	return ExpressionType::FunctionExpression;
 }
 

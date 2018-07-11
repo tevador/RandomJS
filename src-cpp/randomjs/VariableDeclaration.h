@@ -26,7 +26,7 @@ class VariableDeclaration : public Statement {
 public:
 	VariableDeclaration(IVariable*);
 protected:
-	virtual void writeTo(std::ostream&) const;
+	void writeTo(std::ostream&) const override;
 private:
 	IVariable* variable;
 };

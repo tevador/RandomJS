@@ -29,14 +29,14 @@ class Program : public Block {
 public:
 	Program();
 	bool isDefined(Global* global);
-	virtual void require(Global* global);
+	void require(Global* global) override;
 
 	template<typename T>
 	void setGlobalVariable(GlobalVariable& gVar, T value);
 
 protected:
-	virtual void writeTo(std::ostream& os) const;
-	virtual void writeStatements(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
+	void writeStatements(std::ostream& os) const override;
 
 private:
 	Global* definedGlobals[Global::count];

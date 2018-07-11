@@ -36,6 +36,6 @@ void UnaryExpression::writeTo(std::ostream& os) const {
 	}
 }
 
-uint32_t UnaryExpression::getType() {
+EnumType UnaryExpression::getType() {
 	return ExpressionType::UnaryExpression;
 }

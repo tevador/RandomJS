@@ -47,7 +47,7 @@ protected:
 	GlobalFunction(uint32_t index, const char* name, const char* declaration, Global* reference = nullptr)
 		: Global(index, name, reference), declaration(declaration) {}
 
-	void writeTo(std::ostream& os) const;
+	void writeTo(std::ostream& os) const override;
 
 	const char* getDeclaration() const {
 		return declaration;

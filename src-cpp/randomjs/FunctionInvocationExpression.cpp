@@ -23,7 +23,7 @@ along with RandomJS.  If not, see<http://www.gnu.org/licenses/>.
 FunctionInvocationExpression::FunctionInvocationExpression(FunctionExpression* function) : function(function) {
 }
 
-uint32_t FunctionInvocationExpression::getType() {
+EnumType FunctionInvocationExpression::getType() {
 	return ExpressionType::FunctionInvocationExpression;
 }
 
