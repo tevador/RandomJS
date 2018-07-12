@@ -70,7 +70,7 @@ const char* RandomUtility::genStringLiteral(RandomGenerator& rand, int length) {
 
 const char* RandomUtility::genStringLiteral(RandomGenerator& rand, int length, const std::string& charset) {
 	char quote = rand.flipCoin() ? '\'' : '"';
-	String* str = new String();
+	String* str = new (LinearAllocator::getInstance().allocate(sizeof(String))) String();
 	str->reserve(2 * length);
 	str->push_back(quote);
 	while (length-- > 0) {

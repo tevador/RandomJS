@@ -26,9 +26,9 @@ VariableSelector::VariableSelector() {}
 
 void VariableSelector::init() {
 	currentScope = nullptr;
-	readableVars = new List<Variable*>();
+	readableVars = new (LinearAllocator::getInstance().allocate(sizeof(List<Variable*>))) List<Variable*>();
 	readableVars->reserve(50);
-	writableVars = new List<Variable*>();
+	writableVars = new (LinearAllocator::getInstance().allocate(sizeof(List<Variable*>))) List<Variable*>();
 	writableVars->reserve(50);
 }
 
