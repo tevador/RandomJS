@@ -54,6 +54,16 @@ In case of an DoS attack attempt, just 2 Blake2b hash calculations are required 
 ### RandomJS generator
 The generator is documented in [generator.md](doc/generator.md).
 
+### JS Engine
+RandomJS is currently using the [XS engine](https://github.com/tevador/moddable), which is a small and efficient implementatation developed for use in embedded devices.
+
 ## Build dependencies and instructions
 See [build.md](doc/build.md).
 
+## Donations
+Support the development of RandomJS by donating.
+
+XMR:
+```
+4B9nWtGhZfAWsTxWujPDGoWfVpJvADxkxJJTmMQp3zk98n8PdLkEKXA5g7FEUjB8JPPHdP959WDWMem3FPDTK2JUU1UbVHo
+```
