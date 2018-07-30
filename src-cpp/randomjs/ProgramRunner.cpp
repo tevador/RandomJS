@@ -82,13 +82,16 @@ ProgramRunner::~ProgramRunner() {
 }*/
 
 void ProgramRunner::writeProgram(Program* p) {
+	std::stringstream ss;
+	ss << *p;
+
 	stream.clear();
-	stream << *p;
+	stream << ss.tellp() << '\n' << ss.str();
 	stream.null();
 }
 
 int ProgramRunner::executeProgram(char* outputBuffer) {
-	*runnerStdin << stream.data() << '\0';
+	*runnerStdin << stream.data();
 	runnerStdin->flush();
 
 	int buffPos = 0;
