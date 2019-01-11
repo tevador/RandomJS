@@ -1,3 +1,5 @@
+### Note: RandomJS is obsolete. Development continues at [RandomX](https://github.com/tevador/RandomX).
+
 # RandomJS
 This is a concept implementation of a proof-of-work (PoW) algorithm proposal for Monero (but it's usable for any PoW cryptocurrency). Credits to @hyc for the original idea to use random javascript execution to achieve ASIC resistance.
 
